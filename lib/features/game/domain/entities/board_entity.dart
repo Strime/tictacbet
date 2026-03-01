@@ -77,44 +77,40 @@ sealed class BoardEntity with _$BoardEntity {
     );
   }
 
-  /// Check the game status.
-  GameStatus get status {
-    const winPatterns = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
-      [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
-      [0, 4, 8], [2, 4, 6], // diagonals
-    ];
+  /// All possible winning patterns (rows, columns, diagonals).
+  static const _winPatterns = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+    [0, 4, 8], [2, 4, 6], // diagonals
+  ];
 
-    for (final pattern in winPatterns) {
+  /// Returns the winning pattern and suit, or null if no winner.
+  (List<int> pattern, CardSuit suit)? _findWinningPattern() {
+    for (final pattern in _winPatterns) {
       final a = cells[pattern[0]].card?.suit;
-      final b = cells[pattern[1]].card?.suit;
-      final c = cells[pattern[2]].card?.suit;
-      if (a != null && a == b && b == c) {
-        return a == CardSuit.heart ? GameStatus.redWins : GameStatus.blackWins;
+      if (a != null &&
+          a == cells[pattern[1]].card?.suit &&
+          a == cells[pattern[2]].card?.suit) {
+        return (pattern, a);
       }
     }
+    return null;
+  }
 
+  /// Check the game status.
+  GameStatus get status {
+    final winner = _findWinningPattern();
+    if (winner != null) {
+      return winner.$2 == CardSuit.heart
+          ? GameStatus.redWins
+          : GameStatus.blackWins;
+    }
     if (cells.every((c) => c.isNotEmpty)) return GameStatus.draw;
     return GameStatus.inProgress;
   }
 
   /// Returns the winning line cell indices, or null if no winner.
-  List<int>? get winningLine {
-    const winPatterns = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8],
-      [0, 3, 6], [1, 4, 7], [2, 5, 8],
-      [0, 4, 8], [2, 4, 6],
-    ];
-    for (final pattern in winPatterns) {
-      final a = cells[pattern[0]].card?.suit;
-      if (a != null &&
-          a == cells[pattern[1]].card?.suit &&
-          a == cells[pattern[2]].card?.suit) {
-        return pattern;
-      }
-    }
-    return null;
-  }
+  List<int>? get winningLine => _findWinningPattern()?.$1;
 
   bool get isGameOver => status.isGameOver;
 }

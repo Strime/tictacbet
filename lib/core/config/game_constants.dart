@@ -35,6 +35,7 @@ class GameConstants {
   }
 
   // --- XP ---
+  static const int xpPerBonusCell = 20; // XP reward per XP bonus cell
   static const int xpPerWin = 100;
   static const int xpPerDraw = 50;
   static const int xpPerLoss = 10;
