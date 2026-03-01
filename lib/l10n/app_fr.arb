@@ -53,6 +53,15 @@
   "achievement_whale": "Whale",
   "achievement_whale_desc": "Gagner avec une mise de 50$+",
 
+  "nav_lobby": "Lobby",
+  "nav_history": "Historique",
+  "nav_profile": "Profil",
+
+  "history_title": "Historique",
+  "history_comingSoon": "Bientôt disponible",
+
+  "profile_comingSoon": "Bientôt disponible",
+
   "common_error_unknown": "Une erreur inattendue s'est produite",
   "common_error_storage": "Échec de la sauvegarde"
 }

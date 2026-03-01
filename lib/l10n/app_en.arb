@@ -55,6 +55,15 @@
   "achievement_whale": "Whale",
   "achievement_whale_desc": "Win a game with a $50+ bet",
 
+  "nav_lobby": "Lobby",
+  "nav_history": "History",
+  "nav_profile": "Profile",
+
+  "history_title": "History",
+  "history_comingSoon": "Coming soon",
+
+  "profile_comingSoon": "Coming soon",
+
   "common_error_unknown": "An unexpected error occurred",
   "common_error_storage": "Failed to save data"
 }

@@ -138,7 +138,7 @@ class _GameView extends StatelessWidget {
         l10n: l10n,
         onPlayAgain: () {
           Navigator.of(context).pop();
-          context.go(AppRoutes.lobby);
+          context.pop();
         },
       ),
     );
@@ -176,7 +176,7 @@ class _StatusBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-          onPressed: () => context.go(AppRoutes.lobby),
+          onPressed: () => context.pop(),
           icon: const Icon(Icons.arrow_back),
         ),
         Text(

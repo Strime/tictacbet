@@ -3,11 +3,15 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/game/domain/entities/player_side.dart';
 import '../../features/game/presentation/pages/game_page.dart';
+import '../../features/history/presentation/pages/history_page.dart';
 import '../../features/lobby/presentation/pages/lobby_page.dart';
+import '../../features/profile/presentation/pages/profile_page.dart';
+import '../navigation/scaffold_with_nav_bar.dart';
 
 abstract class AppRoutes {
   static const lobby = '/';
   static const game = '/game';
+  static const history = '/history';
   static const profile = '/profile';
 }
 
@@ -23,25 +27,56 @@ class GameParams {
   });
 }
 
+final _rootNavigatorKey = GlobalKey<NavigatorState>();
+final _lobbyNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'lobby');
+final _historyNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'history');
+final _profileNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'profile');
+
 final appRouter = GoRouter(
+  navigatorKey: _rootNavigatorKey,
   initialLocation: AppRoutes.lobby,
   routes: [
-    GoRoute(
-      path: AppRoutes.lobby,
-      builder: (context, state) => const LobbyPage(),
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) {
+        return ScaffoldWithNavBar(navigationShell: navigationShell);
+      },
+      branches: [
+        StatefulShellBranch(
+          navigatorKey: _lobbyNavigatorKey,
+          routes: [
+            GoRoute(
+              path: AppRoutes.lobby,
+              builder: (context, state) => const LobbyPage(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          navigatorKey: _historyNavigatorKey,
+          routes: [
+            GoRoute(
+              path: AppRoutes.history,
+              builder: (context, state) => const HistoryPage(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          navigatorKey: _profileNavigatorKey,
+          routes: [
+            GoRoute(
+              path: AppRoutes.profile,
+              builder: (context, state) => const ProfilePage(),
+            ),
+          ],
+        ),
+      ],
     ),
     GoRoute(
       path: AppRoutes.game,
+      parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) {
         final params = state.extra! as GameParams;
         return GamePage(params: params);
       },
-    ),
-    GoRoute(
-      path: AppRoutes.profile,
-      builder: (context, state) => const Scaffold(
-        body: Center(child: Text('Profile — TODO')),
-      ),
     ),
   ],
 );

@@ -156,6 +156,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get achievement_whale_desc => 'Win a game with a \$50+ bet';
 
   @override
+  String get nav_lobby => 'Lobby';
+
+  @override
+  String get nav_history => 'History';
+
+  @override
+  String get nav_profile => 'Profile';
+
+  @override
+  String get history_title => 'History';
+
+  @override
+  String get history_comingSoon => 'Coming soon';
+
+  @override
+  String get profile_comingSoon => 'Coming soon';
+
+  @override
   String get common_error_unknown => 'An unexpected error occurred';
 
   @override

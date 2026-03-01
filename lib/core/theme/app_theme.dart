@@ -24,11 +24,6 @@ class AppTheme {
     inputDecorationTheme: _inputDecorationTheme,
     cardTheme: _cardTheme,
     dividerTheme: const DividerThemeData(space: 1, thickness: 1),
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: AppColors.surface,
-      selectedItemColor: AppColors.chipGold,
-      unselectedItemColor: AppColors.textSecondary,
-    ),
   );
 
   static AppBarTheme get _appBarTheme => const AppBarTheme(

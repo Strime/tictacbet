@@ -157,6 +157,24 @@ class AppLocalizationsFr extends AppLocalizations {
   String get achievement_whale_desc => 'Gagner avec une mise de 50\$+';
 
   @override
+  String get nav_lobby => 'Lobby';
+
+  @override
+  String get nav_history => 'Historique';
+
+  @override
+  String get nav_profile => 'Profil';
+
+  @override
+  String get history_title => 'Historique';
+
+  @override
+  String get history_comingSoon => 'Bientôt disponible';
+
+  @override
+  String get profile_comingSoon => 'Bientôt disponible';
+
+  @override
   String get common_error_unknown => 'Une erreur inattendue s\'est produite';
 
   @override

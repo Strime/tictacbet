@@ -380,6 +380,42 @@ abstract class AppLocalizations {
   /// **'Win a game with a \$50+ bet'**
   String get achievement_whale_desc;
 
+  /// No description provided for @nav_lobby.
+  ///
+  /// In en, this message translates to:
+  /// **'Lobby'**
+  String get nav_lobby;
+
+  /// No description provided for @nav_history.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get nav_history;
+
+  /// No description provided for @nav_profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get nav_profile;
+
+  /// No description provided for @history_title.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get history_title;
+
+  /// No description provided for @history_comingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get history_comingSoon;
+
+  /// No description provided for @profile_comingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get profile_comingSoon;
+
   /// No description provided for @common_error_unknown.
   ///
   /// In en, this message translates to:
