@@ -35,12 +35,6 @@ class _BetAmountDisplayState extends State<BetAmountDisplay> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.monetization_on,
-              color: AppColors.chipGold,
-              size: AppSpacing.iconXl,
-            ),
-            const SizedBox(width: AppSpacing.sm),
             TweenAnimationBuilder<int>(
               tween: IntTween(begin: _previousAmount, end: widget.betAmount),
               duration: const Duration(
