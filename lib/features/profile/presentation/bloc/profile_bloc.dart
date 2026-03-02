@@ -8,6 +8,7 @@ import '../../domain/entities/achievement.dart';
 import '../../domain/services/achievement_detector.dart';
 import '../../../history/domain/entities/game_result_entity.dart';
 import '../../../history/domain/usecases/load_history_use_case.dart';
+import '../../../progression/domain/usecases/load_progression_use_case.dart';
 
 part 'profile_event.dart';
 part 'profile_state.dart';
@@ -15,8 +16,10 @@ part 'profile_state.dart';
 @injectable
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final LoadHistoryUseCase _loadHistory;
+  final LoadProgressionUseCase _loadProgression;
 
-  ProfileBloc(this._loadHistory) : super(const ProfileInitial()) {
+  ProfileBloc(this._loadHistory, this._loadProgression)
+      : super(const ProfileInitial()) {
     on<ProfileStarted>(_onStarted);
     on<ProfileRefreshed>(_onRefreshed);
   }
@@ -28,7 +31,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(const ProfileLoading());
     try {
       final results = await _loadHistory();
-      emit(_computeStats(results));
+      if (isClosed) return;
+      emit(await _computeStats(results));
     } catch (_) {
       emit(const ProfileError());
     }
@@ -40,7 +44,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ) async {
     try {
       final results = await _loadHistory();
-      emit(_computeStats(results));
+      if (isClosed) return;
+      emit(await _computeStats(results));
     } catch (_) {
       // Silently keep current state on refresh failure
     } finally {
@@ -48,7 +53,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
   }
 
-  ProfileLoaded _computeStats(List<GameResultEntity> results) {
+  Future<ProfileLoaded> _computeStats(List<GameResultEntity> results) async {
     final wins = results.where((r) => r.isWin).length;
     final draws = results.where((r) => r.isDraw).length;
     final losses = results.where((r) => r.isLoss).length;
@@ -57,6 +62,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         gamesPlayed > 0 ? (wins / gamesPlayed) * 100 : 0.0;
     final totalEarnings =
         results.fold<int>(0, (sum, r) => sum + r.netAmount);
+    final progression = await _loadProgression();
 
     return ProfileLoaded(
       gamesPlayed: gamesPlayed,
@@ -66,6 +72,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       winRate: winRate,
       totalEarnings: totalEarnings,
       achievements: detectAchievements(results),
+      bestWinStreak: progression.bestWinStreak,
     );
   }
 }

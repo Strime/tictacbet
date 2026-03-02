@@ -53,6 +53,17 @@ class GameConstants {
     return level;
   }
 
+  // --- Win streak ---
+  static const double streakMultiplierStep = 0.2;
+  static const int streakMaxCount = 10;
+
+  /// Returns the XP multiplier for the given win streak.
+  static double streakMultiplier(int streak) {
+    if (streak <= 1) return 1.0;
+    final effective = streak.clamp(0, streakMaxCount);
+    return 1.0 + (effective - 1) * streakMultiplierStep;
+  }
+
   // --- Bonus distribution probabilities ---
   static const double cloverProbability = 0.15; // 15% chance per cell
   static const double xpBonusProbability = 0.25; // 25% chance per cell

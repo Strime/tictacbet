@@ -42,20 +42,20 @@ final appRouter = GoRouter(
       },
       branches: [
         StatefulShellBranch(
-          navigatorKey: _lobbyNavigatorKey,
-          routes: [
-            GoRoute(
-              path: AppRoutes.lobby,
-              builder: (context, state) => const LobbyPage(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
           navigatorKey: _historyNavigatorKey,
           routes: [
             GoRoute(
               path: AppRoutes.history,
               builder: (context, state) => const HistoryPage(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          navigatorKey: _lobbyNavigatorKey,
+          routes: [
+            GoRoute(
+              path: AppRoutes.lobby,
+              builder: (context, state) => const LobbyPage(),
             ),
           ],
         ),

@@ -203,6 +203,8 @@ class _HistorySliverAppBar extends StatelessWidget {
       expandedHeight: hasStats ? _expandedHeight : AppSpacing.appBarHeight,
       toolbarHeight: AppSpacing.appBarHeight,
       pinned: true,
+      snap: true,
+      floating: true, 
       backgroundColor: AppColors.background,
       surfaceTintColor: Colors.transparent,
       elevation: 0,
@@ -311,9 +313,10 @@ class _FlexibleContent extends StatelessWidget {
             ),
           ),
 
-          // Collapsed title — centered, fades in
+          // Collapsed title + compact stats — fades in
           Positioned(
             left: AppSpacing.lg,
+            right: AppSpacing.lg,
             top: topPadding +
                 (AppSpacing.appBarHeight -
                         _HistorySliverAppBar._collapsedTitleHeight) /
@@ -322,9 +325,37 @@ class _FlexibleContent extends StatelessWidget {
               ignoring: t < 0.5,
               child: Opacity(
                 opacity: (t * 2.0 - 1.0).clamp(0.0, 1.0),
-                child: Text(
-                  l10n.history_title,
-                  style: theme.textTheme.titleLarge,
+                child: Row(
+                  children: [
+                    Text(
+                      l10n.history_title,
+                      style: theme.textTheme.titleLarge,
+                    ),
+                    const Spacer(),
+                    Text(
+                      '$wins',
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        color: AppColors.success,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.sm),
+                    Text(
+                      '$draws',
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        color: AppColors.chipGold,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.sm),
+                    Text(
+                      '$losses',
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        color: AppColors.error,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

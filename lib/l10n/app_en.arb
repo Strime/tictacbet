@@ -78,6 +78,15 @@
   "@history_bet": { "placeholders": { "amount": { "type": "int" } } },
 
   "profile_comingSoon": "Coming soon",
+  "profile_bestStreak": "Best Streak",
+  "profile_levelXp": "Level {level} • {current}/{total} XP",
+  "@profile_levelXp": { "placeholders": { "level": { "type": "int" }, "current": { "type": "int" }, "total": { "type": "int" } } },
+
+  "game_result_xpEarned": "+{amount} XP",
+  "@game_result_xpEarned": { "placeholders": { "amount": { "type": "int" } } },
+  "game_result_streakBonus": "×{multiplier} streak bonus",
+  "@game_result_streakBonus": { "placeholders": { "multiplier": { "type": "String" } } },
+  "game_result_levelUp": "Level Up!",
 
   "common_error_unknown": "An unexpected error occurred",
   "common_error_storage": "Failed to save data"

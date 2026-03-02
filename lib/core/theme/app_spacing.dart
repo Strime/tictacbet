@@ -23,6 +23,9 @@ class AppSpacing {
   static const double bottomNavHeight = 72.0;
   static const double cardSize = 80.0;
   static const double boardCellSize = 100.0;
+  static const double navFabSize = 64.0;
+  static const double navFabOverhang = 16.0;
+  static const double navNotchMargin = 6.0;
 
   // Icon sizes
   static const double iconXs = 16.0;

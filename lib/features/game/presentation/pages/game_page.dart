@@ -7,6 +7,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../injection.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../progression/presentation/bloc/progression_bloc.dart';
 import '../../../wallet/presentation/bloc/wallet_bloc.dart';
 import '../../domain/entities/game_entity.dart';
 import '../../domain/entities/game_status.dart';
@@ -132,15 +133,20 @@ class _GameView extends StatelessWidget {
     AppLocalizations l10n,
   ) {
     final game = state.game;
+    final isWin = game.humanWon;
+    final isDraw = game.status == GameStatus.draw;
 
     context.read<WalletBloc>().add(WalletGameSettled(game.winnings));
+    context.read<ProgressionBloc>().add(
+          ProgressionGameSettled(isWin: isWin, isDraw: isDraw),
+        );
 
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (_) => GameResultDialog(
-        humanWon: game.humanWon,
-        isDraw: game.status == GameStatus.draw,
+        humanWon: isWin,
+        isDraw: isDraw,
         betAmount: game.betAmount,
         l10n: l10n,
         winnings: game.winnings,

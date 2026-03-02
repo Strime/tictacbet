@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../injection.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../progression/presentation/bloc/progression_bloc.dart';
 import '../../../wallet/presentation/bloc/wallet_bloc.dart';
 import '../bloc/profile_bloc.dart';
 import '../widgets/achievements_section.dart';
@@ -187,6 +189,8 @@ class _ProfileSliverAppBar extends StatelessWidget {
       expandedHeight: _expandedHeight,
       toolbarHeight: AppSpacing.appBarHeight,
       pinned: true,
+      snap: true,
+      floating: true, 
       backgroundColor: AppColors.background,
       surfaceTintColor: Colors.transparent,
       elevation: 0,
@@ -225,7 +229,6 @@ class _FlexibleContent extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final topPadding = MediaQuery.of(context).padding.top;
-    final screenWidth = MediaQuery.of(context).size.width;
 
     // Interpolated values
     final avatarSize = lerpDouble(_avatarExpanded, _avatarCollapsed, t)!;
@@ -234,17 +237,22 @@ class _FlexibleContent extends StatelessWidget {
     final balanceOpacity = (1.0 - t * 2.5).clamp(0.0, 1.0);
     final glowOpacity = (1.0 - t).clamp(0.0, 1.0);
 
-    // Avatar position: center → left
+    // Avatar position: left-aligned below toolbar → top-left in toolbar
     final avatarLeft = lerpDouble(
-      (screenWidth - _avatarExpanded) / 2,
+      AppSpacing.xl,
       AppSpacing.lg,
       t,
     )!;
     final avatarTop = lerpDouble(
-      topPadding + AppSpacing.xl,
+      topPadding + AppSpacing.appBarHeight + AppSpacing.sm,
       topPadding + (AppSpacing.appBarHeight - _avatarCollapsed) / 2,
       t,
     )!;
+
+    // Info block: right of avatar, vertically centered
+    final infoLeft = AppSpacing.xl + _avatarExpanded + AppSpacing.lg;
+    final infoTop = topPadding + AppSpacing.appBarHeight + AppSpacing.sm +
+        (_avatarExpanded - 48) / 2;
 
     // Title collapsed position (next to avatar)
     final collapsedTitleLeft =
@@ -297,7 +305,7 @@ class _FlexibleContent extends StatelessWidget {
             ),
           ),
 
-          // Avatar — shrinks and moves from center to top-left
+          // Avatar — shrinks and slides up into toolbar
           Positioned(
             left: avatarLeft,
             top: avatarTop,
@@ -329,15 +337,11 @@ class _FlexibleContent extends StatelessWidget {
             ),
           ),
 
-          // Balance — centered below the avatar, fades out early
+          // Balance — right of avatar, fades out early
           if (balanceOpacity > 0)
             Positioned(
-              left: 0,
-              right: 0,
-              top: topPadding +
-                  AppSpacing.xl +
-                  _avatarExpanded +
-                  AppSpacing.md,
+              left: infoLeft,
+              top: infoTop,
               child: Opacity(
                 opacity: balanceOpacity,
                 child: BlocBuilder<WalletBloc, WalletState>(
@@ -347,7 +351,6 @@ class _FlexibleContent extends StatelessWidget {
                         : 0;
                     return Text(
                       l10n.profile_balance(balance),
-                      textAlign: TextAlign.center,
                       style: theme.textTheme.headlineMedium?.copyWith(
                         color: AppColors.chipGold,
                         fontWeight: FontWeight.bold,
@@ -357,8 +360,148 @@ class _FlexibleContent extends StatelessWidget {
                 ),
               ),
             ),
+
+          // Level XP text — right of avatar, below balance, fades out early
+          if (balanceOpacity > 0)
+            Positioned(
+              left: infoLeft,
+              top: infoTop + _expandedTitleHeight, // below balance text
+              child: Opacity(
+                opacity: balanceOpacity,
+                child: BlocBuilder<ProgressionBloc, ProgressionState>(
+                  builder: (context, progressionState) {
+                    if (progressionState is! ProgressionLoaded) {
+                      return const SizedBox.shrink();
+                    }
+                    final p = progressionState.progression;
+                    final xpInLevel = p.totalXp - p.xpForCurrentLevel;
+                    final xpNeeded = p.xpForNextLevel - p.xpForCurrentLevel;
+                    return Text(
+                      l10n.profile_levelXp(p.level, xpInLevel, xpNeeded),
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: AppColors.xpColor,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+
+          // Level circle — collapsed, right side, fades in
+          Positioned(
+            right: AppSpacing.lg,
+            top: topPadding +
+                (AppSpacing.appBarHeight - _avatarCollapsed) / 2,
+            child: Opacity(
+              opacity: (t * 2.0 - 1.0).clamp(0.0, 1.0),
+              child: BlocBuilder<ProgressionBloc, ProgressionState>(
+                builder: (context, progressionState) {
+                  final level = progressionState is ProgressionLoaded
+                      ? progressionState.level
+                      : 0;
+                  final progress = progressionState is ProgressionLoaded
+                      ? progressionState.progressFraction
+                      : 0.0;
+                  return _LevelCircle(
+                    size: _avatarCollapsed,
+                    level: level,
+                    progress: progress,
+                  );
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
+}
+
+// ---------------------------------------------------------------------------
+// Circular level indicator
+// ---------------------------------------------------------------------------
+
+class _LevelCircle extends StatelessWidget {
+  final double size;
+  final int level;
+  final double progress;
+
+  const _LevelCircle({
+    required this.size,
+    required this.level,
+    required this.progress,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: CustomPaint(
+        painter: _LevelCirclePainter(
+          progress: progress,
+          trackColor: AppColors.surfaceLight,
+          progressColor: AppColors.xpColor,
+          strokeWidth: 3.0,
+        ),
+        child: Center(
+          child: Text(
+            '$level',
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: AppColors.xpColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _LevelCirclePainter extends CustomPainter {
+  final double progress;
+  final Color trackColor;
+  final Color progressColor;
+  final double strokeWidth;
+
+  _LevelCirclePainter({
+    required this.progress,
+    required this.trackColor,
+    required this.progressColor,
+    required this.strokeWidth,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = (size.width - strokeWidth) / 2;
+
+    // Track
+    final trackPaint = Paint()
+      ..color = trackColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth
+      ..strokeCap = StrokeCap.round;
+    canvas.drawCircle(center, radius, trackPaint);
+
+    // Progress arc
+    if (progress > 0) {
+      final progressPaint = Paint()
+        ..color = progressColor
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = strokeWidth
+        ..strokeCap = StrokeCap.round;
+      canvas.drawArc(
+        Rect.fromCircle(center: center, radius: radius),
+        -math.pi / 2, // start from top
+        2 * math.pi * progress,
+        false,
+        progressPaint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(_LevelCirclePainter oldDelegate) =>
+      oldDelegate.progress != progress;
 }

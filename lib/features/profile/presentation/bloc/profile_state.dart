@@ -23,6 +23,7 @@ class ProfileLoaded extends ProfileState {
   final double winRate;
   final int totalEarnings;
   final Map<AchievementType, bool> achievements;
+  final int bestWinStreak;
 
   const ProfileLoaded({
     required this.gamesPlayed,
@@ -32,6 +33,7 @@ class ProfileLoaded extends ProfileState {
     required this.winRate,
     required this.totalEarnings,
     required this.achievements,
+    required this.bestWinStreak,
   });
 
   bool get isEmpty => gamesPlayed == 0;
@@ -47,6 +49,7 @@ class ProfileLoaded extends ProfileState {
         winRate,
         totalEarnings,
         achievements,
+        bestWinStreak,
       ];
 }
 

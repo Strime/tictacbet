@@ -76,6 +76,15 @@
   "@history_bet": { "placeholders": { "amount": { "type": "int" } } },
 
   "profile_comingSoon": "Bientôt disponible",
+  "profile_bestStreak": "Meilleure série",
+  "profile_levelXp": "Niveau {level} • {current}/{total} XP",
+  "@profile_levelXp": { "placeholders": { "level": { "type": "int" }, "current": { "type": "int" }, "total": { "type": "int" } } },
+
+  "game_result_xpEarned": "+{amount} XP",
+  "@game_result_xpEarned": { "placeholders": { "amount": { "type": "int" } } },
+  "game_result_streakBonus": "×{multiplier} bonus série",
+  "@game_result_streakBonus": { "placeholders": { "multiplier": { "type": "String" } } },
+  "game_result_levelUp": "Niveau supérieur !",
 
   "common_error_unknown": "Une erreur inattendue s'est produite",
   "common_error_storage": "Échec de la sauvegarde"

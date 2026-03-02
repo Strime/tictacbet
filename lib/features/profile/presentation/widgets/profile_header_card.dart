@@ -36,6 +36,11 @@ class ProfileHeaderCard extends StatelessWidget {
                 ? AppColors.success
                 : AppColors.error,
           ),
+          _MiniMetric(
+            label: l10n.profile_bestStreak,
+            value: '${state.bestWinStreak}',
+            valueColor: AppColors.xpColor,
+          ),
         ],
       ),
     );

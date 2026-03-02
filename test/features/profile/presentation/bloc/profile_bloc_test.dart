@@ -7,10 +7,15 @@ import 'package:tictacbet/features/game/domain/entities/game_status.dart';
 import 'package:tictacbet/features/game/domain/entities/player_side.dart';
 import 'package:tictacbet/features/history/domain/entities/game_result_entity.dart';
 import 'package:tictacbet/features/history/domain/usecases/load_history_use_case.dart';
+import 'package:tictacbet/features/progression/domain/entities/progression_entity.dart';
+import 'package:tictacbet/features/progression/domain/usecases/load_progression_use_case.dart';
 import 'package:tictacbet/features/profile/domain/entities/achievement.dart';
 import 'package:tictacbet/features/profile/presentation/bloc/profile_bloc.dart';
 
 class MockLoadHistoryUseCase extends Mock implements LoadHistoryUseCase {}
+
+class MockLoadProgressionUseCase extends Mock
+    implements LoadProgressionUseCase {}
 
 const _emptyAchievements = {
   AchievementType.speedRun: false,
@@ -26,12 +31,17 @@ const _emptyAchievements = {
 
 void main() {
   late MockLoadHistoryUseCase mockLoadHistory;
+  late MockLoadProgressionUseCase mockLoadProgression;
 
   setUp(() {
     mockLoadHistory = MockLoadHistoryUseCase();
+    mockLoadProgression = MockLoadProgressionUseCase();
+    when(() => mockLoadProgression())
+        .thenAnswer((_) async => const ProgressionEntity());
   });
 
-  ProfileBloc buildBloc() => ProfileBloc(mockLoadHistory);
+  ProfileBloc buildBloc() =>
+      ProfileBloc(mockLoadHistory, mockLoadProgression);
 
   // 1 win (red wins, human red) → net: 25-10 = +15
   // 1 draw → net: 5-5 = 0
@@ -115,6 +125,7 @@ void main() {
             winRate: 0.0,
             totalEarnings: 0,
             achievements: _emptyAchievements,
+          bestWinStreak: 0,
           ),
         ],
       );
@@ -148,6 +159,7 @@ void main() {
           winRate: 0,
           totalEarnings: 0,
           achievements: _emptyAchievements,
+          bestWinStreak: 0,
         ),
         act: (bloc) => bloc.add(const ProfileRefreshed()),
         expect: () => [isA<ProfileLoaded>()],
@@ -167,6 +179,7 @@ void main() {
           winRate: 0,
           totalEarnings: 0,
           achievements: _emptyAchievements,
+          bestWinStreak: 0,
         ),
         act: (bloc) => bloc.add(const ProfileRefreshed()),
         expect: () => [],

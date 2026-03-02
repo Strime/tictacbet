@@ -44,6 +44,18 @@ import 'package:tictacbet/features/lobby/presentation/bloc/lobby_bloc.dart'
     as _i335;
 import 'package:tictacbet/features/profile/presentation/bloc/profile_bloc.dart'
     as _i169;
+import 'package:tictacbet/features/progression/data/datasources/progression_local_data_source.dart'
+    as _i949;
+import 'package:tictacbet/features/progression/data/repositories/progression_repository_impl.dart'
+    as _i364;
+import 'package:tictacbet/features/progression/domain/repositories/progression_repository.dart'
+    as _i926;
+import 'package:tictacbet/features/progression/domain/usecases/load_progression_use_case.dart'
+    as _i545;
+import 'package:tictacbet/features/progression/domain/usecases/save_progression_use_case.dart'
+    as _i182;
+import 'package:tictacbet/features/progression/presentation/bloc/progression_bloc.dart'
+    as _i657;
 import 'package:tictacbet/features/wallet/data/datasources/wallet_local_data_source.dart'
     as _i774;
 import 'package:tictacbet/features/wallet/data/repositories/wallet_repository_impl.dart'
@@ -76,6 +88,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i774.WalletLocalDataSource>(
       () => _i774.WalletLocalDataSource(gh<_i460.SharedPreferences>()),
     );
+    gh.lazySingleton<_i949.ProgressionLocalDataSource>(
+      () => _i949.ProgressionLocalDataSource(gh<_i460.SharedPreferences>()),
+    );
     gh.factoryParam<_i466.ComputeAiMoveUseCase, _i407.Random?, dynamic>(
       (random, _) => _i466.ComputeAiMoveUseCase(
         gh<_i274.MinimaxService>(),
@@ -104,6 +119,23 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i979.Box<Map<dynamic, dynamic>>>(instanceName: 'historyBox'),
       ),
     );
+    gh.lazySingleton<_i926.ProgressionRepository>(
+      () => _i364.ProgressionRepositoryImpl(
+        gh<_i949.ProgressionLocalDataSource>(),
+      ),
+    );
+    gh.factory<_i545.LoadProgressionUseCase>(
+      () => _i545.LoadProgressionUseCase(gh<_i926.ProgressionRepository>()),
+    );
+    gh.factory<_i182.SaveProgressionUseCase>(
+      () => _i182.SaveProgressionUseCase(gh<_i926.ProgressionRepository>()),
+    );
+    gh.lazySingleton<_i657.ProgressionBloc>(
+      () => _i657.ProgressionBloc(
+        gh<_i545.LoadProgressionUseCase>(),
+        gh<_i182.SaveProgressionUseCase>(),
+      ),
+    );
     gh.factory<_i509.HistoryRepository>(
       () => _i980.HistoryRepositoryImpl(gh<_i948.HistoryLocalDataSource>()),
     );
@@ -119,11 +151,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i542.SaveGameResultUseCase>(
       () => _i542.SaveGameResultUseCase(gh<_i509.HistoryRepository>()),
     );
+    gh.factory<_i169.ProfileBloc>(
+      () => _i169.ProfileBloc(
+        gh<_i721.LoadHistoryUseCase>(),
+        gh<_i545.LoadProgressionUseCase>(),
+      ),
+    );
     gh.factory<_i341.HistoryBloc>(
       () => _i341.HistoryBloc(gh<_i721.LoadHistoryUseCase>()),
-    );
-    gh.factory<_i169.ProfileBloc>(
-      () => _i169.ProfileBloc(gh<_i721.LoadHistoryUseCase>()),
     );
     gh.factory<_i789.GameBloc>(
       () => _i789.GameBloc(

@@ -218,6 +218,27 @@ class AppLocalizationsFr extends AppLocalizations {
   String get profile_comingSoon => 'Bientôt disponible';
 
   @override
+  String get profile_bestStreak => 'Meilleure série';
+
+  @override
+  String profile_levelXp(int level, int current, int total) {
+    return 'Niveau $level • $current/$total XP';
+  }
+
+  @override
+  String game_result_xpEarned(int amount) {
+    return '+$amount XP';
+  }
+
+  @override
+  String game_result_streakBonus(String multiplier) {
+    return '×$multiplier bonus série';
+  }
+
+  @override
+  String get game_result_levelUp => 'Niveau supérieur !';
+
+  @override
   String get common_error_unknown => 'Une erreur inattendue s\'est produite';
 
   @override

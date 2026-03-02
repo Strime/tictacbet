@@ -494,6 +494,36 @@ abstract class AppLocalizations {
   /// **'Coming soon'**
   String get profile_comingSoon;
 
+  /// No description provided for @profile_bestStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Best Streak'**
+  String get profile_bestStreak;
+
+  /// No description provided for @profile_levelXp.
+  ///
+  /// In en, this message translates to:
+  /// **'Level {level} • {current}/{total} XP'**
+  String profile_levelXp(int level, int current, int total);
+
+  /// No description provided for @game_result_xpEarned.
+  ///
+  /// In en, this message translates to:
+  /// **'+{amount} XP'**
+  String game_result_xpEarned(int amount);
+
+  /// No description provided for @game_result_streakBonus.
+  ///
+  /// In en, this message translates to:
+  /// **'×{multiplier} streak bonus'**
+  String game_result_streakBonus(String multiplier);
+
+  /// No description provided for @game_result_levelUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Level Up!'**
+  String get game_result_levelUp;
+
   /// No description provided for @common_error_unknown.
   ///
   /// In en, this message translates to:
