@@ -1,16 +1,69 @@
-# tictacbet
+# TicTacBet
 
-A new Flutter project.
+Casino-themed Tic-Tac-Toe with betting, AI opponent and a wallet system.
+
+## Features
+
+- **Tic-Tac-Toe vs AI** — Minimax with alpha-beta pruning, 4 difficulty levels
+- **Betting system** — Place bets before each game, difficulty scales with bet amount
+- **Wallet** — Persistent balance, daily bonus (10 chips), win/draw/loss settlement
+- **Card-based board** — Each cell hides a card with random bonuses (coins, XP, clovers)
+
+## Tech Stack
+
+| Layer | Tools |
+|-------|-------|
+| State management | flutter_bloc / BLoC |
+| Navigation | go_router (stateful shell) |
+| DI | get_it + injectable |
+| Code generation | freezed, json_serializable |
+| Persistence | shared_preferences |
+| UI | Material 3 dark theme, flutter_animate, Google Fonts |
+| i18n | Flutter intl (EN / FR) |
+
+## Architecture
+
+Clean Architecture — 3 layers per feature:
+
+```
+feature/
+├── domain/       # Entities, repositories (abstract), use cases
+├── data/         # Repository impls, data sources
+└── presentation/ # BLoC, pages, widgets
+```
+
+## Project Structure
+
+```
+lib/
+├── core/
+│   ├── config/        # Game constants & balance tuning
+│   ├── di/            # DI module
+│   ├── error/         # Typed failures (Freezed)
+│   ├── navigation/    # Bottom nav bar
+│   ├── router/        # GoRouter config
+│   └── theme/         # Colors, spacing, text styles, decorations
+│
+├── features/
+│   ├── ai/            # Minimax AI service & use case
+│   ├── game/          # Board, cells, cards, game logic & UI
+│   ├── lobby/         # Bet & side selection before a game
+│   ├── wallet/        # Balance, bets, daily bonus, persistence
+│   ├── history/       # (coming soon)
+│   └── profile/       # (coming soon)
+│
+└── l10n/              # Localization (EN, FR)
+```
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+```bash
+# Install dependencies
+flutter pub get
 
-A few resources to get you started if this is your first Flutter project:
+# Run code generation
+dart run build_runner build --delete-conflicting-outputs
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Run the app
+flutter run
+```
