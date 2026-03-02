@@ -9,6 +9,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../injection.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../wallet/presentation/bloc/wallet_bloc.dart';
 import '../bloc/lobby_bloc.dart';
 import '../widgets/ai_difficulty_gauge.dart';
 import '../widgets/bet_amount_display.dart';
@@ -22,7 +23,14 @@ class LobbyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<LobbyBloc>(),
+      create: (context) {
+        final lobbyBloc = getIt<LobbyBloc>();
+        final walletState = context.read<WalletBloc>().state;
+        if (walletState is WalletLoaded) {
+          lobbyBloc.add(LobbyInitialized(playerBalance: walletState.balance));
+        }
+        return lobbyBloc;
+      },
       child: const _LobbyView(),
     );
   }
@@ -35,14 +43,22 @@ class _LobbyView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return SafeArea(
-      child: BlocBuilder<LobbyBloc, LobbyState>(
-        builder: (context, state) {
-          if (state is! LobbyReady) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return BlocListener<WalletBloc, WalletState>(
+      listener: (context, walletState) {
+        if (walletState is WalletLoaded) {
+          context.read<LobbyBloc>().add(
+            LobbyInitialized(playerBalance: walletState.balance),
+          );
+        }
+      },
+      child: SafeArea(
+        child: BlocBuilder<LobbyBloc, LobbyState>(
+          builder: (context, state) {
+            if (state is! LobbyReady) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          return SingleChildScrollView(
+            return SingleChildScrollView(
             padding: const EdgeInsets.all(AppSpacing.xl),
             child: Column(
               children: [
@@ -107,7 +123,12 @@ class _LobbyView extends StatelessWidget {
                 // AI difficulty gauge
                 AiDifficultyGauge(
                   aiLevel: state.aiLevel,
-                  label: state.aiDifficultyLabel,
+                  label: switch (state.aiDifficulty) {
+                    AiDifficulty.easy => l10n.lobby_difficulty_easy,
+                    AiDifficulty.medium => l10n.lobby_difficulty_medium,
+                    AiDifficulty.hard => l10n.lobby_difficulty_hard,
+                    AiDifficulty.expert => l10n.lobby_difficulty_expert,
+                  },
                 ),
                 const SizedBox(height: AppSpacing.xxxl),
 
@@ -115,17 +136,22 @@ class _LobbyView extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      HapticFeedback.mediumImpact();
-                      context.push(
-                        AppRoutes.game,
-                        extra: GameParams(
-                          humanSide: state.selectedSide,
-                          aiLevel: state.aiLevel,
-                          betAmount: state.betAmount,
-                        ),
-                      );
-                    },
+                    onPressed: state.betAmount > 0
+                        ? () {
+                            HapticFeedback.mediumImpact();
+                            context.read<WalletBloc>().add(
+                              WalletBetPlaced(state.betAmount),
+                            );
+                            context.push(
+                              AppRoutes.game,
+                              extra: GameParams(
+                                humanSide: state.selectedSide,
+                                aiLevel: state.aiLevel,
+                                betAmount: state.betAmount,
+                              ),
+                            );
+                          }
+                        : null,
                     child: Text('${l10n.lobby_play} — \$${state.betAmount}'),
                   ),
                 )
@@ -140,7 +166,8 @@ class _LobbyView extends StatelessWidget {
               ],
             ),
           );
-        },
+          },
+        ),
       ),
     );
   }

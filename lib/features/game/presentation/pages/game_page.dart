@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/config/game_constants.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../injection.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../wallet/presentation/bloc/wallet_bloc.dart';
 import '../../domain/entities/game_entity.dart';
 import '../../domain/entities/game_status.dart';
+import '../../domain/entities/player_side.dart';
 import '../bloc/game_bloc.dart';
 import '../widgets/board_widget.dart';
 import '../widgets/game_result_dialog.dart';
@@ -130,12 +133,35 @@ class _GameView extends StatelessWidget {
     GameOver state,
     AppLocalizations l10n,
   ) {
+    final game = state.game;
+    final humanWon =
+        (game.humanSide == PlayerSide.red &&
+            game.status == GameStatus.redWins) ||
+        (game.humanSide == PlayerSide.black &&
+            game.status == GameStatus.blackWins);
+    final isDraw = game.status == GameStatus.draw;
+
+    final int winnings;
+    if (humanWon) {
+      winnings = GameConstants.winBonusBase +
+          game.betAmount * GameConstants.winBetMultiplier;
+    } else if (isDraw) {
+      winnings = game.betAmount;
+    } else {
+      winnings = 0;
+    }
+
+    context.read<WalletBloc>().add(WalletGameSettled(winnings));
+
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (_) => GameResultDialog(
-        game: state.game,
+        humanWon: humanWon,
+        isDraw: isDraw,
+        betAmount: game.betAmount,
         l10n: l10n,
+        winnings: winnings,
         onPlayAgain: () {
           Navigator.of(context).pop();
           context.pop();

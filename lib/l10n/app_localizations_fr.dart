@@ -157,6 +157,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get achievement_whale_desc => 'Gagner avec une mise de 50\$+';
 
   @override
+  String get lobby_difficulty_easy => 'Facile';
+
+  @override
+  String get lobby_difficulty_medium => 'Moyen';
+
+  @override
+  String get lobby_difficulty_hard => 'Difficile';
+
+  @override
+  String get lobby_difficulty_expert => 'Expert';
+
+  @override
   String get nav_lobby => 'Lobby';
 
   @override

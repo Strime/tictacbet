@@ -1,10 +1,16 @@
 part of 'lobby_bloc.dart';
 
+enum AiDifficulty { easy, medium, hard, expert }
+
 sealed class LobbyState extends Equatable {
   const LobbyState();
 
   @override
   List<Object?> get props => [];
+}
+
+class LobbyInitial extends LobbyState {
+  const LobbyInitial();
 }
 
 class LobbyReady extends LobbyState {
@@ -25,11 +31,11 @@ class LobbyReady extends LobbyState {
 
   int get remainingBalance => maxBet - betAmount;
 
-  String get aiDifficultyLabel => switch (aiLevel) {
-    >= 1.0 => 'Expert',
-    >= 0.7 => 'Hard',
-    >= 0.3 => 'Medium',
-    _ => 'Easy',
+  AiDifficulty get aiDifficulty => switch (aiLevel) {
+    >= 1.0 => AiDifficulty.expert,
+    >= 0.7 => AiDifficulty.hard,
+    >= 0.3 => AiDifficulty.medium,
+    _ => AiDifficulty.easy,
   };
 
   @override

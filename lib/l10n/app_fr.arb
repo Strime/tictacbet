@@ -53,6 +53,11 @@
   "achievement_whale": "Whale",
   "achievement_whale_desc": "Gagner avec une mise de 50$+",
 
+  "lobby_difficulty_easy": "Facile",
+  "lobby_difficulty_medium": "Moyen",
+  "lobby_difficulty_hard": "Difficile",
+  "lobby_difficulty_expert": "Expert",
+
   "nav_lobby": "Lobby",
   "nav_history": "Historique",
   "nav_profile": "Profil",

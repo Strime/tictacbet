@@ -10,7 +10,7 @@ part 'lobby_state.dart';
 
 @injectable
 class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
-  LobbyBloc() : super(const LobbyReady(maxBet: GameConstants.initialBalance)) {
+  LobbyBloc() : super(const LobbyInitial()) {
     on<LobbyInitialized>(_onInitialized);
     on<LobbySideChanged>(_onSideChanged);
     on<LobbyBetChanged>(_onBetChanged);
@@ -21,13 +21,20 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
 
   void _onInitialized(LobbyInitialized event, Emitter<LobbyState> emit) {
     final currentState = state;
-    if (currentState is LobbyReady) {
-      emit(LobbyReady(
-        selectedSide: currentState.selectedSide,
-        betAmount: currentState.betAmount.clamp(1, event.playerBalance),
-        maxBet: event.playerBalance,
-      ));
-    }
+    final balance = event.playerBalance;
+
+    final selectedSide = currentState is LobbyReady
+        ? currentState.selectedSide
+        : PlayerSide.red;
+    final previousBet = currentState is LobbyReady
+        ? currentState.betAmount
+        : 1;
+
+    emit(LobbyReady(
+      selectedSide: selectedSide,
+      betAmount: balance > 0 ? previousBet.clamp(1, balance) : 0,
+      maxBet: balance,
+    ));
   }
 
   void _onSideChanged(LobbySideChanged event, Emitter<LobbyState> emit) {
@@ -69,7 +76,7 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
     if (currentState is LobbyReady) {
       emit(LobbyReady(
         selectedSide: currentState.selectedSide,
-        betAmount: 1,
+        betAmount: currentState.maxBet > 0 ? 1 : 0,
         maxBet: currentState.maxBet,
       ));
     }

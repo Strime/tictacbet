@@ -64,7 +64,10 @@ class GameConstants {
   static const Duration cardFlipDuration = Duration(milliseconds: 400);
 
   // --- Initial player balance ---
-  static const int initialBalance = 50;
+  static const int initialBalance = 10;
+
+  // --- Daily bonus ---
+  static const int dailyBonusAmount = 10;
 }
 
 class BetAiMapping {

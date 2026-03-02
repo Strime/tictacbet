@@ -55,6 +55,11 @@
   "achievement_whale": "Whale",
   "achievement_whale_desc": "Win a game with a $50+ bet",
 
+  "lobby_difficulty_easy": "Easy",
+  "lobby_difficulty_medium": "Medium",
+  "lobby_difficulty_hard": "Hard",
+  "lobby_difficulty_expert": "Expert",
+
   "nav_lobby": "Lobby",
   "nav_history": "History",
   "nav_profile": "Profile",

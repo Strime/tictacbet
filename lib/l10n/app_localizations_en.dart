@@ -156,6 +156,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get achievement_whale_desc => 'Win a game with a \$50+ bet';
 
   @override
+  String get lobby_difficulty_easy => 'Easy';
+
+  @override
+  String get lobby_difficulty_medium => 'Medium';
+
+  @override
+  String get lobby_difficulty_hard => 'Hard';
+
+  @override
+  String get lobby_difficulty_expert => 'Expert';
+
+  @override
   String get nav_lobby => 'Lobby';
 
   @override

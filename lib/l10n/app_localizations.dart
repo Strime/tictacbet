@@ -380,6 +380,30 @@ abstract class AppLocalizations {
   /// **'Win a game with a \$50+ bet'**
   String get achievement_whale_desc;
 
+  /// No description provided for @lobby_difficulty_easy.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy'**
+  String get lobby_difficulty_easy;
+
+  /// No description provided for @lobby_difficulty_medium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get lobby_difficulty_medium;
+
+  /// No description provided for @lobby_difficulty_hard.
+  ///
+  /// In en, this message translates to:
+  /// **'Hard'**
+  String get lobby_difficulty_hard;
+
+  /// No description provided for @lobby_difficulty_expert.
+  ///
+  /// In en, this message translates to:
+  /// **'Expert'**
+  String get lobby_difficulty_expert;
+
   /// No description provided for @nav_lobby.
   ///
   /// In en, this message translates to:
