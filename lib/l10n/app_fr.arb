@@ -31,6 +31,10 @@
   "profile_wins": "Victoires",
   "profile_losses": "Défaites",
   "profile_winRate": "Taux de victoire",
+  "profile_draws": "Nuls",
+  "profile_totalEarnings": "Gains totaux",
+  "profile_empty": "Pas encore de stats",
+  "profile_emptySubtitle": "Jouez votre première partie\npour voir vos stats ici",
   "profile_achievements": "Succès",
   "profile_clovers": "Trèfles",
 

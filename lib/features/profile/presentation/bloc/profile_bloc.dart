@@ -1,0 +1,71 @@
+import 'dart:async';
+
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
+
+import '../../domain/entities/achievement.dart';
+import '../../domain/services/achievement_detector.dart';
+import '../../../history/domain/entities/game_result_entity.dart';
+import '../../../history/domain/usecases/load_history_use_case.dart';
+
+part 'profile_event.dart';
+part 'profile_state.dart';
+
+@injectable
+class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
+  final LoadHistoryUseCase _loadHistory;
+
+  ProfileBloc(this._loadHistory) : super(const ProfileInitial()) {
+    on<ProfileStarted>(_onStarted);
+    on<ProfileRefreshed>(_onRefreshed);
+  }
+
+  Future<void> _onStarted(
+    ProfileStarted event,
+    Emitter<ProfileState> emit,
+  ) async {
+    emit(const ProfileLoading());
+    try {
+      final results = await _loadHistory();
+      emit(_computeStats(results));
+    } catch (_) {
+      emit(const ProfileError());
+    }
+  }
+
+  Future<void> _onRefreshed(
+    ProfileRefreshed event,
+    Emitter<ProfileState> emit,
+  ) async {
+    try {
+      final results = await _loadHistory();
+      emit(_computeStats(results));
+    } catch (_) {
+      // Silently keep current state on refresh failure
+    } finally {
+      event.completer?.complete();
+    }
+  }
+
+  ProfileLoaded _computeStats(List<GameResultEntity> results) {
+    final wins = results.where((r) => r.isWin).length;
+    final draws = results.where((r) => r.isDraw).length;
+    final losses = results.where((r) => r.isLoss).length;
+    final gamesPlayed = results.length;
+    final winRate =
+        gamesPlayed > 0 ? (wins / gamesPlayed) * 100 : 0.0;
+    final totalEarnings =
+        results.fold<int>(0, (sum, r) => sum + r.netAmount);
+
+    return ProfileLoaded(
+      gamesPlayed: gamesPlayed,
+      wins: wins,
+      losses: losses,
+      draws: draws,
+      winRate: winRate,
+      totalEarnings: totalEarnings,
+      achievements: detectAchievements(results),
+    );
+  }
+}

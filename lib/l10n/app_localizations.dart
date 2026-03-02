@@ -260,6 +260,30 @@ abstract class AppLocalizations {
   /// **'Win Rate'**
   String get profile_winRate;
 
+  /// No description provided for @profile_draws.
+  ///
+  /// In en, this message translates to:
+  /// **'Draws'**
+  String get profile_draws;
+
+  /// No description provided for @profile_totalEarnings.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Earnings'**
+  String get profile_totalEarnings;
+
+  /// No description provided for @profile_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No stats yet'**
+  String get profile_empty;
+
+  /// No description provided for @profile_emptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Play your first game to\nsee your stats here'**
+  String get profile_emptySubtitle;
+
   /// No description provided for @profile_achievements.
   ///
   /// In en, this message translates to:

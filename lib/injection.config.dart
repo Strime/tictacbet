@@ -42,6 +42,8 @@ import 'package:tictacbet/features/history/presentation/bloc/history_bloc.dart'
     as _i341;
 import 'package:tictacbet/features/lobby/presentation/bloc/lobby_bloc.dart'
     as _i335;
+import 'package:tictacbet/features/profile/presentation/bloc/profile_bloc.dart'
+    as _i169;
 import 'package:tictacbet/features/wallet/data/datasources/wallet_local_data_source.dart'
     as _i774;
 import 'package:tictacbet/features/wallet/data/repositories/wallet_repository_impl.dart'
@@ -119,6 +121,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i341.HistoryBloc>(
       () => _i341.HistoryBloc(gh<_i721.LoadHistoryUseCase>()),
+    );
+    gh.factory<_i169.ProfileBloc>(
+      () => _i169.ProfileBloc(gh<_i721.LoadHistoryUseCase>()),
     );
     gh.factory<_i789.GameBloc>(
       () => _i789.GameBloc(

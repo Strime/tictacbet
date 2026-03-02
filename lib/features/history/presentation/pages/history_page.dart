@@ -9,8 +9,10 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../injection.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../domain/entities/game_result_entity.dart';
 import '../bloc/history_bloc.dart';
 import '../widgets/history_list_item.dart';
+import '../widgets/stats_row.dart';
 
 class HistoryPage extends StatelessWidget {
   const HistoryPage({super.key});
@@ -67,138 +69,282 @@ class _HistoryViewState extends State<_HistoryView> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.lg,
-              AppSpacing.lg,
-              AppSpacing.lg,
-              AppSpacing.md,
-            ),
-            child: Text(
-              l10n.history_title,
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
-          ),
-          Expanded(
-            child: BlocBuilder<HistoryBloc, HistoryState>(
-              builder: (context, state) => switch (state) {
-                HistoryInitial() || HistoryLoading() => const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                HistoryError() => _ErrorContent(
-                    message: l10n.common_error_unknown,
-                    onRefresh: _onRefresh,
-                  ),
-                HistoryLoaded(isEmpty: true) => _EmptyContent(
-                    l10n: l10n,
-                    onRefresh: _onRefresh,
-                  ),
-                HistoryLoaded(:final results) => RefreshIndicator(
-                    onRefresh: _onRefresh,
-                    color: AppColors.chipGold,
-                    child: ListView.separated(
-                      physics: const AlwaysScrollableScrollPhysics(),
+    return BlocBuilder<HistoryBloc, HistoryState>(
+      builder: (context, state) {
+        final results =
+            state is HistoryLoaded ? state.results : <GameResultEntity>[];
+        final wins = results.where((r) => r.isWin).length;
+        final losses = results.where((r) => r.isLoss).length;
+        final draws = results.where((r) => r.isDraw).length;
+
+        return RefreshIndicator(
+          onRefresh: _onRefresh,
+          color: AppColors.chipGold,
+          edgeOffset: _HistorySliverAppBar._expandedHeight,
+          child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              _HistorySliverAppBar(
+                wins: wins,
+                losses: losses,
+                draws: draws,
+                hasStats: state is HistoryLoaded && !state.isEmpty,
+              ),
+              ...switch (state) {
+                HistoryInitial() || HistoryLoading() => [
+                    const SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  ],
+                HistoryError() => [
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(
+                        child: Text(
+                          l10n.common_error_unknown,
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    color: AppColors.textSecondary,
+                                  ),
+                        ),
+                      ),
+                    ),
+                  ],
+                HistoryLoaded(isEmpty: true) => [
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.history,
+                              size: AppSpacing.iconXl,
+                              color: AppColors.textSecondary,
+                            ),
+                            const SizedBox(height: AppSpacing.lg),
+                            Text(
+                              l10n.history_empty,
+                              style:
+                                  Theme.of(context).textTheme.headlineMedium,
+                            ),
+                            const SizedBox(height: AppSpacing.sm),
+                            Text(
+                              l10n.history_emptySubtitle,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    color: AppColors.textSecondary,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                HistoryLoaded(:final results) => [
+                    SliverPadding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: AppSpacing.lg,
                         vertical: AppSpacing.sm,
                       ),
-                      itemCount: results.length,
-                      separatorBuilder: (_, _) =>
-                          const SizedBox(height: AppSpacing.sm),
-                      itemBuilder: (_, index) => HistoryListItem(
-                        result: results[index],
-                      ).animate().fadeIn(
-                            delay: Duration(milliseconds: index * 50),
-                          ),
-                    ),
-                  ),
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _EmptyContent extends StatelessWidget {
-  final AppLocalizations l10n;
-  final Future<void> Function() onRefresh;
-
-  const _EmptyContent({required this.l10n, required this.onRefresh});
-
-  @override
-  Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: onRefresh,
-      color: AppColors.chipGold,
-      child: CustomScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        slivers: [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.history,
-                    size: AppSpacing.iconXl,
-                    color: AppColors.textSecondary,
-                  ),
-                  const SizedBox(height: AppSpacing.lg),
-                  Text(
-                    l10n.history_empty,
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  Text(
-                    l10n.history_emptySubtitle,
-                    textAlign: TextAlign.center,
-                    style:
-                        Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: AppColors.textSecondary,
+                      sliver: SliverList.separated(
+                        itemCount: results.length,
+                        separatorBuilder: (_, _) =>
+                            const SizedBox(height: AppSpacing.sm),
+                        itemBuilder: (_, index) => HistoryListItem(
+                          result: results[index],
+                        ).animate().fadeIn(
+                              delay: Duration(milliseconds: index * 50),
                             ),
-                  ),
-                ],
-              ),
-            ),
+                      ),
+                    ),
+                  ],
+              },
+            ],
           ),
-        ],
+        );
+      },
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// SliverAppBar
+// ---------------------------------------------------------------------------
+
+class _HistorySliverAppBar extends StatelessWidget {
+  const _HistorySliverAppBar({
+    required this.wins,
+    required this.losses,
+    required this.draws,
+    required this.hasStats,
+  });
+
+  final int wins;
+  final int losses;
+  final int draws;
+  final bool hasStats;
+
+  static const double _expandedHeight = 160.0;
+  static const double _expandedTitleHeight = 28.0;
+  static const double _collapsedTitleHeight = 24.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final topPadding = MediaQuery.of(context).padding.top;
+
+    return SliverAppBar(
+      expandedHeight: hasStats ? _expandedHeight : AppSpacing.appBarHeight,
+      toolbarHeight: AppSpacing.appBarHeight,
+      pinned: true,
+      backgroundColor: AppColors.background,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      flexibleSpace: hasStats
+          ? LayoutBuilder(
+              builder: (context, constraints) {
+                final maxExtent = _expandedHeight + topPadding;
+                final minExtent = AppSpacing.appBarHeight + topPadding;
+                final t = ((maxExtent - constraints.maxHeight) /
+                        (maxExtent - minExtent))
+                    .clamp(0.0, 1.0);
+
+                return _FlexibleContent(
+                  t: t,
+                  wins: wins,
+                  losses: losses,
+                  draws: draws,
+                );
+              },
+            )
+          : _StaticTitle(),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Static title — used when no stats to show (loading, error, empty)
+// ---------------------------------------------------------------------------
+
+class _StaticTitle extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final topPadding = MediaQuery.of(context).padding.top;
+
+    return Container(
+      color: AppColors.background,
+      padding: EdgeInsets.only(top: topPadding),
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: const EdgeInsets.only(left: AppSpacing.lg),
+        child: Text(
+          l10n.history_title,
+          style: Theme.of(context).textTheme.headlineLarge,
+        ),
       ),
     );
   }
 }
 
-class _ErrorContent extends StatelessWidget {
-  final String message;
-  final Future<void> Function() onRefresh;
+// ---------------------------------------------------------------------------
+// Flexible content — interpolates between expanded and collapsed states
+// ---------------------------------------------------------------------------
 
-  const _ErrorContent({required this.message, required this.onRefresh});
+class _FlexibleContent extends StatelessWidget {
+  final double t;
+  final int wins;
+  final int losses;
+  final int draws;
+
+  const _FlexibleContent({
+    required this.t,
+    required this.wins,
+    required this.losses,
+    required this.draws,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: onRefresh,
-      color: AppColors.chipGold,
-      child: CustomScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        slivers: [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Center(
-              child: Text(
-                message,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final topPadding = MediaQuery.of(context).padding.top;
+
+    final statsOpacity = (1.0 - t * 2.0).clamp(0.0, 1.0);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        border: Border(
+          bottom: BorderSide(
+            color: AppColors.chipGold.withValues(alpha: 0.15 * t),
+            width: 0.5,
+          ),
+        ),
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          // Expanded title — top left, fades out
+          Positioned(
+            left: AppSpacing.lg,
+            top: topPadding +
+                (AppSpacing.appBarHeight -
+                        _HistorySliverAppBar._expandedTitleHeight) /
+                    2,
+            child: IgnorePointer(
+              ignoring: t > 0.5,
+              child: Opacity(
+                opacity: (1.0 - t * 2.0).clamp(0.0, 1.0),
+                child: Text(
+                  l10n.history_title,
+                  style: theme.textTheme.headlineLarge,
+                ),
               ),
             ),
           ),
+
+          // Collapsed title — centered, fades in
+          Positioned(
+            left: AppSpacing.lg,
+            top: topPadding +
+                (AppSpacing.appBarHeight -
+                        _HistorySliverAppBar._collapsedTitleHeight) /
+                    2,
+            child: IgnorePointer(
+              ignoring: t < 0.5,
+              child: Opacity(
+                opacity: (t * 2.0 - 1.0).clamp(0.0, 1.0),
+                child: Text(
+                  l10n.history_title,
+                  style: theme.textTheme.titleLarge,
+                ),
+              ),
+            ),
+          ),
+
+          // StatsRow — below the title, fades out on scroll
+          if (statsOpacity > 0)
+            Positioned(
+              left: AppSpacing.lg,
+              right: AppSpacing.lg,
+              top: topPadding + AppSpacing.appBarHeight + AppSpacing.sm,
+              child: Opacity(
+                opacity: statsOpacity,
+                child: StatsRow(
+                  wins: wins,
+                  losses: losses,
+                  draws: draws,
+                ),
+              ),
+            ),
         ],
       ),
     );

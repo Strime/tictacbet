@@ -33,6 +33,10 @@
   "profile_wins": "Wins",
   "profile_losses": "Losses",
   "profile_winRate": "Win Rate",
+  "profile_draws": "Draws",
+  "profile_totalEarnings": "Total Earnings",
+  "profile_empty": "No stats yet",
+  "profile_emptySubtitle": "Play your first game to\nsee your stats here",
   "profile_achievements": "Achievements",
   "profile_clovers": "Clovers",
 

@@ -94,6 +94,19 @@ class AppLocalizationsFr extends AppLocalizations {
   String get profile_winRate => 'Taux de victoire';
 
   @override
+  String get profile_draws => 'Nuls';
+
+  @override
+  String get profile_totalEarnings => 'Gains totaux';
+
+  @override
+  String get profile_empty => 'Pas encore de stats';
+
+  @override
+  String get profile_emptySubtitle =>
+      'Jouez votre première partie\npour voir vos stats ici';
+
+  @override
   String get profile_achievements => 'Succès';
 
   @override
