@@ -428,11 +428,41 @@ abstract class AppLocalizations {
   /// **'History'**
   String get history_title;
 
-  /// No description provided for @history_comingSoon.
+  /// No description provided for @history_empty.
   ///
   /// In en, this message translates to:
-  /// **'Coming soon'**
-  String get history_comingSoon;
+  /// **'No games yet'**
+  String get history_empty;
+
+  /// No description provided for @history_emptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Play your first game to\nsee your results here'**
+  String get history_emptySubtitle;
+
+  /// No description provided for @history_result_win.
+  ///
+  /// In en, this message translates to:
+  /// **'Win'**
+  String get history_result_win;
+
+  /// No description provided for @history_result_draw.
+  ///
+  /// In en, this message translates to:
+  /// **'Draw'**
+  String get history_result_draw;
+
+  /// No description provided for @history_result_loss.
+  ///
+  /// In en, this message translates to:
+  /// **'Loss'**
+  String get history_result_loss;
+
+  /// No description provided for @history_bet.
+  ///
+  /// In en, this message translates to:
+  /// **'Bet: \${amount}'**
+  String history_bet(int amount);
 
   /// No description provided for @profile_comingSoon.
   ///

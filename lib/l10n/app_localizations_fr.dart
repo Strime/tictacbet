@@ -181,7 +181,25 @@ class AppLocalizationsFr extends AppLocalizations {
   String get history_title => 'Historique';
 
   @override
-  String get history_comingSoon => 'Bientôt disponible';
+  String get history_empty => 'Aucune partie';
+
+  @override
+  String get history_emptySubtitle =>
+      'Jouez votre première partie\npour voir vos résultats ici';
+
+  @override
+  String get history_result_win => 'Victoire';
+
+  @override
+  String get history_result_draw => 'Nul';
+
+  @override
+  String get history_result_loss => 'Défaite';
+
+  @override
+  String history_bet(int amount) {
+    return 'Mise : \$$amount';
+  }
 
   @override
   String get profile_comingSoon => 'Bientôt disponible';

@@ -12,6 +12,7 @@
 import 'dart:math' as _i407;
 
 import 'package:get_it/get_it.dart' as _i174;
+import 'package:hive/hive.dart' as _i979;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 import 'package:tictacbet/core/di/app_module.dart' as _i109;
@@ -27,6 +28,18 @@ import 'package:tictacbet/features/game/domain/usecases/play_move_use_case.dart'
     as _i740;
 import 'package:tictacbet/features/game/presentation/bloc/game_bloc.dart'
     as _i789;
+import 'package:tictacbet/features/history/data/datasources/history_local_data_source.dart'
+    as _i948;
+import 'package:tictacbet/features/history/data/repositories/history_repository_impl.dart'
+    as _i980;
+import 'package:tictacbet/features/history/domain/repositories/history_repository.dart'
+    as _i509;
+import 'package:tictacbet/features/history/domain/usecases/load_history_use_case.dart'
+    as _i721;
+import 'package:tictacbet/features/history/domain/usecases/save_game_result_use_case.dart'
+    as _i542;
+import 'package:tictacbet/features/history/presentation/bloc/history_bloc.dart'
+    as _i341;
 import 'package:tictacbet/features/lobby/presentation/bloc/lobby_bloc.dart'
     as _i335;
 import 'package:tictacbet/features/wallet/data/datasources/wallet_local_data_source.dart'
@@ -76,20 +89,43 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i278.SaveWalletUseCase>(
       () => _i278.SaveWalletUseCase(gh<_i411.WalletRepository>()),
     );
+    await gh.factoryAsync<_i979.Box<Map<dynamic, dynamic>>>(
+      () => appModule.historyBox,
+      instanceName: 'historyBox',
+      preResolve: true,
+    );
     gh.factoryParam<_i740.PlayMoveUseCase, _i407.Random?, dynamic>(
       (random, _) => _i740.PlayMoveUseCase(random: random),
+    );
+    gh.factory<_i948.HistoryLocalDataSource>(
+      () => _i948.HistoryLocalDataSource(
+        gh<_i979.Box<Map<dynamic, dynamic>>>(instanceName: 'historyBox'),
+      ),
+    );
+    gh.factory<_i509.HistoryRepository>(
+      () => _i980.HistoryRepositoryImpl(gh<_i948.HistoryLocalDataSource>()),
+    );
+    gh.lazySingleton<_i939.WalletBloc>(
+      () => _i939.WalletBloc(
+        gh<_i27.LoadWalletUseCase>(),
+        gh<_i278.SaveWalletUseCase>(),
+      ),
+    );
+    gh.factory<_i721.LoadHistoryUseCase>(
+      () => _i721.LoadHistoryUseCase(gh<_i509.HistoryRepository>()),
+    );
+    gh.factory<_i542.SaveGameResultUseCase>(
+      () => _i542.SaveGameResultUseCase(gh<_i509.HistoryRepository>()),
+    );
+    gh.factory<_i341.HistoryBloc>(
+      () => _i341.HistoryBloc(gh<_i721.LoadHistoryUseCase>()),
     );
     gh.factory<_i789.GameBloc>(
       () => _i789.GameBloc(
         gh<_i800.GenerateBoardUseCase>(),
         gh<_i740.PlayMoveUseCase>(),
         gh<_i466.ComputeAiMoveUseCase>(),
-      ),
-    );
-    gh.lazySingleton<_i939.WalletBloc>(
-      () => _i939.WalletBloc(
-        gh<_i27.LoadWalletUseCase>(),
-        gh<_i278.SaveWalletUseCase>(),
+        gh<_i542.SaveGameResultUseCase>(),
       ),
     );
     return this;

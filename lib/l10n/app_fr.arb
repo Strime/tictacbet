@@ -63,7 +63,13 @@
   "nav_profile": "Profil",
 
   "history_title": "Historique",
-  "history_comingSoon": "Bientôt disponible",
+  "history_empty": "Aucune partie",
+  "history_emptySubtitle": "Jouez votre première partie\npour voir vos résultats ici",
+  "history_result_win": "Victoire",
+  "history_result_draw": "Nul",
+  "history_result_loss": "Défaite",
+  "history_bet": "Mise : ${amount}",
+  "@history_bet": { "placeholders": { "amount": { "type": "int" } } },
 
   "profile_comingSoon": "Bientôt disponible",
 

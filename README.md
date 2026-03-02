@@ -8,6 +8,7 @@ Casino-themed Tic-Tac-Toe with betting, AI opponent and a wallet system.
 - **Betting system** — Place bets before each game, difficulty scales with bet amount
 - **Wallet** — Persistent balance, daily bonus (10 chips), win/draw/loss settlement
 - **Card-based board** — Each cell hides a card with random bonuses (coins, XP, clovers)
+- **Game history** — Last 50 results stored locally (Hive), browsable list with outcome & stats
 
 ## Tech Stack
 
@@ -17,7 +18,7 @@ Casino-themed Tic-Tac-Toe with betting, AI opponent and a wallet system.
 | Navigation | go_router (stateful shell) |
 | DI | get_it + injectable |
 | Code generation | freezed, json_serializable |
-| Persistence | shared_preferences |
+| Persistence | shared_preferences, Hive |
 | UI | Material 3 dark theme, flutter_animate, Google Fonts |
 | i18n | Flutter intl (EN / FR) |
 
@@ -49,7 +50,7 @@ lib/
 │   ├── game/          # Board, cells, cards, game logic & UI
 │   ├── lobby/         # Bet & side selection before a game
 │   ├── wallet/        # Balance, bets, daily bonus, persistence
-│   ├── history/       # (coming soon)
+│   ├── history/       # Game results log (Hive storage)
 │   └── profile/       # (coming soon)
 │
 └── l10n/              # Localization (EN, FR)

@@ -65,7 +65,13 @@
   "nav_profile": "Profile",
 
   "history_title": "History",
-  "history_comingSoon": "Coming soon",
+  "history_empty": "No games yet",
+  "history_emptySubtitle": "Play your first game to\nsee your results here",
+  "history_result_win": "Win",
+  "history_result_draw": "Draw",
+  "history_result_loss": "Loss",
+  "history_bet": "Bet: ${amount}",
+  "@history_bet": { "placeholders": { "amount": { "type": "int" } } },
 
   "profile_comingSoon": "Coming soon",
 

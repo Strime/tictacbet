@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../core/config/game_constants.dart';
 import 'board_entity.dart';
 import 'game_status.dart';
 import 'player_side.dart';
@@ -26,4 +27,18 @@ sealed class GameEntity with _$GameEntity {
   bool get isHumanTurn => board.currentPlayer == humanSide;
 
   Duration? get duration => endedAt?.difference(startedAt);
+
+  bool get humanWon =>
+      (humanSide == PlayerSide.red && status == GameStatus.redWins) ||
+      (humanSide == PlayerSide.black && status == GameStatus.blackWins);
+
+  int get winnings {
+    if (!isGameOver) return 0;
+    if (humanWon) {
+      return GameConstants.winBonusBase +
+          betAmount * GameConstants.winBetMultiplier;
+    }
+    if (status == GameStatus.draw) return betAmount;
+    return 0;
+  }
 }

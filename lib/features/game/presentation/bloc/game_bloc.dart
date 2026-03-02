@@ -4,6 +4,8 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../core/config/game_constants.dart';
 import '../../../ai/domain/usecases/compute_ai_move_use_case.dart';
+import '../../../history/domain/entities/game_result_entity.dart';
+import '../../../history/domain/usecases/save_game_result_use_case.dart';
 import '../../domain/entities/game_entity.dart';
 import '../../domain/entities/player_side.dart';
 import '../../domain/usecases/generate_board_use_case.dart';
@@ -17,11 +19,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   final GenerateBoardUseCase _generateBoard;
   final PlayMoveUseCase _playMove;
   final ComputeAiMoveUseCase _computeAiMove;
+  final SaveGameResultUseCase _saveGameResult;
 
   GameBloc(
     this._generateBoard,
     this._playMove,
     this._computeAiMove,
+    this._saveGameResult,
   ) : super(const GameInitial()) {
     on<GameStarted>(_onGameStarted);
     on<CellTapped>(_onCellTapped);
@@ -58,9 +62,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     final moveIndex = event.row * 3 + event.col;
 
     if (updatedGame.isGameOver) {
+      final finishedGame = updatedGame.copyWith(endedAt: DateTime.now());
+      _saveResult(finishedGame);
       emit(GameOver(
-        game: updatedGame.copyWith(endedAt: DateTime.now()),
-        winningLine: updatedGame.board.winningLine,
+        game: finishedGame,
+        winningLine: finishedGame.board.winningLine,
       ));
       return;
     }
@@ -87,9 +93,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     final gameAfterAi = updatedGame.copyWith(board: boardAfterAi);
 
     if (gameAfterAi.isGameOver) {
+      final finishedGame = gameAfterAi.copyWith(endedAt: DateTime.now());
+      _saveResult(finishedGame);
       emit(GameOver(
-        game: gameAfterAi.copyWith(endedAt: DateTime.now()),
-        winningLine: gameAfterAi.board.winningLine,
+        game: finishedGame,
+        winningLine: finishedGame.board.winningLine,
       ));
       return;
     }
@@ -103,5 +111,20 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   void _onGameReset(GameReset event, Emitter<GameState> emit) {
     emit(const GameInitial());
+  }
+
+  void _saveResult(GameEntity game) {
+    _saveGameResult(
+      GameResultEntity(
+        result: game.status,
+        humanSide: game.humanSide,
+        aiLevel: game.aiLevel,
+        betAmount: game.betAmount,
+        winnings: game.winnings,
+        playedAt: game.startedAt,
+        duration: game.duration ?? Duration.zero,
+        moveCount: game.moveCount,
+      ),
+    );
   }
 }

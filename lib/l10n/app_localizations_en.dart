@@ -180,7 +180,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get history_title => 'History';
 
   @override
-  String get history_comingSoon => 'Coming soon';
+  String get history_empty => 'No games yet';
+
+  @override
+  String get history_emptySubtitle =>
+      'Play your first game to\nsee your results here';
+
+  @override
+  String get history_result_win => 'Win';
+
+  @override
+  String get history_result_draw => 'Draw';
+
+  @override
+  String get history_result_loss => 'Loss';
+
+  @override
+  String history_bet(int amount) {
+    return 'Bet: \$$amount';
+  }
 
   @override
   String get profile_comingSoon => 'Coming soon';
