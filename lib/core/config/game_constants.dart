@@ -58,6 +58,10 @@ class GameConstants {
   static const double xpBonusProbability = 0.25; // 25% chance per cell
   // Remaining ~60% = coin bonus
 
+  // --- AI noise ---
+  static const double aiNoiseScale = 20.0; // Max noise amplitude at level 0.0
+  static const double aiMinNoise = 3.0; // Residual noise even at level 1.0
+
   // --- Timing ---
   static const Duration aiMoveDelay = Duration(milliseconds: 600);
   static const Duration speedWinThreshold = Duration(seconds: 30);

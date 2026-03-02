@@ -2,7 +2,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../../game/domain/entities/board_entity.dart';
 import '../../../game/domain/entities/card_entity.dart';
-import '../../../game/domain/entities/cell_entity.dart';
+
 import '../../../game/domain/entities/game_status.dart';
 
 /// Minimax with alpha-beta pruning for the AI.
@@ -32,42 +32,6 @@ class MinimaxService {
     }
 
     return bestMove;
-  }
-
-  /// Returns the best move considering bonus cell values (for level 1.0 AI).
-  int getBestMoveWithBonusAwareness(BoardEntity board) {
-    int bestScore = -1000;
-    int bestMove = board.availableMoves.first;
-
-    for (final move in board.availableMoves) {
-      final newBoard = _simulateMove(board, move);
-      final minimaxScore = _minimax(
-        newBoard,
-        depth: 0,
-        isMaximizing: false,
-        alpha: -1000,
-        beta: 1000,
-        aiSuit: board.currentPlayer.suit,
-      );
-      // Add a small bonus weight for clover cells
-      final bonusWeight = _bonusWeight(board.cellAtIndex(move));
-      final score = minimaxScore * 100 + bonusWeight;
-      if (score > bestScore) {
-        bestScore = score;
-        bestMove = move;
-      }
-    }
-
-    return bestMove;
-  }
-
-  int _bonusWeight(CellEntity cell) {
-    return switch (cell.bonus) {
-      CellBonus.clover => 3,
-      CellBonus.xp => 1,
-      CellBonus.coin => 2,
-      null => 0,
-    };
   }
 
   int _minimax(
@@ -124,6 +88,25 @@ class MinimaxService {
       }
       return best;
     }
+  }
+
+  /// Returns minimax scores for all available moves.
+  List<({int move, int score})> getMovesWithScores(BoardEntity board) {
+    final aiSuit = board.currentPlayer.suit;
+    return [
+      for (final move in board.availableMoves)
+        (
+          move: move,
+          score: _minimax(
+            _simulateMove(board, move),
+            depth: 0,
+            isMaximizing: false,
+            alpha: -1000,
+            beta: 1000,
+            aiSuit: aiSuit,
+          ),
+        ),
+    ];
   }
 
   /// Simulates a move with a dummy card (rank irrelevant for win logic).
