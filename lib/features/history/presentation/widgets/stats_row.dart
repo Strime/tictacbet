@@ -8,12 +8,14 @@ class StatsRow extends StatelessWidget {
   final int wins;
   final int losses;
   final int draws;
+  final int cashOuts;
 
   const StatsRow({
     super.key,
     required this.wins,
     required this.losses,
     required this.draws,
+    this.cashOuts = 0,
   });
 
   @override
@@ -45,6 +47,16 @@ class StatsRow extends StatelessWidget {
             color: AppColors.chipGold,
           ),
         ),
+        if (cashOuts > 0) ...[
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: _StatPill(
+              label: l10n.profile_cashOuts,
+              value: '$cashOuts',
+              color: AppColors.chipGold,
+            ),
+          ),
+        ],
       ],
     );
   }

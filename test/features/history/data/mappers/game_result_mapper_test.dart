@@ -101,6 +101,27 @@ void main() {
 
         expect(roundTripped, equals(entity));
       });
+
+      test('preserves isCashOut flag in round-trip', () {
+        final cashOutEntity = GameResultEntity(
+          result: GameStatus.blackWins,
+          humanSide: PlayerSide.red,
+          aiLevel: 0.5,
+          betAmount: 20,
+          winnings: 15,
+          playedAt: DateTime(2026, 3, 1),
+          duration: const Duration(minutes: 1),
+          moveCount: 5,
+          isCashOut: true,
+        );
+
+        final roundTripped = GameResultMapper.toEntity(
+          GameResultMapper.toModel(cashOutEntity),
+        );
+
+        expect(roundTripped.isCashOut, isTrue);
+        expect(roundTripped, equals(cashOutEntity));
+      });
     });
   });
 }

@@ -28,6 +28,8 @@ const _emptyAchievements = {
   AchievementType.luckyBastard: false,
   AchievementType.oops: false,
   AchievementType.ghost: false,
+  AchievementType.goldenParachute: false,
+  AchievementType.paperHands: false,
 };
 
 void main() {

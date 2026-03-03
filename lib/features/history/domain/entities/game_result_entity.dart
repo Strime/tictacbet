@@ -18,6 +18,7 @@ sealed class GameResultEntity with _$GameResultEntity {
     required DateTime playedAt,
     required Duration duration,
     required int moveCount,
+    @Default(false) bool isCashOut,
   }) = _GameResultEntity;
 
   bool get isWin =>
@@ -25,7 +26,7 @@ sealed class GameResultEntity with _$GameResultEntity {
       (humanSide == PlayerSide.black && result == GameStatus.blackWins);
 
   bool get isDraw => result == GameStatus.draw;
-  bool get isLoss => !isWin && !isDraw;
+  bool get isLoss => !isWin && !isDraw && !isCashOut;
 
   int get netAmount => isLoss ? -betAmount : winnings - betAmount;
 }

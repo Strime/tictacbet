@@ -23,6 +23,14 @@
   "game_result_blackWins": "Black wins!",
   "game_result_playAgain": "Play Again",
   "game_result_backToLobby": "Back to Lobby",
+  "game_result_cashOut": "Cashed Out",
+
+  "game_cashOut": "Cash Out",
+  "game_cashOut_confirm_title": "Cash Out?",
+  "game_cashOut_confirm_body": "You'll receive {amount}. Are you sure?",
+  "@game_cashOut_confirm_body": { "placeholders": { "amount": { "type": "String" } } },
+  "game_cashOut_confirm_yes": "Cash Out",
+  "game_cashOut_confirm_no": "Keep Playing",
 
   "profile_title": "Profile",
   "profile_level": "Level {level}",
@@ -34,6 +42,7 @@
   "profile_losses": "Losses",
   "profile_winRate": "Win Rate",
   "profile_draws": "Draws",
+  "profile_cashOuts": "Cash Outs",
   "profile_totalEarnings": "Total Earnings",
   "profile_empty": "No stats yet",
   "profile_emptySubtitle": "Play your first game to\nsee your stats here",
@@ -58,6 +67,10 @@
   "achievement_hat_trick_desc": "Win 3 consecutive games",
   "achievement_whale": "Whale",
   "achievement_whale_desc": "Win a game with a $50+ bet",
+  "achievement_golden_parachute": "Golden Parachute",
+  "achievement_golden_parachute_desc": "Cash out with a profit",
+  "achievement_paper_hands": "Paper Hands",
+  "achievement_paper_hands_desc": "Cash out 3 times",
 
   "lobby_difficulty_easy": "Easy",
   "lobby_difficulty_medium": "Medium",
@@ -74,6 +87,7 @@
   "history_result_win": "Win",
   "history_result_draw": "Draw",
   "history_result_loss": "Loss",
+  "history_result_cashOut": "Cash Out",
   "history_bet": "Bet: ${amount}",
   "@history_bet": { "placeholders": { "amount": { "type": "int" } } },
 
@@ -84,6 +98,8 @@
 
   "game_result_xpEarned": "+{amount} XP",
   "@game_result_xpEarned": { "placeholders": { "amount": { "type": "int" } } },
+  "game_result_winStreak": "{count} win streak",
+  "@game_result_winStreak": { "placeholders": { "count": { "type": "int" } } },
   "game_result_streakBonus": "×{multiplier} streak bonus",
   "@game_result_streakBonus": { "placeholders": { "multiplier": { "type": "String" } } },
   "game_result_levelUp": "Level Up!",

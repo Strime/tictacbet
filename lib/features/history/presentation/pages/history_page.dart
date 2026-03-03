@@ -78,6 +78,7 @@ class _HistoryViewState extends State<_HistoryView> {
         final wins = results.where((r) => r.isWin).length;
         final losses = results.where((r) => r.isLoss).length;
         final draws = results.where((r) => r.isDraw).length;
+        final cashOuts = results.where((r) => r.isCashOut).length;
 
         return RefreshIndicator(
           onRefresh: _onRefresh,
@@ -90,6 +91,7 @@ class _HistoryViewState extends State<_HistoryView> {
                 wins: wins,
                 losses: losses,
                 draws: draws,
+                cashOuts: cashOuts,
                 hasStats: state is HistoryLoaded && !state.isEmpty,
               ),
               ...switch (state) {
@@ -185,12 +187,14 @@ class _HistorySliverAppBar extends StatelessWidget {
     required this.wins,
     required this.losses,
     required this.draws,
+    required this.cashOuts,
     required this.hasStats,
   });
 
   final int wins;
   final int losses;
   final int draws;
+  final int cashOuts;
   final bool hasStats;
 
   static const double _expandedHeight = 160.0;
@@ -225,6 +229,7 @@ class _HistorySliverAppBar extends StatelessWidget {
                   wins: wins,
                   losses: losses,
                   draws: draws,
+                  cashOuts: cashOuts,
                 );
               },
             )
@@ -267,12 +272,14 @@ class _FlexibleContent extends StatelessWidget {
   final int wins;
   final int losses;
   final int draws;
+  final int cashOuts;
 
   const _FlexibleContent({
     required this.t,
     required this.wins,
     required this.losses,
     required this.draws,
+    required this.cashOuts,
   });
 
   @override
@@ -357,6 +364,16 @@ class _FlexibleContent extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    if (cashOuts > 0) ...[
+                      const SizedBox(width: AppSpacing.sm),
+                      Text(
+                        '$cashOuts',
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          color: AppColors.chipGold,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -375,6 +392,7 @@ class _FlexibleContent extends StatelessWidget {
                   wins: wins,
                   losses: losses,
                   draws: draws,
+                  cashOuts: cashOuts,
                 ),
               ),
             ),

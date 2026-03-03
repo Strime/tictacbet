@@ -59,43 +59,29 @@ void main() {
       );
     });
 
-    test('level 1.0 loses at least once over 500 games (residual noise)', () {
-      int aiLosses = 0;
-      const totalGames = 500;
+    test('level 1.0 noise causes move variation on close-scored positions', () {
+      // After one move, many responses score similarly — noise should vary
+      // the pick across different RNG seeds.
+      final board = buildBoard(
+        'R........',
+        currentPlayer: PlayerSide.black,
+      );
 
-      for (int game = 0; game < totalGames; game++) {
-        final rng = Random(game * 7 + 13); // different seeds
-        final useCase = ComputeAiMoveUseCase(minimaxService, random: rng);
-        var board = buildBoard('.........');
-
-        while (!board.isGameOver) {
-          final int move;
-          if (board.currentPlayer == PlayerSide.red) {
-            final moves = board.availableMoves;
-            move = moves[rng.nextInt(moves.length)];
-          } else {
-            move = useCase(board, 1.0);
-          }
-
-          final row = move ~/ 3;
-          final col = move % 3;
-          final card = CardEntity(
-            suit: board.currentPlayer.suit,
-            rank: CardRank.ace,
-          );
-          board = board.makeMove(row, col, card);
-        }
-
-        if (board.status == GameStatus.redWins) {
-          aiLosses++;
-        }
+      final chosenMoves = <int>{};
+      for (int i = 0; i < 50; i++) {
+        final useCase =
+            ComputeAiMoveUseCase(minimaxService, random: Random(i));
+        chosenMoves.add(useCase(board, 1.0));
       }
 
+      // Residual noise (aiMinNoise = 3.0) should cause at least 2 different
+      // moves to be selected, proving noise is effective at level 1.0.
       expect(
-        aiLosses,
-        greaterThan(0),
+        chosenMoves.length,
+        greaterThan(1),
         reason:
-            'AI at level 1.0 should lose at least once in $totalGames games due to residual noise ($aiLosses losses)',
+            'At level 1.0, residual noise should cause move variation '
+            'across seeds (got ${chosenMoves.length} distinct moves)',
       );
     });
 

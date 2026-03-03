@@ -69,6 +69,12 @@ class GameConstants {
   static const double xpBonusProbability = 0.25; // 25% chance per cell
   // Remaining ~60% = coin bonus
 
+  // --- Cash out ---
+  static const double cashOutMinMultiplier = 0.1;
+  static const double cashOutMaxMultiplier = 1.8;
+  static const int cashOutMinMoveCount = 2;
+  static const int xpPerCashOut = 10;
+
   // --- AI noise ---
   static const double aiNoiseScale = 20.0; // Max noise amplitude at level 0.0
   static const double aiMinNoise = 3.0; // Residual noise even at level 1.0

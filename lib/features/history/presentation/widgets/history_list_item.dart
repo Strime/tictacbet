@@ -19,6 +19,11 @@ class HistoryListItem extends StatelessWidget {
     final theme = Theme.of(context);
 
     final (Color accentColor, IconData icon, String label) = switch (result) {
+      GameResultEntity(isCashOut: true) => (
+          AppColors.chipGold,
+          LucideIcons.banknote,
+          l10n.history_result_cashOut,
+        ),
       GameResultEntity(isWin: true) => (
           AppColors.success,
           LucideIcons.trophy,

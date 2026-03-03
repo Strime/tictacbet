@@ -8,6 +8,7 @@ import '../../../history/domain/entities/game_result_entity.dart';
 import '../../../history/domain/usecases/save_game_result_use_case.dart';
 import '../../domain/entities/game_entity.dart';
 import '../../domain/entities/player_side.dart';
+import '../../domain/usecases/compute_cash_out_use_case.dart';
 import '../../domain/usecases/generate_board_use_case.dart';
 import '../../domain/usecases/play_move_use_case.dart';
 
@@ -20,15 +21,18 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   final PlayMoveUseCase _playMove;
   final ComputeAiMoveUseCase _computeAiMove;
   final SaveGameResultUseCase _saveGameResult;
+  final ComputeCashOutUseCase _computeCashOut;
 
   GameBloc(
     this._generateBoard,
     this._playMove,
     this._computeAiMove,
     this._saveGameResult,
+    this._computeCashOut,
   ) : super(const GameInitial()) {
     on<GameStarted>(_onGameStarted);
     on<CellTapped>(_onCellTapped);
+    on<GameCashedOut>(_onGameCashedOut);
     on<GameReset>(_onGameReset);
   }
 
@@ -106,24 +110,49 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       game: gameAfterAi,
       isAiThinking: false,
       lastMoveIndex: aiMoveIndex,
+      cashOutAmount: _getCashOutAmount(gameAfterAi),
     ));
+  }
+
+  void _onGameCashedOut(GameCashedOut event, Emitter<GameState> emit) {
+    final currentState = state;
+    if (currentState is! GameInProgress) return;
+
+    final cashOutAmount = currentState.cashOutAmount;
+    if (cashOutAmount == null) return;
+
+    final finishedGame =
+        currentState.game.copyWith(endedAt: DateTime.now());
+    _saveResult(finishedGame, isCashOut: true, winnings: cashOutAmount);
+    emit(GameOver(game: finishedGame, cashOutAmount: cashOutAmount));
   }
 
   void _onGameReset(GameReset event, Emitter<GameState> emit) {
     emit(const GameInitial());
   }
 
-  void _saveResult(GameEntity game) {
+  int? _getCashOutAmount(GameEntity game) {
+    if (game.board.moveCount < GameConstants.cashOutMinMoveCount) return null;
+    if (!game.isHumanTurn) return null;
+    return _computeCashOut(game.board, game.betAmount);
+  }
+
+  void _saveResult(
+    GameEntity game, {
+    bool isCashOut = false,
+    int? winnings,
+  }) {
     _saveGameResult(
       GameResultEntity(
         result: game.status,
         humanSide: game.humanSide,
         aiLevel: game.aiLevel,
         betAmount: game.betAmount,
-        winnings: game.winnings,
+        winnings: winnings ?? game.winnings,
         playedAt: game.startedAt,
         duration: game.duration ?? Duration.zero,
         moveCount: game.moveCount,
+        isCashOut: isCashOut,
       ),
     );
   }

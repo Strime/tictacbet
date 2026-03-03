@@ -218,6 +218,42 @@ abstract class AppLocalizations {
   /// **'Back to Lobby'**
   String get game_result_backToLobby;
 
+  /// No description provided for @game_result_cashOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Cashed Out'**
+  String get game_result_cashOut;
+
+  /// No description provided for @game_cashOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash Out'**
+  String get game_cashOut;
+
+  /// No description provided for @game_cashOut_confirm_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash Out?'**
+  String get game_cashOut_confirm_title;
+
+  /// No description provided for @game_cashOut_confirm_body.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll receive {amount}. Are you sure?'**
+  String game_cashOut_confirm_body(String amount);
+
+  /// No description provided for @game_cashOut_confirm_yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash Out'**
+  String get game_cashOut_confirm_yes;
+
+  /// No description provided for @game_cashOut_confirm_no.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep Playing'**
+  String get game_cashOut_confirm_no;
+
   /// No description provided for @profile_title.
   ///
   /// In en, this message translates to:
@@ -265,6 +301,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Draws'**
   String get profile_draws;
+
+  /// No description provided for @profile_cashOuts.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash Outs'**
+  String get profile_cashOuts;
 
   /// No description provided for @profile_totalEarnings.
   ///
@@ -404,6 +446,30 @@ abstract class AppLocalizations {
   /// **'Win a game with a \$50+ bet'**
   String get achievement_whale_desc;
 
+  /// No description provided for @achievement_golden_parachute.
+  ///
+  /// In en, this message translates to:
+  /// **'Golden Parachute'**
+  String get achievement_golden_parachute;
+
+  /// No description provided for @achievement_golden_parachute_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash out with a profit'**
+  String get achievement_golden_parachute_desc;
+
+  /// No description provided for @achievement_paper_hands.
+  ///
+  /// In en, this message translates to:
+  /// **'Paper Hands'**
+  String get achievement_paper_hands;
+
+  /// No description provided for @achievement_paper_hands_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash out 3 times'**
+  String get achievement_paper_hands_desc;
+
   /// No description provided for @lobby_difficulty_easy.
   ///
   /// In en, this message translates to:
@@ -482,6 +548,12 @@ abstract class AppLocalizations {
   /// **'Loss'**
   String get history_result_loss;
 
+  /// No description provided for @history_result_cashOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash Out'**
+  String get history_result_cashOut;
+
   /// No description provided for @history_bet.
   ///
   /// In en, this message translates to:
@@ -511,6 +583,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'+{amount} XP'**
   String game_result_xpEarned(int amount);
+
+  /// No description provided for @game_result_winStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} win streak'**
+  String game_result_winStreak(int count);
 
   /// No description provided for @game_result_streakBonus.
   ///

@@ -14,6 +14,7 @@ sealed class GameResultModel with _$GameResultModel {
     required String playedAt,
     required int durationSeconds,
     required int moveCount,
+    @Default(false) bool isCashOut,
   }) = _GameResultModel;
 
   factory GameResultModel.fromJson(Map<String, dynamic> json) =>

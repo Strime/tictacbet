@@ -22,6 +22,8 @@ import 'package:tictacbet/features/ai/domain/usecases/compute_ai_move_use_case.d
     as _i466;
 import 'package:tictacbet/features/game/domain/usecases/check_win_use_case.dart'
     as _i991;
+import 'package:tictacbet/features/game/domain/usecases/compute_cash_out_use_case.dart'
+    as _i880;
 import 'package:tictacbet/features/game/domain/usecases/generate_board_use_case.dart'
     as _i800;
 import 'package:tictacbet/features/game/domain/usecases/play_move_use_case.dart'
@@ -100,6 +102,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i411.WalletRepository>(
       () => _i83.WalletRepositoryImpl(gh<_i774.WalletLocalDataSource>()),
     );
+    gh.factory<_i880.ComputeCashOutUseCase>(
+      () => _i880.ComputeCashOutUseCase(gh<_i274.MinimaxService>()),
+    );
     gh.factory<_i27.LoadWalletUseCase>(
       () => _i27.LoadWalletUseCase(gh<_i411.WalletRepository>()),
     );
@@ -166,6 +171,7 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i740.PlayMoveUseCase>(),
         gh<_i466.ComputeAiMoveUseCase>(),
         gh<_i542.SaveGameResultUseCase>(),
+        gh<_i880.ComputeCashOutUseCase>(),
       ),
     );
     return this;

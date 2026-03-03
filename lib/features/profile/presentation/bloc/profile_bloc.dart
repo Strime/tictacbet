@@ -60,6 +60,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     final wins = results.where((r) => r.isWin).length;
     final draws = results.where((r) => r.isDraw).length;
     final losses = results.where((r) => r.isLoss).length;
+    final cashOuts = results.where((r) => r.isCashOut).length;
     final gamesPlayed = results.length;
     final winRate =
         gamesPlayed > 0 ? (wins / gamesPlayed) * 100 : 0.0;
@@ -73,6 +74,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       wins: wins,
       losses: losses,
       draws: draws,
+      cashOuts: cashOuts,
       winRate: winRate,
       totalEarnings: totalEarnings,
       achievements: detectAchievements(results),

@@ -12,7 +12,9 @@ enum AchievementType {
   comeback(icon: LucideIcons.rotateCcw, color: AppColors.success, detectable: false),
   luckyBastard(icon: LucideIcons.clover, color: AppColors.cloverColor, detectable: false),
   oops(icon: LucideIcons.frown, color: AppColors.warning, detectable: false),
-  ghost(icon: LucideIcons.eyeOff, color: AppColors.textSecondary, detectable: false);
+  ghost(icon: LucideIcons.eyeOff, color: AppColors.textSecondary, detectable: false),
+  goldenParachute(icon: LucideIcons.umbrella, color: AppColors.chipGold, detectable: true),
+  paperHands(icon: LucideIcons.handMetal, color: AppColors.warning, detectable: true);
 
   final IconData icon;
   final Color color;

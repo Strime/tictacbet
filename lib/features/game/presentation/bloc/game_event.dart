@@ -34,6 +34,11 @@ class CellTapped extends GameEvent {
   List<Object?> get props => [row, col];
 }
 
+/// Player cashes out mid-game.
+class GameCashedOut extends GameEvent {
+  const GameCashedOut();
+}
+
 /// Reset to initial state.
 class GameReset extends GameEvent {
   const GameReset();

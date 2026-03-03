@@ -20,6 +20,7 @@ class ProfileLoaded extends ProfileState {
   final int wins;
   final int losses;
   final int draws;
+  final int cashOuts;
   final double winRate;
   final int totalEarnings;
   final Map<AchievementType, bool> achievements;
@@ -30,6 +31,7 @@ class ProfileLoaded extends ProfileState {
     required this.wins,
     required this.losses,
     required this.draws,
+    this.cashOuts = 0,
     required this.winRate,
     required this.totalEarnings,
     required this.achievements,
@@ -46,6 +48,7 @@ class ProfileLoaded extends ProfileState {
         wins,
         losses,
         draws,
+        cashOuts,
         winRate,
         totalEarnings,
         achievements,

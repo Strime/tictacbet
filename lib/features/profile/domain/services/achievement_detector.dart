@@ -14,6 +14,8 @@ Map<AchievementType, bool> detectAchievements(
     AchievementType.luckyBastard: false,
     AchievementType.oops: false,
     AchievementType.ghost: false,
+    AchievementType.goldenParachute: _hasGoldenParachute(results),
+    AchievementType.paperHands: _hasPaperHands(results),
   };
 }
 
@@ -47,4 +49,14 @@ bool _hasHatTrick(List<GameResultEntity> results) {
 /// Win a game with a $50+ bet.
 bool _isWhale(List<GameResultEntity> results) {
   return results.any((r) => r.isWin && r.betAmount >= 50);
+}
+
+/// Cash out with a profit (winnings > betAmount).
+bool _hasGoldenParachute(List<GameResultEntity> results) {
+  return results.any((r) => r.isCashOut && r.winnings > r.betAmount);
+}
+
+/// Cash out 3 times total.
+bool _hasPaperHands(List<GameResultEntity> results) {
+  return results.where((r) => r.isCashOut).length >= 3;
 }

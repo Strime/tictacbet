@@ -23,6 +23,14 @@
   "game_result_blackWins": "Les Noirs gagnent !",
   "game_result_playAgain": "Rejouer",
   "game_result_backToLobby": "Retour au lobby",
+  "game_result_cashOut": "Cash Out",
+
+  "game_cashOut": "Cash Out",
+  "game_cashOut_confirm_title": "Cash Out ?",
+  "game_cashOut_confirm_body": "Tu recevras {amount}. Confirmer ?",
+  "@game_cashOut_confirm_body": { "placeholders": { "amount": { "type": "String" } } },
+  "game_cashOut_confirm_yes": "Cash Out",
+  "game_cashOut_confirm_no": "Continuer",
 
   "profile_title": "Profil",
   "profile_level": "Niveau {level}",
@@ -32,6 +40,7 @@
   "profile_losses": "Défaites",
   "profile_winRate": "Taux de victoire",
   "profile_draws": "Nuls",
+  "profile_cashOuts": "Cash Outs",
   "profile_totalEarnings": "Gains totaux",
   "profile_empty": "Pas encore de stats",
   "profile_emptySubtitle": "Jouez votre première partie\npour voir vos stats ici",
@@ -56,6 +65,10 @@
   "achievement_hat_trick_desc": "Gagner 3 parties consécutives",
   "achievement_whale": "Whale",
   "achievement_whale_desc": "Gagner avec une mise de 50$+",
+  "achievement_golden_parachute": "Parachute doré",
+  "achievement_golden_parachute_desc": "Cash out avec un profit",
+  "achievement_paper_hands": "Mains de papier",
+  "achievement_paper_hands_desc": "Cash out 3 fois",
 
   "lobby_difficulty_easy": "Facile",
   "lobby_difficulty_medium": "Moyen",
@@ -72,6 +85,7 @@
   "history_result_win": "Victoire",
   "history_result_draw": "Nul",
   "history_result_loss": "Défaite",
+  "history_result_cashOut": "Cash Out",
   "history_bet": "Mise : ${amount}",
   "@history_bet": { "placeholders": { "amount": { "type": "int" } } },
 
@@ -82,6 +96,8 @@
 
   "game_result_xpEarned": "+{amount} XP",
   "@game_result_xpEarned": { "placeholders": { "amount": { "type": "int" } } },
+  "game_result_winStreak": "Série de {count} victoires",
+  "@game_result_winStreak": { "placeholders": { "count": { "type": "int" } } },
   "game_result_streakBonus": "×{multiplier} bonus série",
   "@game_result_streakBonus": { "placeholders": { "multiplier": { "type": "String" } } },
   "game_result_levelUp": "Niveau supérieur !",

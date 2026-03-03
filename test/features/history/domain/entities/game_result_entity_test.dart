@@ -8,6 +8,7 @@ GameResultEntity _make({
   PlayerSide humanSide = PlayerSide.red,
   int betAmount = 10,
   int winnings = 0,
+  bool isCashOut = false,
 }) =>
     GameResultEntity(
       result: result,
@@ -18,6 +19,7 @@ GameResultEntity _make({
       playedAt: DateTime(2026, 3, 1),
       duration: const Duration(minutes: 2),
       moveCount: 7,
+      isCashOut: isCashOut,
     );
 
 void main() {
@@ -97,6 +99,30 @@ void main() {
         final entity = _make(result: GameStatus.draw);
 
         expect(entity.isLoss, isFalse);
+      });
+    });
+
+    group('isCashOut', () {
+      test('cash out is not a loss', () {
+        final entity = _make(
+          humanSide: PlayerSide.red,
+          result: GameStatus.blackWins,
+          isCashOut: true,
+        );
+
+        expect(entity.isLoss, isFalse);
+        expect(entity.isWin, isFalse);
+        expect(entity.isDraw, isFalse);
+      });
+
+      test('netAmount is winnings - betAmount on cash out', () {
+        final entity = _make(
+          isCashOut: true,
+          betAmount: 20,
+          winnings: 15,
+        );
+
+        expect(entity.netAmount, equals(-5));
       });
     });
 

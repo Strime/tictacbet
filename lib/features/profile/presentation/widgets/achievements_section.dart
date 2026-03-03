@@ -111,5 +111,13 @@ class AchievementsSection extends StatelessWidget {
             l10n.achievement_ghost,
             l10n.achievement_ghost_desc,
           ),
+        AchievementType.goldenParachute => (
+            l10n.achievement_golden_parachute,
+            l10n.achievement_golden_parachute_desc,
+          ),
+        AchievementType.paperHands => (
+            l10n.achievement_paper_hands,
+            l10n.achievement_paper_hands_desc,
+          ),
       };
 }

@@ -8,6 +8,9 @@ Casino-themed Tic-Tac-Toe with betting, AI opponent and a wallet system.
 - **Betting system** — Place bets before each game, difficulty scales with bet amount
 - **Wallet** — Persistent balance, daily bonus (10 chips), win/draw/loss settlement
 - **Card-based board** — Each cell hides a card with random bonuses (coins, XP, clovers)
+- **Cash out** — Leave a game early and collect a payout based on board evaluation
+- **Progression** — XP, levels and win streaks with streak bonus multipliers
+- **Profile** — Lifetime stats and 11 unlockable achievements
 - **Game history** — Last 50 results stored locally (Hive), browsable list with outcome & stats
 
 ## Tech Stack
@@ -43,7 +46,8 @@ lib/
 │   ├── error/         # Typed failures (Freezed)
 │   ├── navigation/    # Bottom nav bar
 │   ├── router/        # GoRouter config
-│   └── theme/         # Colors, spacing, text styles, decorations
+│   ├── theme/         # Colors, spacing, text styles, decorations
+│   └── utils/         # Shared helpers
 │
 ├── features/
 │   ├── ai/            # Minimax AI service & use case
@@ -51,7 +55,8 @@ lib/
 │   ├── lobby/         # Bet & side selection before a game
 │   ├── wallet/        # Balance, bets, daily bonus, persistence
 │   ├── history/       # Game results log (Hive storage)
-│   └── profile/       # (coming soon)
+│   ├── profile/       # Stats dashboard & achievements
+│   └── progression/   # XP, levels, win streaks
 │
 └── l10n/              # Localization (EN, FR)
 ```

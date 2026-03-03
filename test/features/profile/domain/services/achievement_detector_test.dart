@@ -8,6 +8,7 @@ import 'package:tictacbet/features/profile/domain/services/achievement_detector.
 GameResultEntity _makeResult({
   bool isWin = false,
   bool isDraw = false,
+  bool isCashOut = false,
   Duration duration = const Duration(minutes: 2),
   int betAmount = 10,
   int winnings = 0,
@@ -31,6 +32,7 @@ GameResultEntity _makeResult({
     playedAt: DateTime(2026, 3, 1),
     duration: duration,
     moveCount: 5,
+    isCashOut: isCashOut,
   );
 }
 
@@ -186,6 +188,98 @@ void main() {
         ];
         expect(
           detectAchievements(results)[AchievementType.whale],
+          isFalse,
+        );
+      });
+    });
+
+    group('Golden Parachute', () {
+      test('true when cash out with winnings > betAmount', () {
+        final results = [
+          _makeResult(isCashOut: true, betAmount: 10, winnings: 15),
+        ];
+        expect(
+          detectAchievements(results)[AchievementType.goldenParachute],
+          isTrue,
+        );
+      });
+
+      test('false when cash out with winnings == betAmount', () {
+        final results = [
+          _makeResult(isCashOut: true, betAmount: 10, winnings: 10),
+        ];
+        expect(
+          detectAchievements(results)[AchievementType.goldenParachute],
+          isFalse,
+        );
+      });
+
+      test('false when cash out with winnings < betAmount', () {
+        final results = [
+          _makeResult(isCashOut: true, betAmount: 10, winnings: 5),
+        ];
+        expect(
+          detectAchievements(results)[AchievementType.goldenParachute],
+          isFalse,
+        );
+      });
+
+      test('false when profit but not a cash out', () {
+        final results = [
+          _makeResult(isWin: true, betAmount: 10, winnings: 20),
+        ];
+        expect(
+          detectAchievements(results)[AchievementType.goldenParachute],
+          isFalse,
+        );
+      });
+    });
+
+    group('Paper Hands', () {
+      test('true when cashed out 3 times', () {
+        final results = [
+          _makeResult(isCashOut: true, betAmount: 10, winnings: 5),
+          _makeResult(isCashOut: true, betAmount: 10, winnings: 15),
+          _makeResult(isCashOut: true, betAmount: 20, winnings: 10),
+        ];
+        expect(
+          detectAchievements(results)[AchievementType.paperHands],
+          isTrue,
+        );
+      });
+
+      test('false when cashed out only 2 times', () {
+        final results = [
+          _makeResult(isCashOut: true, betAmount: 10, winnings: 5),
+          _makeResult(isCashOut: true, betAmount: 10, winnings: 15),
+          _makeResult(isWin: true, betAmount: 10, winnings: 20),
+        ];
+        expect(
+          detectAchievements(results)[AchievementType.paperHands],
+          isFalse,
+        );
+      });
+
+      test('true when more than 3 cash outs', () {
+        final results = [
+          _makeResult(isCashOut: true, betAmount: 10, winnings: 5),
+          _makeResult(isCashOut: true, betAmount: 10, winnings: 5),
+          _makeResult(isCashOut: true, betAmount: 10, winnings: 5),
+          _makeResult(isCashOut: true, betAmount: 10, winnings: 5),
+        ];
+        expect(
+          detectAchievements(results)[AchievementType.paperHands],
+          isTrue,
+        );
+      });
+
+      test('false when no cash outs', () {
+        final results = [
+          _makeResult(isWin: true, betAmount: 10, winnings: 20),
+          _makeResult(betAmount: 10),
+        ];
+        expect(
+          detectAchievements(results)[AchievementType.paperHands],
           isFalse,
         );
       });

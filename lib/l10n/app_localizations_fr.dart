@@ -69,6 +69,26 @@ class AppLocalizationsFr extends AppLocalizations {
   String get game_result_backToLobby => 'Retour au lobby';
 
   @override
+  String get game_result_cashOut => 'Cash Out';
+
+  @override
+  String get game_cashOut => 'Cash Out';
+
+  @override
+  String get game_cashOut_confirm_title => 'Cash Out ?';
+
+  @override
+  String game_cashOut_confirm_body(String amount) {
+    return 'Tu recevras $amount. Confirmer ?';
+  }
+
+  @override
+  String get game_cashOut_confirm_yes => 'Cash Out';
+
+  @override
+  String get game_cashOut_confirm_no => 'Continuer';
+
+  @override
   String get profile_title => 'Profil';
 
   @override
@@ -95,6 +115,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get profile_draws => 'Nuls';
+
+  @override
+  String get profile_cashOuts => 'Cash Outs';
 
   @override
   String get profile_totalEarnings => 'Gains totaux';
@@ -170,6 +193,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get achievement_whale_desc => 'Gagner avec une mise de 50\$+';
 
   @override
+  String get achievement_golden_parachute => 'Parachute doré';
+
+  @override
+  String get achievement_golden_parachute_desc => 'Cash out avec un profit';
+
+  @override
+  String get achievement_paper_hands => 'Mains de papier';
+
+  @override
+  String get achievement_paper_hands_desc => 'Cash out 3 fois';
+
+  @override
   String get lobby_difficulty_easy => 'Facile';
 
   @override
@@ -210,6 +245,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get history_result_loss => 'Défaite';
 
   @override
+  String get history_result_cashOut => 'Cash Out';
+
+  @override
   String history_bet(int amount) {
     return 'Mise : \$$amount';
   }
@@ -228,6 +266,11 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String game_result_xpEarned(int amount) {
     return '+$amount XP';
+  }
+
+  @override
+  String game_result_winStreak(int count) {
+    return 'Série de $count victoires';
   }
 
   @override

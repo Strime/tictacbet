@@ -49,6 +49,8 @@ class ProgressionBloc extends Bloc<ProgressionEvent, ProgressionState> {
     final int newStreak;
     if (event.isWin) {
       newStreak = old.currentWinStreak + 1;
+    } else if (event.isCashOut) {
+      newStreak = old.currentWinStreak; // preserve streak on cash out
     } else {
       newStreak = 0;
     }
@@ -57,6 +59,8 @@ class ProgressionBloc extends Bloc<ProgressionEvent, ProgressionState> {
     final int baseXp;
     if (event.isWin) {
       baseXp = GameConstants.xpPerWin;
+    } else if (event.isCashOut) {
+      baseXp = GameConstants.xpPerCashOut;
     } else if (event.isDraw) {
       baseXp = GameConstants.xpPerDraw;
     } else {

@@ -21,6 +21,7 @@ class GameResultMapper {
         playedAt: DateTime.parse(model.playedAt),
         duration: Duration(seconds: model.durationSeconds),
         moveCount: model.moveCount,
+        isCashOut: model.isCashOut,
       );
 
   static GameResultModel toModel(GameResultEntity entity) => GameResultModel(
@@ -32,5 +33,6 @@ class GameResultMapper {
         playedAt: entity.playedAt.toIso8601String(),
         durationSeconds: entity.duration.inSeconds,
         moveCount: entity.moveCount,
+        isCashOut: entity.isCashOut,
       );
 }

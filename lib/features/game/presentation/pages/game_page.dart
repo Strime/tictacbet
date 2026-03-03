@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/utils/currency_formatter.dart';
 import '../../../../injection.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../progression/presentation/bloc/progression_bloc.dart';
@@ -65,16 +67,19 @@ class _GameView extends StatelessWidget {
                   final GameEntity game;
                   final bool isAiThinking;
                   final int? lastMove;
+                  final int? cashOutAmount;
                   List<int>? winLine;
 
                   if (state is GameInProgress) {
                     game = state.game;
                     isAiThinking = state.isAiThinking;
                     lastMove = state.lastMoveIndex;
+                    cashOutAmount = state.cashOutAmount;
                   } else if (state is GameOver) {
                     game = state.game;
                     isAiThinking = false;
                     lastMove = null;
+                    cashOutAmount = null;
                     winLine = state.winningLine;
                   } else {
                     return const SizedBox.shrink();
@@ -120,6 +125,18 @@ class _GameView extends StatelessWidget {
                         isAiThinking: isAiThinking,
                         l10n: l10n,
                       ),
+                      if (cashOutAmount case final amount?) ...[
+                        const SizedBox(height: AppSpacing.md),
+                        _CashOutButton(
+                          amount: amount,
+                          l10n: l10n,
+                          onTap: () => _confirmCashOut(
+                            context,
+                            amount,
+                            l10n,
+                          ),
+                        ),
+                      ],
                     ],
                   );
                 },
@@ -131,14 +148,44 @@ class _GameView extends StatelessWidget {
     );
   }
 
+  void _confirmCashOut(
+    BuildContext context,
+    int amount,
+    AppLocalizations l10n,
+  ) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        title: Text(l10n.game_cashOut_confirm_title),
+        content: Text(l10n.game_cashOut_confirm_body(amount.toCurrency())),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(l10n.game_cashOut_confirm_no),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+              context.read<GameBloc>().add(const GameCashedOut());
+            },
+            child: Text(l10n.game_cashOut_confirm_yes),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showGameResult(
     BuildContext context,
     GameOver state,
     AppLocalizations l10n,
   ) {
     final game = state.game;
-    final isWin = game.humanWon;
-    final isDraw = game.status == GameStatus.draw;
+    final isCashOut = state.isCashOut;
+    final isWin = !isCashOut && game.humanWon;
+    final isDraw = !isCashOut && game.status == GameStatus.draw;
+    final winnings = state.cashOutAmount ?? game.winnings;
 
     // Capture progression state BEFORE dispatching the event
     final progressionState = context.read<ProgressionBloc>().state;
@@ -152,9 +199,13 @@ class _GameView extends StatelessWidget {
       previousLevel = 0;
     }
 
-    context.read<WalletBloc>().add(WalletGameSettled(game.winnings));
+    context.read<WalletBloc>().add(WalletGameSettled(winnings));
     context.read<ProgressionBloc>().add(
-          ProgressionGameSettled(isWin: isWin, isDraw: isDraw),
+          ProgressionGameSettled(
+            isWin: isWin,
+            isDraw: isDraw,
+            isCashOut: isCashOut,
+          ),
         );
 
     showModalBottomSheet(
@@ -165,15 +216,72 @@ class _GameView extends StatelessWidget {
       builder: (_) => GameResultDialog(
         humanWon: isWin,
         isDraw: isDraw,
+        isCashOut: isCashOut,
         betAmount: game.betAmount,
         l10n: l10n,
-        winnings: game.winnings,
+        winnings: winnings,
         previousProgressFraction: previousProgressFraction,
         previousLevel: previousLevel,
         onPlayAgain: () {
           Navigator.of(context).pop();
           context.pop();
         },
+      ),
+    );
+  }
+}
+
+class _CashOutButton extends StatelessWidget {
+  final int amount;
+  final AppLocalizations l10n;
+  final VoidCallback onTap;
+
+  const _CashOutButton({
+    required this.amount,
+    required this.l10n,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.sm,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceLight,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusRound),
+          border: Border.all(
+            color: AppColors.chipGold.withValues(alpha: 0.5),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              LucideIcons.banknote,
+              color: AppColors.chipGold,
+              size: AppSpacing.iconSm,
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            Text(
+              '${l10n.game_cashOut}  ',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: AppColors.chipGold,
+                  ),
+            ),
+            Text(
+              amount.toCurrency(),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: AppColors.chipGold,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+          ],
+        ),
       ),
     );
   }
