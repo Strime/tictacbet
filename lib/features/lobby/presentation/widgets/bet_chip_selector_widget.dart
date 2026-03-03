@@ -7,7 +7,7 @@ import '../../../../core/theme/app_spacing.dart';
 class BetChipSelectorWidget extends StatelessWidget {
   final int currentBet;
   final int maxBet;
-  final ValueChanged<int> onAdd;
+  final void Function(int amount, Offset globalCenter) onAdd;
   final VoidCallback onReset;
   final VoidCallback onMax;
 
@@ -36,9 +36,9 @@ class BetChipSelectorWidget extends StatelessWidget {
               child: _ChipButton(
                 amount: value,
                 enabled: enabled,
-                onTap: () {
+                onTap: (center) {
                   HapticFeedback.lightImpact();
-                  onAdd(value);
+                  onAdd(value, center);
                 },
               ),
             );
@@ -75,7 +75,7 @@ class BetChipSelectorWidget extends StatelessWidget {
 class _ChipButton extends StatefulWidget {
   final int amount;
   final bool enabled;
-  final VoidCallback onTap;
+  final ValueChanged<Offset> onTap;
 
   const _ChipButton({
     required this.amount,
@@ -113,7 +113,11 @@ class _ChipButtonState extends State<_ChipButton>
   void _handleTap() {
     if (!widget.enabled) return;
     _controller.forward().then((_) => _controller.reverse());
-    widget.onTap();
+    final box = context.findRenderObject() as RenderBox;
+    final center = box.localToGlobal(
+      Offset(box.size.width / 2, box.size.height / 2),
+    );
+    widget.onTap(center);
   }
 
   @override
