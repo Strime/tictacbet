@@ -88,6 +88,10 @@
   "@game_result_streakBonus": { "placeholders": { "multiplier": { "type": "String" } } },
   "game_result_levelUp": "Level Up!",
 
+  "lobby_potentialWinnings": "Potential winnings",
+  "lobby_playWithBet": "Play — ${amount}",
+  "@lobby_playWithBet": { "placeholders": { "amount": { "type": "int" } } },
+
   "common_error_unknown": "An unexpected error occurred",
   "common_error_storage": "Failed to save data"
 }

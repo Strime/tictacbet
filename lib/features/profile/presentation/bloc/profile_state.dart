@@ -54,5 +54,10 @@ class ProfileLoaded extends ProfileState {
 }
 
 class ProfileError extends ProfileState {
-  const ProfileError();
+  final AppFailure failure;
+
+  const ProfileError({required this.failure});
+
+  @override
+  List<Object?> get props => [failure];
 }

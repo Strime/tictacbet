@@ -238,6 +238,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get game_result_levelUp => 'Level Up!';
 
   @override
+  String get lobby_potentialWinnings => 'Potential winnings';
+
+  @override
+  String lobby_playWithBet(int amount) {
+    return 'Play — \$$amount';
+  }
+
+  @override
   String get common_error_unknown => 'An unexpected error occurred';
 
   @override

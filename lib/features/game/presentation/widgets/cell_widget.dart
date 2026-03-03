@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_decorations.dart';
@@ -56,26 +57,13 @@ class CellWidget extends StatelessWidget {
   }
 
   Widget _buildHiddenContent() {
-    return Center(
-      child: Container(
-        width: AppSpacing.xxxl,
-        height: AppSpacing.xxxl,
-        decoration: BoxDecoration(
-          color: AppColors.feltGreenDark,
-          borderRadius: AppSpacing.borderRadiusSm,
-          border: Border.all(
-            color: AppColors.chipGold.withValues(alpha: 0.3),
-          ),
-        ),
-        child: const Center(
-          child: Text(
-            '?',
-            style: TextStyle(
-              color: AppColors.chipGold,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+    return Padding(
+      padding: const EdgeInsets.all(AppSpacing.xs),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(AppSpacing.radiusXs),
+        child: CustomPaint(
+          painter: const _CardBackPainter(),
+          size: Size.infinite,
         ),
       ),
     );
@@ -87,7 +75,7 @@ class CellWidget extends StatelessWidget {
 
     final isHeart = card.suit == CardSuit.heart;
     final color = isHeart ? AppColors.heartRed : AppColors.spadeBlackLight;
-    final icon = isHeart ? Icons.favorite : Icons.spa;
+    final icon = isHeart ? LucideIcons.heart : LucideIcons.spade;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -96,9 +84,8 @@ class CellWidget extends StatelessWidget {
         const SizedBox(height: AppSpacing.xxs),
         Text(
           card.rank.name.toUpperCase(),
-          style: TextStyle(
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
             color: color,
-            fontSize: 12,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -119,11 +106,62 @@ class _BonusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (icon, color) = switch (bonus) {
-      CellBonus.coin => (Icons.monetization_on, AppColors.coinColor),
-      CellBonus.clover => (Icons.eco, AppColors.cloverColor),
-      CellBonus.xp => (Icons.star, AppColors.xpColor),
+      CellBonus.coin => (LucideIcons.coins, AppColors.coinColor),
+      CellBonus.clover => (LucideIcons.clover, AppColors.cloverColor),
+      CellBonus.xp => (LucideIcons.sparkles, AppColors.xpColor),
     };
 
     return Icon(icon, color: color, size: AppSpacing.iconSm);
   }
+}
+
+class _CardBackPainter extends CustomPainter {
+  const _CardBackPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Background
+    canvas.drawRect(
+      Offset.zero & size,
+      Paint()..color = AppColors.feltGreenDark,
+    );
+
+    // Diamond crosshatch pattern
+    const spacing = AppSpacing.md;
+    final linePaint = Paint()
+      ..color = AppColors.feltGreen.withValues(alpha: 0.5)
+      ..strokeWidth = 0.8
+      ..style = PaintingStyle.stroke;
+
+    // Diagonal lines (top-left to bottom-right)
+    for (var i = -size.height; i < size.width + size.height; i += spacing) {
+      canvas.drawLine(
+        Offset(i, 0),
+        Offset(i + size.height, size.height),
+        linePaint,
+      );
+    }
+
+    // Diagonal lines (top-right to bottom-left)
+    for (var i = -size.height; i < size.width + size.height; i += spacing) {
+      canvas.drawLine(
+        Offset(i + size.height, 0),
+        Offset(i, size.height),
+        linePaint,
+      );
+    }
+
+    // Inner border
+    final borderRect = Rect.fromLTWH(4, 4, size.width - 8, size.height - 8);
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(borderRect, const Radius.circular(2)),
+      Paint()
+        ..color = AppColors.chipGold.withValues(alpha: 0.25)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.0,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

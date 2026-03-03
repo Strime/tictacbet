@@ -239,6 +239,14 @@ class AppLocalizationsFr extends AppLocalizations {
   String get game_result_levelUp => 'Niveau supérieur !';
 
   @override
+  String get lobby_potentialWinnings => 'Gains potentiels';
+
+  @override
+  String lobby_playWithBet(int amount) {
+    return 'Jouer — $amount\$';
+  }
+
+  @override
   String get common_error_unknown => 'Une erreur inattendue s\'est produite';
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -95,7 +96,7 @@ class _GameView extends StatelessWidget {
                         borderRadius: AppSpacing.borderRadiusSm,
                       ),
                       child: Text(
-                        'Bet: \$${params.betAmount}',
+                        l10n.history_bet(params.betAmount),
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: AppColors.chipGold,
                         ),
@@ -136,20 +137,36 @@ class _GameView extends StatelessWidget {
     final isWin = game.humanWon;
     final isDraw = game.status == GameStatus.draw;
 
+    // Capture progression state BEFORE dispatching the event
+    final progressionState = context.read<ProgressionBloc>().state;
+    final double previousProgressFraction;
+    final int previousLevel;
+    if (progressionState is ProgressionLoaded) {
+      previousProgressFraction = progressionState.progression.progressFraction;
+      previousLevel = progressionState.progression.level;
+    } else {
+      previousProgressFraction = 0.0;
+      previousLevel = 0;
+    }
+
     context.read<WalletBloc>().add(WalletGameSettled(game.winnings));
     context.read<ProgressionBloc>().add(
           ProgressionGameSettled(isWin: isWin, isDraw: isDraw),
         );
 
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      barrierDismissible: false,
+      isDismissible: false,
+      enableDrag: false,
+      backgroundColor: Colors.transparent,
       builder: (_) => GameResultDialog(
         humanWon: isWin,
         isDraw: isDraw,
         betAmount: game.betAmount,
         l10n: l10n,
         winnings: game.winnings,
+        previousProgressFraction: previousProgressFraction,
+        previousLevel: previousLevel,
         onPlayAgain: () {
           Navigator.of(context).pop();
           context.pop();
@@ -191,7 +208,7 @@ class _StatusBar extends StatelessWidget {
       children: [
         IconButton(
           onPressed: () => context.pop(),
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(LucideIcons.arrowLeft),
         ),
         Text(
           statusText,

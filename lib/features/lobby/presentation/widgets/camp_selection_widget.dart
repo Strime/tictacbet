@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -17,22 +18,25 @@ class CampSelectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _CampCard(
-          side: PlayerSide.red,
-          icon: Icons.favorite,
-          color: AppColors.heartRed,
-          isSelected: selectedSide == PlayerSide.red,
-          onTap: () => onSideChanged(PlayerSide.red),
+        Expanded(
+          child: _CampCard(
+            side: PlayerSide.red,
+            icon: LucideIcons.heart,
+            color: AppColors.heartRed,
+            isSelected: selectedSide == PlayerSide.red,
+            onTap: () => onSideChanged(PlayerSide.red),
+          ),
         ),
-        const SizedBox(width: AppSpacing.xl),
-        _CampCard(
-          side: PlayerSide.black,
-          icon: Icons.spa,
-          color: AppColors.spadeBlackLight,
-          isSelected: selectedSide == PlayerSide.black,
-          onTap: () => onSideChanged(PlayerSide.black),
+        const SizedBox(width: AppSpacing.lg),
+        Expanded(
+          child: _CampCard(
+            side: PlayerSide.black,
+            icon: LucideIcons.spade,
+            color: AppColors.spadeBlackLight,
+            isSelected: selectedSide == PlayerSide.black,
+            onTap: () => onSideChanged(PlayerSide.black),
+          ),
         ),
       ],
     );
@@ -58,31 +62,45 @@ class _CampCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: AnimatedContainer(
+      child: AnimatedScale(
+        scale: isSelected ? 1.03 : 1.0,
         duration: const Duration(milliseconds: AppSpacing.animationMedium),
-        width: 120,
-        height: 140,
-        decoration: BoxDecoration(
-          color: isSelected ? color.withValues(alpha: 0.2) : AppColors.surface,
-          borderRadius: AppSpacing.borderRadiusLg,
-          border: Border.all(
-            color: isSelected ? color : AppColors.surfaceLight,
-            width: isSelected ? 3 : 1,
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: AppSpacing.iconXl, color: color),
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              side.label,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: color,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
+        curve: Curves.easeOut,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: AppSpacing.animationMedium),
+          height: AppSpacing.campCardHeight,
+          decoration: BoxDecoration(
+            gradient: isSelected
+                ? LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      color.withValues(alpha: 0.2),
+                      color.withValues(alpha: 0.05),
+                    ],
+                  )
+                : null,
+            color: isSelected ? null : AppColors.surface,
+            borderRadius: AppSpacing.borderRadiusLg,
+            border: Border.all(
+              color: isSelected ? color : AppColors.surfaceLight,
+              width: isSelected ? 2 : 1,
             ),
-          ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: AppSpacing.iconXl, color: color),
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                side.label,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: color,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

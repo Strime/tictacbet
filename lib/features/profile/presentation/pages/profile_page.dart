@@ -5,7 +5,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
+import '../../../../core/error/failure_message.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -91,12 +93,12 @@ class _ProfileViewState extends State<_ProfileView> {
                       ),
                     ),
                   ],
-                ProfileError() => [
+                ProfileError(:final failure) => [
                     SliverFillRemaining(
                       hasScrollBody: false,
                       child: Center(
                         child: Text(
-                          l10n.common_error_unknown,
+                          failure.toLocalizedMessage(l10n),
                           style:
                               Theme.of(context).textTheme.bodyLarge?.copyWith(
                                     color: AppColors.textSecondary,
@@ -113,7 +115,7 @@ class _ProfileViewState extends State<_ProfileView> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const Icon(
-                              Icons.bar_chart,
+                              LucideIcons.barChart3,
                               size: AppSpacing.iconXl,
                               color: AppColors.textSecondary,
                             ),
@@ -235,7 +237,6 @@ class _FlexibleContent extends StatelessWidget {
     final borderWidth = lerpDouble(2.0, 1.5, t)!;
     final iconSize = lerpDouble(AppSpacing.iconLg, AppSpacing.iconSm, t)!;
     final balanceOpacity = (1.0 - t * 2.5).clamp(0.0, 1.0);
-    final glowOpacity = (1.0 - t).clamp(0.0, 1.0);
 
     // Avatar position: left-aligned below toolbar → top-left in toolbar
     final avatarLeft = lerpDouble(
@@ -266,7 +267,7 @@ class _FlexibleContent extends StatelessWidget {
         border: Border(
           bottom: BorderSide(
             color: AppColors.chipGold.withValues(alpha: 0.15 * t),
-            width: 0.5,
+            width: AppSpacing.thinBorderWidth,
           ),
         ),
       ),
@@ -316,73 +317,61 @@ class _FlexibleContent extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: AppColors.surfaceLight,
                 border: Border.all(
-                  color: AppColors.chipGold.withValues(alpha: 0.5),
+                  color: AppColors.onSurface.withValues(alpha: 0.3),
                   width: borderWidth,
                 ),
-                boxShadow: [
-                  if (glowOpacity > 0)
-                    BoxShadow(
-                      color: AppColors.chipGold
-                          .withValues(alpha: 0.12 * glowOpacity),
-                      blurRadius: 12 * glowOpacity,
-                      spreadRadius: 2 * glowOpacity,
-                    ),
-                ],
               ),
               child: Icon(
-                Icons.person,
+                LucideIcons.user,
                 size: iconSize,
-                color: AppColors.chipGold,
+                color: AppColors.textPrimary,
               ),
             ),
           ),
 
-          // Balance — right of avatar, fades out early
+          // Balance + Level XP — right of avatar, fades out early
           if (balanceOpacity > 0)
             Positioned(
               left: infoLeft,
               top: infoTop,
               child: Opacity(
                 opacity: balanceOpacity,
-                child: BlocBuilder<WalletBloc, WalletState>(
-                  builder: (context, walletState) {
-                    final balance = walletState is WalletLoaded
-                        ? walletState.balance
-                        : 0;
-                    return Text(
-                      l10n.profile_balance(balance),
-                      style: theme.textTheme.headlineMedium?.copyWith(
-                        color: AppColors.chipGold,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-
-          // Level XP text — right of avatar, below balance, fades out early
-          if (balanceOpacity > 0)
-            Positioned(
-              left: infoLeft,
-              top: infoTop + _expandedTitleHeight, // below balance text
-              child: Opacity(
-                opacity: balanceOpacity,
-                child: BlocBuilder<ProgressionBloc, ProgressionState>(
-                  builder: (context, progressionState) {
-                    if (progressionState is! ProgressionLoaded) {
-                      return const SizedBox.shrink();
-                    }
-                    final p = progressionState.progression;
-                    final xpInLevel = p.totalXp - p.xpForCurrentLevel;
-                    final xpNeeded = p.xpForNextLevel - p.xpForCurrentLevel;
-                    return Text(
-                      l10n.profile_levelXp(p.level, xpInLevel, xpNeeded),
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: AppColors.xpColor,
-                      ),
-                    );
-                  },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    BlocBuilder<WalletBloc, WalletState>(
+                      builder: (context, walletState) {
+                        final balance = walletState is WalletLoaded
+                            ? walletState.balance
+                            : 0;
+                        return Text(
+                          l10n.profile_balance(balance),
+                          style: theme.textTheme.headlineMedium?.copyWith(
+                            color: AppColors.chipGold,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      },
+                    ),
+                    BlocBuilder<ProgressionBloc, ProgressionState>(
+                      builder: (context, progressionState) {
+                        if (progressionState is! ProgressionLoaded) {
+                          return const SizedBox.shrink();
+                        }
+                        final p = progressionState.progression;
+                        final xpInLevel = p.totalXp - p.xpForCurrentLevel;
+                        final xpNeeded =
+                            p.xpForNextLevel - p.xpForCurrentLevel;
+                        return Text(
+                          l10n.profile_levelXp(p.level, xpInLevel, xpNeeded),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: AppColors.xpColor,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),

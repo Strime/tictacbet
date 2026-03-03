@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_decorations.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/utils/currency_formatter.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../bloc/profile_bloc.dart';
 
@@ -17,7 +18,7 @@ class ProfileHeaderCard extends StatelessWidget {
 
     return Container(
       decoration: AppDecorations.card,
-      padding: const EdgeInsets.all(AppSpacing.xl),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -25,9 +26,9 @@ class ProfileHeaderCard extends StatelessWidget {
             label: l10n.profile_gamesPlayed,
             value: '${state.gamesPlayed}',
           ),
-          _MiniMetric(
+          _WinRateMetric(
             label: l10n.profile_winRate,
-            value: '${state.winRate.toStringAsFixed(1)}%',
+            winRate: state.winRate,
           ),
           _MiniMetric(
             label: l10n.profile_totalEarnings,
@@ -46,9 +47,38 @@ class ProfileHeaderCard extends StatelessWidget {
     );
   }
 
-  String _formatEarnings(int amount) {
-    final sign = amount >= 0 ? '+' : '-';
-    return '$sign\$${amount.abs()}';
+  String _formatEarnings(int amount) => amount.toSignedCurrency();
+}
+
+class _WinRateMetric extends StatelessWidget {
+  final String label;
+  final double winRate;
+
+  const _WinRateMetric({required this.label, required this.winRate});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          '${winRate.toStringAsFixed(0)}%',
+          style: theme.textTheme.titleMedium?.copyWith(
+            color: AppColors.success,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.xxs),
+        Text(
+          label,
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: AppColors.textSecondary,
+          ),
+        ),
+      ],
+    );
   }
 }
 

@@ -6,6 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:tictacbet/features/game/domain/entities/game_status.dart';
 import 'package:tictacbet/features/game/domain/entities/player_side.dart';
 import 'package:tictacbet/features/history/domain/entities/game_result_entity.dart';
+import 'package:tictacbet/core/error/failure.dart';
 import 'package:tictacbet/features/history/domain/usecases/load_history_use_case.dart';
 import 'package:tictacbet/features/history/presentation/bloc/history_bloc.dart';
 
@@ -87,7 +88,7 @@ void main() {
         act: (bloc) => bloc.add(const HistoryStarted()),
         expect: () => [
           const HistoryLoading(),
-          const HistoryError(),
+          HistoryError(failure: AppFailure.unknown(debugInfo: Exception('db error').toString())),
         ],
       );
     });

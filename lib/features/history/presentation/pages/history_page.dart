@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
+import '../../../../core/error/failure_message.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -99,12 +101,12 @@ class _HistoryViewState extends State<_HistoryView> {
                       ),
                     ),
                   ],
-                HistoryError() => [
+                HistoryError(:final failure) => [
                     SliverFillRemaining(
                       hasScrollBody: false,
                       child: Center(
                         child: Text(
-                          l10n.common_error_unknown,
+                          failure.toLocalizedMessage(l10n),
                           style:
                               Theme.of(context).textTheme.bodyLarge?.copyWith(
                                     color: AppColors.textSecondary,
@@ -121,7 +123,7 @@ class _HistoryViewState extends State<_HistoryView> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const Icon(
-                              Icons.history,
+                              LucideIcons.clock,
                               size: AppSpacing.iconXl,
                               color: AppColors.textSecondary,
                             ),
@@ -341,17 +343,17 @@ class _FlexibleContent extends StatelessWidget {
                     ),
                     const SizedBox(width: AppSpacing.sm),
                     Text(
-                      '$draws',
+                      '$losses',
                       style: theme.textTheme.titleSmall?.copyWith(
-                        color: AppColors.chipGold,
+                        color: AppColors.error,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(width: AppSpacing.sm),
                     Text(
-                      '$losses',
+                      '$draws',
                       style: theme.textTheme.titleSmall?.copyWith(
-                        color: AppColors.error,
+                        color: AppColors.chipGold,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

@@ -86,6 +86,9 @@
   "@game_result_streakBonus": { "placeholders": { "multiplier": { "type": "String" } } },
   "game_result_levelUp": "Niveau supérieur !",
 
+  "lobby_potentialWinnings": "Gains potentiels",
+  "lobby_playWithBet": "Jouer — {amount}$",
+
   "common_error_unknown": "Une erreur inattendue s'est produite",
   "common_error_storage": "Échec de la sauvegarde"
 }

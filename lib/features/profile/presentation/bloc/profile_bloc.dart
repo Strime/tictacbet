@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../core/error/failure.dart';
 import '../../domain/entities/achievement.dart';
 import '../../domain/services/achievement_detector.dart';
 import '../../../history/domain/entities/game_result_entity.dart';
@@ -32,9 +33,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     try {
       final results = await _loadHistory();
       if (isClosed) return;
-      emit(await _computeStats(results));
-    } catch (_) {
-      emit(const ProfileError());
+      final stats = await _computeStats(results);
+      if (stats != null) emit(stats);
+    } catch (e) {
+      emit(ProfileError(failure: AppFailure.unknown(debugInfo: e.toString())));
     }
   }
 
@@ -45,7 +47,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     try {
       final results = await _loadHistory();
       if (isClosed) return;
-      emit(await _computeStats(results));
+      final stats = await _computeStats(results);
+      if (stats != null) emit(stats);
     } catch (_) {
       // Silently keep current state on refresh failure
     } finally {
@@ -53,7 +56,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
   }
 
-  Future<ProfileLoaded> _computeStats(List<GameResultEntity> results) async {
+  Future<ProfileLoaded?> _computeStats(List<GameResultEntity> results) async {
     final wins = results.where((r) => r.isWin).length;
     final draws = results.where((r) => r.isDraw).length;
     final losses = results.where((r) => r.isLoss).length;
@@ -63,6 +66,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     final totalEarnings =
         results.fold<int>(0, (sum, r) => sum + r.netAmount);
     final progression = await _loadProgression();
+    if (isClosed) return null;
 
     return ProfileLoaded(
       gamesPlayed: gamesPlayed,

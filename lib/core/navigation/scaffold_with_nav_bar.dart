@@ -2,11 +2,12 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_decorations.dart';
 import '../theme/app_shadows.dart';
 import '../theme/app_spacing.dart';
 
@@ -22,8 +23,11 @@ class ScaffoldWithNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      body: navigationShell,
+    return DecoratedBox(
+      decoration: AppDecorations.backgroundGradient,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: navigationShell,
       bottomNavigationBar: _NavBar(
         selectedIndex: navigationShell.currentIndex,
         onTap: (index) {
@@ -34,16 +38,15 @@ class ScaffoldWithNavBar extends StatelessWidget {
           );
         },
         leftItem: _NavItem(
-          icon: Icons.history_outlined,
-          selectedIcon: Icons.history,
+          icon: LucideIcons.clock,
           label: l10n.nav_history,
         ),
         centerLabel: l10n.nav_lobby,
         rightItem: _NavItem(
-          icon: Icons.person_outline,
-          selectedIcon: Icons.person,
+          icon: LucideIcons.user,
           label: l10n.nav_profile,
         ),
+      ),
       ),
     );
   }
@@ -51,12 +54,10 @@ class ScaffoldWithNavBar extends StatelessWidget {
 
 class _NavItem {
   final IconData icon;
-  final IconData selectedIcon;
   final String label;
 
   const _NavItem({
     required this.icon,
-    required this.selectedIcon,
     required this.label,
   });
 }
@@ -204,7 +205,7 @@ class _NotchedBarPainter extends CustomPainter {
       Paint()
         ..color = borderColor
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 0.5,
+        ..strokeWidth = AppSpacing.thinBorderWidth,
     );
   }
 
@@ -280,14 +281,14 @@ class _CenterNavButton extends StatelessWidget {
                     ),
                     border: Border.all(
                       color: AppColors.chipGold,
-                      width: 3.0,
+                      width: AppSpacing.chipBorderWidth,
                     ),
                     boxShadow:
                         isSelected ? AppShadows.glow : AppShadows.elevated,
                   ),
                   child: Center(
                     child: Icon(
-                      isSelected ? Icons.casino : Icons.casino_outlined,
+                      LucideIcons.dices,
                       size: AppSpacing.iconLg,
                       color: AppColors.textPrimary,
                     ),
@@ -336,19 +337,11 @@ class _NavDestination extends StatelessWidget {
             },
             child: isSelected
                 ? Icon(
-                    item.selectedIcon,
+                    item.icon,
                     key: const ValueKey('selected'),
                     size: AppSpacing.iconMd,
                     color: AppColors.chipGold,
                   )
-                    .animate(
-                      onPlay: (c) => c.repeat(reverse: true),
-                    )
-                    .shimmer(
-                      delay: 1.seconds,
-                      duration: 2.seconds,
-                      color: AppColors.chipGold.withValues(alpha: 0.3),
-                    )
                 : Icon(
                     item.icon,
                     key: const ValueKey('unselected'),

@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../core/error/failure.dart';
 import '../../domain/entities/game_result_entity.dart';
 import '../../domain/usecases/load_history_use_case.dart';
 
@@ -27,8 +28,8 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
     try {
       final results = await _loadHistory();
       emit(HistoryLoaded(results: results));
-    } catch (_) {
-      emit(const HistoryError());
+    } catch (e) {
+      emit(HistoryError(failure: AppFailure.unknown(debugInfo: e.toString())));
     }
   }
 

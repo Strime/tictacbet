@@ -26,6 +26,12 @@ class AppSpacing {
   static const double navFabSize = 64.0;
   static const double navFabOverhang = 16.0;
   static const double navNotchMargin = 6.0;
+  static const double campCardHeight = 120.0;
+  static const double dragHandleWidth = 32.0;
+  static const double dragHandleHeight = 4.0;
+  static const double xpBarMinHeight = 6.0;
+  static const double chipBorderWidth = 3.0;
+  static const double thinBorderWidth = 0.5;
 
   // Icon sizes
   static const double iconXs = 16.0;

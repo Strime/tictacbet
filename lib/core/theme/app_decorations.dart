@@ -40,4 +40,15 @@ class AppDecorations {
     ),
     borderRadius: AppSpacing.borderRadiusSm,
   );
+
+  static BoxDecoration get backgroundGradient => const BoxDecoration(
+    gradient: RadialGradient(
+      center: Alignment(0, -0.3),
+      radius: 1.2,
+      colors: [
+        AppColors.backgroundDeep,
+        AppColors.background,
+      ],
+    ),
+  );
 }

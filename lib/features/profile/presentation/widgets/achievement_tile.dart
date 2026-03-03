@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -28,7 +29,7 @@ class AchievementTile extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: AppSpacing.borderRadiusMd,
         border: isUnlocked
-            ? Border.all(color: AppColors.chipGold.withValues(alpha: 0.4))
+            ? Border.all(color: AppColors.surfaceLight)
             : null,
       ),
       child: Row(
@@ -39,14 +40,14 @@ class AchievementTile extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: isUnlocked
-                  ? AppColors.chipGold.withValues(alpha: 0.15)
+                  ? type.color.withValues(alpha: 0.15)
                   : AppColors.surfaceLight,
             ),
             child: Icon(
-              isUnlocked ? type.icon : Icons.lock,
+              isUnlocked ? type.icon : LucideIcons.lock,
               size: AppSpacing.iconMd,
               color: isUnlocked
-                  ? AppColors.chipGold
+                  ? type.color
                   : AppColors.textSecondary,
             ),
           ),
@@ -78,9 +79,9 @@ class AchievementTile extends StatelessWidget {
             ),
           ),
           if (isUnlocked)
-            const Icon(
-              Icons.check_circle,
-              color: AppColors.chipGold,
+            Icon(
+              LucideIcons.checkCircle2,
+              color: type.color,
               size: AppSpacing.iconMd,
             ),
         ],

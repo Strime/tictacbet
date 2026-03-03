@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/utils/currency_formatter.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/game_result_entity.dart';
 
@@ -19,17 +21,17 @@ class HistoryListItem extends StatelessWidget {
     final (Color accentColor, IconData icon, String label) = switch (result) {
       GameResultEntity(isWin: true) => (
           AppColors.success,
-          Icons.emoji_events,
+          LucideIcons.trophy,
           l10n.history_result_win,
         ),
       GameResultEntity(isDraw: true) => (
           AppColors.chipGold,
-          Icons.handshake,
+          LucideIcons.scale,
           l10n.history_result_draw,
         ),
       _ => (
           AppColors.error,
-          Icons.close,
+          LucideIcons.x,
           l10n.history_result_loss,
         ),
     };
@@ -41,9 +43,6 @@ class HistoryListItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: AppSpacing.borderRadiusMd,
-        border: Border(
-          left: BorderSide(color: accentColor, width: AppSpacing.xs),
-        ),
       ),
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
@@ -128,10 +127,9 @@ class _NetAmountLabel extends StatelessWidget {
     if (netAmount == 0) return const SizedBox.shrink();
 
     final color = netAmount > 0 ? AppColors.success : AppColors.error;
-    final sign = netAmount > 0 ? '+' : '-';
 
     return Text(
-      '$sign\$${netAmount.abs()}',
+      netAmount.toSignedCurrency(),
       style: Theme.of(context).textTheme.titleMedium?.copyWith(
         color: color,
         fontWeight: FontWeight.bold,

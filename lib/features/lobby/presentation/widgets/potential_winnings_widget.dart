@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/utils/currency_formatter.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class PotentialWinningsWidget extends StatefulWidget {
   final int potentialWinnings;
@@ -38,20 +41,17 @@ class _PotentialWinningsWidgetState extends State<PotentialWinningsWidget> {
       decoration: BoxDecoration(
         color: AppColors.surfaceLight,
         borderRadius: AppSpacing.borderRadiusMd,
-        border: Border.all(
-          color: AppColors.chipGold.withValues(alpha: 0.3),
-        ),
       ),
       child: Row(
         children: [
           const Icon(
-            Icons.emoji_events,
+            LucideIcons.trophy,
             color: AppColors.chipGold,
             size: AppSpacing.iconMd,
           ),
           const SizedBox(width: AppSpacing.sm),
           Text(
-            'Potential winnings',
+            AppLocalizations.of(context)!.lobby_potentialWinnings,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: AppColors.textSecondary,
             ),
@@ -66,7 +66,7 @@ class _PotentialWinningsWidgetState extends State<PotentialWinningsWidget> {
             curve: Curves.easeOut,
             builder: (context, value, _) {
               return Text(
-                '+\$$value',
+                value.toSignedCurrency(),
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: AppColors.success,
                   fontWeight: FontWeight.bold,

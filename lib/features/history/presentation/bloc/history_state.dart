@@ -27,5 +27,10 @@ class HistoryLoaded extends HistoryState {
 }
 
 class HistoryError extends HistoryState {
-  const HistoryError();
+  final AppFailure failure;
+
+  const HistoryError({required this.failure});
+
+  @override
+  List<Object?> get props => [failure];
 }

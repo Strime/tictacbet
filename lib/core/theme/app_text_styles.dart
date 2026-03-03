@@ -6,13 +6,13 @@ class AppTextStyles {
   AppTextStyles._();
 
   static TextTheme get textTheme => TextTheme(
-    displayLarge: GoogleFonts.plusJakartaSans(
+    displayLarge: GoogleFonts.dmSerifDisplay(
       fontSize: 32,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.normal,
     ),
-    displayMedium: GoogleFonts.plusJakartaSans(
+    displayMedium: GoogleFonts.dmSerifDisplay(
       fontSize: 28,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.normal,
     ),
     headlineLarge: GoogleFonts.plusJakartaSans(
       fontSize: 24,

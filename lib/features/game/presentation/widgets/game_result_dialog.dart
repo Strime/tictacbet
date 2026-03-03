@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/config/game_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/utils/currency_formatter.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../progression/presentation/bloc/progression_bloc.dart';
 
@@ -15,6 +16,8 @@ class GameResultDialog extends StatelessWidget {
   final AppLocalizations l10n;
   final VoidCallback onPlayAgain;
   final int winnings;
+  final double previousProgressFraction;
+  final int previousLevel;
 
   const GameResultDialog({
     super.key,
@@ -24,6 +27,8 @@ class GameResultDialog extends StatelessWidget {
     required this.l10n,
     required this.onPlayAgain,
     required this.winnings,
+    required this.previousProgressFraction,
+    required this.previousLevel,
   });
 
   @override
@@ -40,48 +45,75 @@ class GameResultDialog extends StatelessWidget {
             ? AppColors.chipGold
             : AppColors.error;
 
-    return Dialog(
-      backgroundColor: AppColors.surface,
-      shape: RoundedRectangleBorder(borderRadius: AppSpacing.borderRadiusLg),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xl),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              resultText,
-              style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                color: resultColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ).animate().fadeIn().scale(),
-            const SizedBox(height: AppSpacing.md),
-            _WinningsText(
-              humanWon: humanWon,
-              isDraw: isDraw,
-              winnings: winnings,
-              betAmount: betAmount,
-            ).animate().fadeIn(delay: const Duration(milliseconds: 200)),
-            const SizedBox(height: AppSpacing.lg),
-            _XpSection(l10n: l10n)
-                .animate()
-                .fadeIn(delay: const Duration(milliseconds: 400)),
-            const SizedBox(height: AppSpacing.xl),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: onPlayAgain,
-                child: Text(l10n.game_result_playAgain),
-              ),
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+
+    return Container(
+      decoration: const BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppSpacing.radiusLg)),
+      ),
+      padding: EdgeInsets.fromLTRB(
+        AppSpacing.xl,
+        AppSpacing.lg,
+        AppSpacing.xl,
+        AppSpacing.xl + bottomPadding,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: AppSpacing.dragHandleWidth,
+            height: AppSpacing.dragHandleHeight,
+            decoration: BoxDecoration(
+              color: AppColors.surfaceLight,
+              borderRadius: BorderRadius.circular(AppSpacing.xxs),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: AppSpacing.xl),
+          Text(
+            resultText,
+            style: Theme.of(context).textTheme.displayMedium?.copyWith(
+              color: resultColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ).animate().fadeIn().scale(),
+          const SizedBox(height: AppSpacing.md),
+          _WinningsText(
+            humanWon: humanWon,
+            isDraw: isDraw,
+            winnings: winnings,
+            betAmount: betAmount,
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          _XpSection(
+            l10n: l10n,
+            previousProgressFraction: previousProgressFraction,
+            previousLevel: previousLevel,
+          ),
+          const SizedBox(height: AppSpacing.xl),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: onPlayAgain,
+              child: Text(l10n.game_result_playAgain),
+            ),
+          )
+              .animate()
+              .fadeIn(delay: const Duration(milliseconds: 1200))
+              .slideY(
+                begin: 0.2,
+                end: 0.0,
+                delay: const Duration(milliseconds: 1200),
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeOut,
+              ),
+        ],
       ),
     );
   }
 }
 
-class _WinningsText extends StatelessWidget {
+class _WinningsText extends StatefulWidget {
   final bool humanWon;
   final bool isDraw;
   final int winnings;
@@ -95,36 +127,94 @@ class _WinningsText extends StatelessWidget {
   });
 
   @override
+  State<_WinningsText> createState() => _WinningsTextState();
+}
+
+class _WinningsTextState extends State<_WinningsText> {
+  bool _started = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 200), () {
+      if (mounted) setState(() => _started = true);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final String text;
+    final style = Theme.of(context).textTheme.headlineMedium?.copyWith(
+      fontWeight: FontWeight.bold,
+    );
+
+    if (widget.isDraw) {
+      return AnimatedOpacity(
+        opacity: _started ? 1.0 : 0.0,
+        duration: const Duration(milliseconds: 300),
+        child: Text(
+          0.toCurrency(),
+          style: style?.copyWith(color: AppColors.chipGold),
+        ),
+      );
+    }
+
+    final int targetValue;
     final Color color;
 
-    if (humanWon) {
-      final netProfit = winnings - betAmount;
-      text = '+\$$netProfit';
+    if (widget.humanWon) {
+      targetValue = widget.winnings - widget.betAmount;
       color = AppColors.success;
-    } else if (isDraw) {
-      text = '\$0';
-      color = AppColors.chipGold;
     } else {
-      text = '-\$$betAmount';
+      targetValue = widget.betAmount;
       color = AppColors.error;
     }
 
-    return Text(
-      text,
-      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-        color: color,
-        fontWeight: FontWeight.bold,
+    return AnimatedOpacity(
+      opacity: _started ? 1.0 : 0.0,
+      duration: const Duration(milliseconds: 300),
+      child: TweenAnimationBuilder<int>(
+        tween: IntTween(begin: 0, end: _started ? targetValue : 0),
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeOut,
+        builder: (context, value, _) {
+          final text = widget.humanWon
+              ? '+${value.toCurrency()}'
+              : '-${value.toCurrency()}';
+          return Text(
+            text,
+            style: style?.copyWith(color: color),
+          );
+        },
       ),
     );
   }
 }
 
-class _XpSection extends StatelessWidget {
+class _XpSection extends StatefulWidget {
   final AppLocalizations l10n;
+  final double previousProgressFraction;
+  final int previousLevel;
 
-  const _XpSection({required this.l10n});
+  const _XpSection({
+    required this.l10n,
+    required this.previousProgressFraction,
+    required this.previousLevel,
+  });
+
+  @override
+  State<_XpSection> createState() => _XpSectionState();
+}
+
+class _XpSectionState extends State<_XpSection> {
+  bool _started = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 600), () {
+      if (mounted) setState(() => _started = true);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,62 +229,155 @@ class _XpSection extends StatelessWidget {
         final xpEarned = state.xpEarned ?? 0;
         final streak = progression.currentWinStreak;
         final multiplier = GameConstants.streakMultiplier(streak);
+        final didLevelUp = state.leveledUp;
 
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              l10n.game_result_xpEarned(xpEarned),
-              style: theme.textTheme.titleLarge?.copyWith(
-                color: AppColors.xpColor,
-                fontWeight: FontWeight.bold,
+        return AnimatedOpacity(
+          opacity: _started ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 300),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TweenAnimationBuilder<int>(
+                tween: IntTween(begin: 0, end: _started ? xpEarned : 0),
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeOut,
+                builder: (context, value, _) {
+                  return Text(
+                    widget.l10n.game_result_xpEarned(value),
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      color: AppColors.xpColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                },
               ),
-            ),
-            if (streak >= 2) ...[
+              if (streak >= 2) ...[
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  widget.l10n.game_result_streakBonus(
+                    multiplier.toStringAsFixed(1),
+                  ),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: AppColors.xpColor.withValues(alpha: 0.8),
+                  ),
+                ),
+              ],
+              const SizedBox(height: AppSpacing.md),
+              _AnimatedXpBar(
+                fromFraction: didLevelUp ? 0.0 : widget.previousProgressFraction,
+                toFraction: progression.progressFraction,
+                started: _started,
+              ),
               const SizedBox(height: AppSpacing.xs),
               Text(
-                l10n.game_result_streakBonus(
-                  multiplier.toStringAsFixed(1),
+                widget.l10n.profile_levelXp(
+                  progression.level,
+                  progression.totalXp - progression.xpForCurrentLevel,
+                  progression.xpForNextLevel - progression.xpForCurrentLevel,
                 ),
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: AppColors.xpColor.withValues(alpha: 0.8),
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: AppColors.textSecondary,
                 ),
               ),
+              if (didLevelUp) ...[
+                const SizedBox(height: AppSpacing.sm),
+                _LevelUpBadge(level: progression.level, l10n: widget.l10n),
+              ],
             ],
-            const SizedBox(height: AppSpacing.md),
-            ClipRRect(
-              borderRadius: AppSpacing.borderRadiusSm,
-              child: LinearProgressIndicator(
-                value: progression.progressFraction,
-                backgroundColor: AppColors.surfaceLight,
-                valueColor: const AlwaysStoppedAnimation(AppColors.xpColor),
-                minHeight: 6,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.xs),
-            Text(
-              l10n.profile_levelXp(
-                progression.level,
-                progression.totalXp - progression.xpForCurrentLevel,
-                progression.xpForNextLevel - progression.xpForCurrentLevel,
-              ),
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: AppColors.textSecondary,
-              ),
-            ),
-            if (state.leveledUp) ...[
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                l10n.game_result_levelUp,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: AppColors.xpColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ],
+          ),
         );
       },
+    );
+  }
+}
+
+class _AnimatedXpBar extends StatelessWidget {
+  final double fromFraction;
+  final double toFraction;
+  final bool started;
+
+  const _AnimatedXpBar({
+    required this.fromFraction,
+    required this.toFraction,
+    required this.started,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(
+        begin: fromFraction,
+        end: started ? toFraction : fromFraction,
+      ),
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeInOut,
+      builder: (context, value, _) {
+        return ClipRRect(
+          borderRadius: AppSpacing.borderRadiusSm,
+          child: LinearProgressIndicator(
+            value: value.clamp(0.0, 1.0),
+            backgroundColor: AppColors.surfaceLight,
+            valueColor: const AlwaysStoppedAnimation(AppColors.xpColor),
+            minHeight: AppSpacing.xpBarMinHeight,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _LevelUpBadge extends StatelessWidget {
+  final int level;
+  final AppLocalizations l10n;
+
+  const _LevelUpBadge({required this.level, required this.l10n});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          l10n.game_result_levelUp,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            color: AppColors.xpColor,
+            fontWeight: FontWeight.bold,
+          ),
+        )
+            .animate(onPlay: (controller) => controller.repeat(reverse: true))
+            .shimmer(
+              duration: const Duration(milliseconds: 1200),
+              color: AppColors.chipGold.withValues(alpha: 0.4),
+            ),
+        const SizedBox(height: AppSpacing.xs),
+        Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.xs,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.xpColor.withValues(alpha: 0.2),
+            borderRadius: AppSpacing.borderRadiusMd,
+            border: Border.all(
+              color: AppColors.xpColor.withValues(alpha: 0.5),
+            ),
+          ),
+          child: Text(
+            l10n.profile_level(level),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              color: AppColors.xpColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        )
+            .animate()
+            .scale(
+              begin: const Offset(0.5, 0.5),
+              end: const Offset(1.0, 1.0),
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.elasticOut,
+            )
+            .fadeIn(duration: const Duration(milliseconds: 200)),
+      ],
     );
   }
 }

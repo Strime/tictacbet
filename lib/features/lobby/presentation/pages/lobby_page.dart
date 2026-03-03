@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -59,25 +58,22 @@ class _LobbyView extends StatelessWidget {
             }
 
             return SingleChildScrollView(
-            padding: const EdgeInsets.all(AppSpacing.xl),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.xl,
+              vertical: AppSpacing.lg,
+            ),
             child: Column(
               children: [
-                const SizedBox(height: AppSpacing.lg),
                 Text(
                   l10n.lobby_title,
                   style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                    color: AppColors.chipGold,
+                    color: AppColors.textPrimary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: AppSpacing.xxxl),
+                const SizedBox(height: AppSpacing.xl),
 
                 // Camp selection
-                Text(
-                  l10n.lobby_selectCamp,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: AppSpacing.lg),
                 CampSelectionWidget(
                   selectedSide: state.selectedSide,
                   onSideChanged: (side) {
@@ -86,19 +82,12 @@ class _LobbyView extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.xxl),
 
-                // Bet amount display
-                Text(
-                  l10n.lobby_placeBet,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: AppSpacing.lg),
+                // Bet amount + chips
                 BetAmountDisplay(
                   betAmount: state.betAmount,
                   remainingBalance: state.remainingBalance,
                 ),
-                const SizedBox(height: AppSpacing.lg),
-
-                // Chip selector
+                const SizedBox(height: AppSpacing.md),
                 BetChipSelectorWidget(
                   currentBet: state.betAmount,
                   maxBet: state.maxBet,
@@ -112,15 +101,13 @@ class _LobbyView extends StatelessWidget {
                     context.read<LobbyBloc>().add(const LobbyBetMaxed());
                   },
                 ),
-                const SizedBox(height: AppSpacing.xl),
+                const SizedBox(height: AppSpacing.lg),
 
-                // Potential winnings
+                // Potential winnings + AI difficulty
                 PotentialWinningsWidget(
                   potentialWinnings: state.potentialWinnings,
                 ),
-                const SizedBox(height: AppSpacing.lg),
-
-                // AI difficulty gauge
+                const SizedBox(height: AppSpacing.md),
                 AiDifficultyGauge(
                   aiLevel: state.aiLevel,
                   label: switch (state.aiDifficulty) {
@@ -130,7 +117,7 @@ class _LobbyView extends StatelessWidget {
                     AiDifficulty.expert => l10n.lobby_difficulty_expert,
                   },
                 ),
-                const SizedBox(height: AppSpacing.xxxl),
+                const SizedBox(height: AppSpacing.xxl),
 
                 // Play button
                 SizedBox(
@@ -152,17 +139,9 @@ class _LobbyView extends StatelessWidget {
                             );
                           }
                         : null,
-                    child: Text('${l10n.lobby_play} — \$${state.betAmount}'),
+                    child: Text(l10n.lobby_playWithBet(state.betAmount)),
                   ),
-                )
-                    .animate(
-                      onPlay: (controller) => controller.repeat(reverse: true),
-                    )
-                    .shimmer(
-                      delay: 2.seconds,
-                      duration: 1.5.seconds,
-                      color: AppColors.chipGold.withValues(alpha: 0.15),
-                    ),
+                ),
               ],
             ),
           );

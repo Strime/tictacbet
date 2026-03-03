@@ -524,6 +524,18 @@ abstract class AppLocalizations {
   /// **'Level Up!'**
   String get game_result_levelUp;
 
+  /// No description provided for @lobby_potentialWinnings.
+  ///
+  /// In en, this message translates to:
+  /// **'Potential winnings'**
+  String get lobby_potentialWinnings;
+
+  /// No description provided for @lobby_playWithBet.
+  ///
+  /// In en, this message translates to:
+  /// **'Play — \${amount}'**
+  String lobby_playWithBet(int amount);
+
   /// No description provided for @common_error_unknown.
   ///
   /// In en, this message translates to:
