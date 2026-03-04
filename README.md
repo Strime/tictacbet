@@ -2,6 +2,13 @@
 
 Casino-themed Tic-Tac-Toe with betting, AI opponent and a wallet system.
 
+## Demo
+
+<!-- Replace with your GIF or video -->
+<p align="center">
+  <img src="assets/demo.gif" alt="Tic Tac Bet demo" width="300" />
+</p>
+
 ## About me
 
 Hello, I'm Gaëtan. I did this exercise with pleasure, hope the review will be enjoyable for you too.
