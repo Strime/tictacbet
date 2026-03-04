@@ -31,6 +31,7 @@ class GamePage extends StatelessWidget {
           humanSide: params.humanSide,
           aiLevel: params.aiLevel,
           betAmount: params.betAmount,
+          isAllIn: params.isAllIn,
         )),
       child: _GameView(params: params),
     );

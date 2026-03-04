@@ -20,6 +20,7 @@ sealed class GameEntity with _$GameEntity {
     required int betAmount,
     required DateTime startedAt,
     DateTime? endedAt,
+    @Default(false) bool isAllIn,
   }) = _GameEntity;
 
   GameStatus get status => board.status;

@@ -10,10 +10,7 @@ Map<AchievementType, bool> detectAchievements(
     AchievementType.highRoller: _isHighRoller(results),
     AchievementType.hatTrick: _hasHatTrick(results),
     AchievementType.whale: _isWhale(results),
-    AchievementType.allIn: false,
-    AchievementType.comeback: false,
-    AchievementType.oops: false,
-    AchievementType.ghost: false,
+    AchievementType.allIn: _hasAllIn(results),
     AchievementType.goldenParachute: _hasGoldenParachute(results),
     AchievementType.paperHands: _hasPaperHands(results),
     AchievementType.doubleAgent: _isDoubleAgent(results),
@@ -47,6 +44,11 @@ bool _hasHatTrick(List<GameResultEntity> results) {
     }
   }
   return false;
+}
+
+/// Win a game after going all in.
+bool _hasAllIn(List<GameResultEntity> results) {
+  return results.any((r) => r.isWin && r.isAllIn);
 }
 
 /// Win a game with a $50+ bet.

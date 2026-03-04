@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$GameEntity {
 
- BoardEntity get board; PlayerSide get humanSide; double get aiLevel; int get betAmount; DateTime get startedAt; DateTime? get endedAt;
+ BoardEntity get board; PlayerSide get humanSide; double get aiLevel; int get betAmount; DateTime get startedAt; DateTime? get endedAt; bool get isAllIn;
 /// Create a copy of GameEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $GameEntityCopyWith<GameEntity> get copyWith => _$GameEntityCopyWithImpl<GameEnt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GameEntity&&(identical(other.board, board) || other.board == board)&&(identical(other.humanSide, humanSide) || other.humanSide == humanSide)&&(identical(other.aiLevel, aiLevel) || other.aiLevel == aiLevel)&&(identical(other.betAmount, betAmount) || other.betAmount == betAmount)&&(identical(other.startedAt, startedAt) || other.startedAt == startedAt)&&(identical(other.endedAt, endedAt) || other.endedAt == endedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GameEntity&&(identical(other.board, board) || other.board == board)&&(identical(other.humanSide, humanSide) || other.humanSide == humanSide)&&(identical(other.aiLevel, aiLevel) || other.aiLevel == aiLevel)&&(identical(other.betAmount, betAmount) || other.betAmount == betAmount)&&(identical(other.startedAt, startedAt) || other.startedAt == startedAt)&&(identical(other.endedAt, endedAt) || other.endedAt == endedAt)&&(identical(other.isAllIn, isAllIn) || other.isAllIn == isAllIn));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,board,humanSide,aiLevel,betAmount,startedAt,endedAt);
+int get hashCode => Object.hash(runtimeType,board,humanSide,aiLevel,betAmount,startedAt,endedAt,isAllIn);
 
 @override
 String toString() {
-  return 'GameEntity(board: $board, humanSide: $humanSide, aiLevel: $aiLevel, betAmount: $betAmount, startedAt: $startedAt, endedAt: $endedAt)';
+  return 'GameEntity(board: $board, humanSide: $humanSide, aiLevel: $aiLevel, betAmount: $betAmount, startedAt: $startedAt, endedAt: $endedAt, isAllIn: $isAllIn)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $GameEntityCopyWith<$Res>  {
   factory $GameEntityCopyWith(GameEntity value, $Res Function(GameEntity) _then) = _$GameEntityCopyWithImpl;
 @useResult
 $Res call({
- BoardEntity board, PlayerSide humanSide, double aiLevel, int betAmount, DateTime startedAt, DateTime? endedAt
+ BoardEntity board, PlayerSide humanSide, double aiLevel, int betAmount, DateTime startedAt, DateTime? endedAt, bool isAllIn
 });
 
 
@@ -62,7 +62,7 @@ class _$GameEntityCopyWithImpl<$Res>
 
 /// Create a copy of GameEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? board = null,Object? humanSide = null,Object? aiLevel = null,Object? betAmount = null,Object? startedAt = null,Object? endedAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? board = null,Object? humanSide = null,Object? aiLevel = null,Object? betAmount = null,Object? startedAt = null,Object? endedAt = freezed,Object? isAllIn = null,}) {
   return _then(_self.copyWith(
 board: null == board ? _self.board : board // ignore: cast_nullable_to_non_nullable
 as BoardEntity,humanSide: null == humanSide ? _self.humanSide : humanSide // ignore: cast_nullable_to_non_nullable
@@ -70,7 +70,8 @@ as PlayerSide,aiLevel: null == aiLevel ? _self.aiLevel : aiLevel // ignore: cast
 as double,betAmount: null == betAmount ? _self.betAmount : betAmount // ignore: cast_nullable_to_non_nullable
 as int,startedAt: null == startedAt ? _self.startedAt : startedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,endedAt: freezed == endedAt ? _self.endedAt : endedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,isAllIn: null == isAllIn ? _self.isAllIn : isAllIn // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 /// Create a copy of GameEntity
@@ -161,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( BoardEntity board,  PlayerSide humanSide,  double aiLevel,  int betAmount,  DateTime startedAt,  DateTime? endedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( BoardEntity board,  PlayerSide humanSide,  double aiLevel,  int betAmount,  DateTime startedAt,  DateTime? endedAt,  bool isAllIn)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GameEntity() when $default != null:
-return $default(_that.board,_that.humanSide,_that.aiLevel,_that.betAmount,_that.startedAt,_that.endedAt);case _:
+return $default(_that.board,_that.humanSide,_that.aiLevel,_that.betAmount,_that.startedAt,_that.endedAt,_that.isAllIn);case _:
   return orElse();
 
 }
@@ -182,10 +183,10 @@ return $default(_that.board,_that.humanSide,_that.aiLevel,_that.betAmount,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( BoardEntity board,  PlayerSide humanSide,  double aiLevel,  int betAmount,  DateTime startedAt,  DateTime? endedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( BoardEntity board,  PlayerSide humanSide,  double aiLevel,  int betAmount,  DateTime startedAt,  DateTime? endedAt,  bool isAllIn)  $default,) {final _that = this;
 switch (_that) {
 case _GameEntity():
-return $default(_that.board,_that.humanSide,_that.aiLevel,_that.betAmount,_that.startedAt,_that.endedAt);}
+return $default(_that.board,_that.humanSide,_that.aiLevel,_that.betAmount,_that.startedAt,_that.endedAt,_that.isAllIn);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -199,10 +200,10 @@ return $default(_that.board,_that.humanSide,_that.aiLevel,_that.betAmount,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( BoardEntity board,  PlayerSide humanSide,  double aiLevel,  int betAmount,  DateTime startedAt,  DateTime? endedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( BoardEntity board,  PlayerSide humanSide,  double aiLevel,  int betAmount,  DateTime startedAt,  DateTime? endedAt,  bool isAllIn)?  $default,) {final _that = this;
 switch (_that) {
 case _GameEntity() when $default != null:
-return $default(_that.board,_that.humanSide,_that.aiLevel,_that.betAmount,_that.startedAt,_that.endedAt);case _:
+return $default(_that.board,_that.humanSide,_that.aiLevel,_that.betAmount,_that.startedAt,_that.endedAt,_that.isAllIn);case _:
   return null;
 
 }
@@ -214,7 +215,7 @@ return $default(_that.board,_that.humanSide,_that.aiLevel,_that.betAmount,_that.
 
 
 class _GameEntity extends GameEntity {
-  const _GameEntity({required this.board, required this.humanSide, required this.aiLevel, required this.betAmount, required this.startedAt, this.endedAt}): super._();
+  const _GameEntity({required this.board, required this.humanSide, required this.aiLevel, required this.betAmount, required this.startedAt, this.endedAt, this.isAllIn = false}): super._();
   
 
 @override final  BoardEntity board;
@@ -223,6 +224,7 @@ class _GameEntity extends GameEntity {
 @override final  int betAmount;
 @override final  DateTime startedAt;
 @override final  DateTime? endedAt;
+@override@JsonKey() final  bool isAllIn;
 
 /// Create a copy of GameEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -234,16 +236,16 @@ _$GameEntityCopyWith<_GameEntity> get copyWith => __$GameEntityCopyWithImpl<_Gam
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GameEntity&&(identical(other.board, board) || other.board == board)&&(identical(other.humanSide, humanSide) || other.humanSide == humanSide)&&(identical(other.aiLevel, aiLevel) || other.aiLevel == aiLevel)&&(identical(other.betAmount, betAmount) || other.betAmount == betAmount)&&(identical(other.startedAt, startedAt) || other.startedAt == startedAt)&&(identical(other.endedAt, endedAt) || other.endedAt == endedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GameEntity&&(identical(other.board, board) || other.board == board)&&(identical(other.humanSide, humanSide) || other.humanSide == humanSide)&&(identical(other.aiLevel, aiLevel) || other.aiLevel == aiLevel)&&(identical(other.betAmount, betAmount) || other.betAmount == betAmount)&&(identical(other.startedAt, startedAt) || other.startedAt == startedAt)&&(identical(other.endedAt, endedAt) || other.endedAt == endedAt)&&(identical(other.isAllIn, isAllIn) || other.isAllIn == isAllIn));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,board,humanSide,aiLevel,betAmount,startedAt,endedAt);
+int get hashCode => Object.hash(runtimeType,board,humanSide,aiLevel,betAmount,startedAt,endedAt,isAllIn);
 
 @override
 String toString() {
-  return 'GameEntity(board: $board, humanSide: $humanSide, aiLevel: $aiLevel, betAmount: $betAmount, startedAt: $startedAt, endedAt: $endedAt)';
+  return 'GameEntity(board: $board, humanSide: $humanSide, aiLevel: $aiLevel, betAmount: $betAmount, startedAt: $startedAt, endedAt: $endedAt, isAllIn: $isAllIn)';
 }
 
 
@@ -254,7 +256,7 @@ abstract mixin class _$GameEntityCopyWith<$Res> implements $GameEntityCopyWith<$
   factory _$GameEntityCopyWith(_GameEntity value, $Res Function(_GameEntity) _then) = __$GameEntityCopyWithImpl;
 @override @useResult
 $Res call({
- BoardEntity board, PlayerSide humanSide, double aiLevel, int betAmount, DateTime startedAt, DateTime? endedAt
+ BoardEntity board, PlayerSide humanSide, double aiLevel, int betAmount, DateTime startedAt, DateTime? endedAt, bool isAllIn
 });
 
 
@@ -271,7 +273,7 @@ class __$GameEntityCopyWithImpl<$Res>
 
 /// Create a copy of GameEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? board = null,Object? humanSide = null,Object? aiLevel = null,Object? betAmount = null,Object? startedAt = null,Object? endedAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? board = null,Object? humanSide = null,Object? aiLevel = null,Object? betAmount = null,Object? startedAt = null,Object? endedAt = freezed,Object? isAllIn = null,}) {
   return _then(_GameEntity(
 board: null == board ? _self.board : board // ignore: cast_nullable_to_non_nullable
 as BoardEntity,humanSide: null == humanSide ? _self.humanSide : humanSide // ignore: cast_nullable_to_non_nullable
@@ -279,7 +281,8 @@ as PlayerSide,aiLevel: null == aiLevel ? _self.aiLevel : aiLevel // ignore: cast
 as double,betAmount: null == betAmount ? _self.betAmount : betAmount // ignore: cast_nullable_to_non_nullable
 as int,startedAt: null == startedAt ? _self.startedAt : startedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,endedAt: freezed == endedAt ? _self.endedAt : endedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,isAllIn: null == isAllIn ? _self.isAllIn : isAllIn // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

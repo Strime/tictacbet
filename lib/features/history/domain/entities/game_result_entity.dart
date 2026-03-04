@@ -19,6 +19,7 @@ sealed class GameResultEntity with _$GameResultEntity {
     required Duration duration,
     required int moveCount,
     @Default(false) bool isCashOut,
+    @Default(false) bool isAllIn,
   }) = _GameResultEntity;
 
   bool get isWin =>
