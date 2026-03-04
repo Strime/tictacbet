@@ -25,7 +25,7 @@ class StepPlayPreview extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           BetAmountDisplay(
-            remainingBalance: maxBet - betAmount,
+            balance: maxBet - betAmount,
           ),
           const Spacer(),
           Padding(
