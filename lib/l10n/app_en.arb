@@ -109,5 +109,23 @@
   "@lobby_playWithBet": { "placeholders": { "amount": { "type": "int" } } },
 
   "common_error_unknown": "An unexpected error occurred",
-  "common_error_storage": "Failed to save data"
+  "common_error_storage": "Failed to save data",
+
+  "onboarding_stepBet_title": "Place your bet",
+  "onboarding_stepBet_desc": "Tap a chip to place your bet.\nHigher bets mean tougher AI.",
+  "onboarding_stepPlay_title": "Launch the game",
+  "onboarding_stepPlay_desc": "When you're ready, hit Play\nto start the match.",
+  "onboarding_stepCard_title": "Discover the cards",
+  "onboarding_stepCard_desc": "Each cell hides a card.\nTap one to reveal it!",
+  "onboarding_stepAchievements_title": "Earn achievements",
+  "onboarding_stepAchievements_desc": "Complete challenges to unlock\nachievements and show off your skills.",
+  "onboarding_moreToDiscover": "...and more to discover!",
+  "onboarding_startPlaying": "Start playing",
+  "onboarding_bonusCoin": "Coin",
+  "onboarding_bonusCoin_desc": "Cash bonus on capture",
+  "onboarding_bonusLuck": "Luck",
+  "onboarding_bonusLuck_desc": "Lucky draw bonus",
+  "onboarding_bonusXp": "XP",
+  "onboarding_bonusXp_desc": "Experience points bonus",
+  "onboarding_gotIt": "Got it"
 }

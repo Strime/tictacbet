@@ -625,6 +625,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to save data'**
   String get common_error_storage;
+
+  /// No description provided for @onboarding_stepBet_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Place your bet'**
+  String get onboarding_stepBet_title;
+
+  /// No description provided for @onboarding_stepBet_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a chip to place your bet.\nHigher bets mean tougher AI.'**
+  String get onboarding_stepBet_desc;
+
+  /// No description provided for @onboarding_stepPlay_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Launch the game'**
+  String get onboarding_stepPlay_title;
+
+  /// No description provided for @onboarding_stepPlay_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'When you\'re ready, hit Play\nto start the match.'**
+  String get onboarding_stepPlay_desc;
+
+  /// No description provided for @onboarding_stepCard_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover the cards'**
+  String get onboarding_stepCard_title;
+
+  /// No description provided for @onboarding_stepCard_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Each cell hides a card.\nTap one to reveal it!'**
+  String get onboarding_stepCard_desc;
+
+  /// No description provided for @onboarding_stepAchievements_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Earn achievements'**
+  String get onboarding_stepAchievements_title;
+
+  /// No description provided for @onboarding_stepAchievements_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete challenges to unlock\nachievements and show off your skills.'**
+  String get onboarding_stepAchievements_desc;
+
+  /// No description provided for @onboarding_moreToDiscover.
+  ///
+  /// In en, this message translates to:
+  /// **'...and more to discover!'**
+  String get onboarding_moreToDiscover;
+
+  /// No description provided for @onboarding_startPlaying.
+  ///
+  /// In en, this message translates to:
+  /// **'Start playing'**
+  String get onboarding_startPlaying;
+
+  /// No description provided for @onboarding_bonusCoin.
+  ///
+  /// In en, this message translates to:
+  /// **'Coin'**
+  String get onboarding_bonusCoin;
+
+  /// No description provided for @onboarding_bonusCoin_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash bonus on capture'**
+  String get onboarding_bonusCoin_desc;
+
+  /// No description provided for @onboarding_bonusLuck.
+  ///
+  /// In en, this message translates to:
+  /// **'Luck'**
+  String get onboarding_bonusLuck;
+
+  /// No description provided for @onboarding_bonusLuck_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Lucky draw bonus'**
+  String get onboarding_bonusLuck_desc;
+
+  /// No description provided for @onboarding_bonusXp.
+  ///
+  /// In en, this message translates to:
+  /// **'XP'**
+  String get onboarding_bonusXp;
+
+  /// No description provided for @onboarding_bonusXp_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Experience points bonus'**
+  String get onboarding_bonusXp_desc;
+
+  /// No description provided for @onboarding_gotIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get onboarding_gotIt;
 }
 
 class _AppLocalizationsDelegate

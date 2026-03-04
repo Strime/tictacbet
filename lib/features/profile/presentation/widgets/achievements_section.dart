@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/achievement.dart';
+import '../extensions/achievement_type_message.dart';
 import 'achievement_tile.dart';
 
 class AchievementsSection extends StatelessWidget {
@@ -50,7 +51,8 @@ class AchievementsSection extends StatelessWidget {
           final index = entry.key;
           final type = entry.value;
           final isUnlocked = achievements[type] ?? false;
-          final (name, description) = _localizedTexts(type, l10n);
+          final name = type.label(l10n);
+          final description = type.description(l10n);
 
           return Padding(
             padding: EdgeInsets.only(
@@ -70,54 +72,4 @@ class AchievementsSection extends StatelessWidget {
     );
   }
 
-  (String, String) _localizedTexts(
-    AchievementType type,
-    AppLocalizations l10n,
-  ) =>
-      switch (type) {
-        AchievementType.speedRun => (
-            l10n.achievement_speed_run,
-            l10n.achievement_speed_run_desc,
-          ),
-        AchievementType.highRoller => (
-            l10n.achievement_high_roller,
-            l10n.achievement_high_roller_desc,
-          ),
-        AchievementType.hatTrick => (
-            l10n.achievement_hat_trick,
-            l10n.achievement_hat_trick_desc,
-          ),
-        AchievementType.whale => (
-            l10n.achievement_whale,
-            l10n.achievement_whale_desc,
-          ),
-        AchievementType.allIn => (
-            l10n.achievement_all_in,
-            l10n.achievement_all_in_desc,
-          ),
-        AchievementType.comeback => (
-            l10n.achievement_comeback,
-            l10n.achievement_comeback_desc,
-          ),
-        AchievementType.luckyBastard => (
-            l10n.achievement_lucky_bastard,
-            l10n.achievement_lucky_bastard_desc,
-          ),
-        AchievementType.oops => (
-            l10n.achievement_oops,
-            l10n.achievement_oops_desc,
-          ),
-        AchievementType.ghost => (
-            l10n.achievement_ghost,
-            l10n.achievement_ghost_desc,
-          ),
-        AchievementType.goldenParachute => (
-            l10n.achievement_golden_parachute,
-            l10n.achievement_golden_parachute_desc,
-          ),
-        AchievementType.paperHands => (
-            l10n.achievement_paper_hands,
-            l10n.achievement_paper_hands_desc,
-          ),
-      };
 }

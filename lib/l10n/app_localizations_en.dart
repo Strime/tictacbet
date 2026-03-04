@@ -293,4 +293,59 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get common_error_storage => 'Failed to save data';
+
+  @override
+  String get onboarding_stepBet_title => 'Place your bet';
+
+  @override
+  String get onboarding_stepBet_desc =>
+      'Tap a chip to place your bet.\nHigher bets mean tougher AI.';
+
+  @override
+  String get onboarding_stepPlay_title => 'Launch the game';
+
+  @override
+  String get onboarding_stepPlay_desc =>
+      'When you\'re ready, hit Play\nto start the match.';
+
+  @override
+  String get onboarding_stepCard_title => 'Discover the cards';
+
+  @override
+  String get onboarding_stepCard_desc =>
+      'Each cell hides a card.\nTap one to reveal it!';
+
+  @override
+  String get onboarding_stepAchievements_title => 'Earn achievements';
+
+  @override
+  String get onboarding_stepAchievements_desc =>
+      'Complete challenges to unlock\nachievements and show off your skills.';
+
+  @override
+  String get onboarding_moreToDiscover => '...and more to discover!';
+
+  @override
+  String get onboarding_startPlaying => 'Start playing';
+
+  @override
+  String get onboarding_bonusCoin => 'Coin';
+
+  @override
+  String get onboarding_bonusCoin_desc => 'Cash bonus on capture';
+
+  @override
+  String get onboarding_bonusLuck => 'Luck';
+
+  @override
+  String get onboarding_bonusLuck_desc => 'Lucky draw bonus';
+
+  @override
+  String get onboarding_bonusXp => 'XP';
+
+  @override
+  String get onboarding_bonusXp_desc => 'Experience points bonus';
+
+  @override
+  String get onboarding_gotIt => 'Got it';
 }

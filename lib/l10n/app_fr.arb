@@ -106,5 +106,23 @@
   "lobby_playWithBet": "Jouer — {amount}$",
 
   "common_error_unknown": "Une erreur inattendue s'est produite",
-  "common_error_storage": "Échec de la sauvegarde"
+  "common_error_storage": "Échec de la sauvegarde",
+
+  "onboarding_stepBet_title": "Place ta mise",
+  "onboarding_stepBet_desc": "Tape un jeton pour miser.\nPlus la mise est haute, plus l'IA est forte.",
+  "onboarding_stepPlay_title": "Lance la partie",
+  "onboarding_stepPlay_desc": "Quand tu es prêt, appuie sur Jouer\npour lancer la partie.",
+  "onboarding_stepCard_title": "Découvre les cartes",
+  "onboarding_stepCard_desc": "Chaque case cache une carte.\nTape pour la révéler !",
+  "onboarding_stepAchievements_title": "Débloque des succès",
+  "onboarding_stepAchievements_desc": "Relève des défis pour débloquer\ndes succès et montrer ton talent.",
+  "onboarding_moreToDiscover": "...et plus encore à découvrir !",
+  "onboarding_startPlaying": "Commencer à jouer",
+  "onboarding_bonusCoin": "Pièce",
+  "onboarding_bonusCoin_desc": "Bonus en cash à la capture",
+  "onboarding_bonusLuck": "Chance",
+  "onboarding_bonusLuck_desc": "Bonus de tirage au sort",
+  "onboarding_bonusXp": "XP",
+  "onboarding_bonusXp_desc": "Bonus de points d'expérience",
+  "onboarding_gotIt": "Compris"
 }

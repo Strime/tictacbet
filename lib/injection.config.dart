@@ -44,6 +44,10 @@ import 'package:tictacbet/features/history/presentation/bloc/history_bloc.dart'
     as _i341;
 import 'package:tictacbet/features/lobby/presentation/bloc/lobby_bloc.dart'
     as _i335;
+import 'package:tictacbet/features/onboarding/data/datasources/onboarding_local_data_source.dart'
+    as _i185;
+import 'package:tictacbet/features/onboarding/presentation/cubit/onboarding_cubit.dart'
+    as _i289;
 import 'package:tictacbet/features/profile/presentation/bloc/profile_bloc.dart'
     as _i169;
 import 'package:tictacbet/features/progression/data/datasources/progression_local_data_source.dart'
@@ -89,6 +93,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i274.MinimaxService>(() => _i274.MinimaxService());
     gh.factory<_i774.WalletLocalDataSource>(
       () => _i774.WalletLocalDataSource(gh<_i460.SharedPreferences>()),
+    );
+    gh.lazySingleton<_i185.OnboardingLocalDataSource>(
+      () => _i185.OnboardingLocalDataSource(gh<_i460.SharedPreferences>()),
     );
     gh.lazySingleton<_i949.ProgressionLocalDataSource>(
       () => _i949.ProgressionLocalDataSource(gh<_i460.SharedPreferences>()),
@@ -143,6 +150,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i509.HistoryRepository>(
       () => _i980.HistoryRepositoryImpl(gh<_i948.HistoryLocalDataSource>()),
+    );
+    gh.factory<_i289.OnboardingCubit>(
+      () => _i289.OnboardingCubit(gh<_i185.OnboardingLocalDataSource>()),
     );
     gh.lazySingleton<_i939.WalletBloc>(
       () => _i939.WalletBloc(

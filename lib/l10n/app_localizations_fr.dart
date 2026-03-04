@@ -294,4 +294,59 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get common_error_storage => 'Échec de la sauvegarde';
+
+  @override
+  String get onboarding_stepBet_title => 'Place ta mise';
+
+  @override
+  String get onboarding_stepBet_desc =>
+      'Tape un jeton pour miser.\nPlus la mise est haute, plus l\'IA est forte.';
+
+  @override
+  String get onboarding_stepPlay_title => 'Lance la partie';
+
+  @override
+  String get onboarding_stepPlay_desc =>
+      'Quand tu es prêt, appuie sur Jouer\npour lancer la partie.';
+
+  @override
+  String get onboarding_stepCard_title => 'Découvre les cartes';
+
+  @override
+  String get onboarding_stepCard_desc =>
+      'Chaque case cache une carte.\nTape pour la révéler !';
+
+  @override
+  String get onboarding_stepAchievements_title => 'Débloque des succès';
+
+  @override
+  String get onboarding_stepAchievements_desc =>
+      'Relève des défis pour débloquer\ndes succès et montrer ton talent.';
+
+  @override
+  String get onboarding_moreToDiscover => '...et plus encore à découvrir !';
+
+  @override
+  String get onboarding_startPlaying => 'Commencer à jouer';
+
+  @override
+  String get onboarding_bonusCoin => 'Pièce';
+
+  @override
+  String get onboarding_bonusCoin_desc => 'Bonus en cash à la capture';
+
+  @override
+  String get onboarding_bonusLuck => 'Chance';
+
+  @override
+  String get onboarding_bonusLuck_desc => 'Bonus de tirage au sort';
+
+  @override
+  String get onboarding_bonusXp => 'XP';
+
+  @override
+  String get onboarding_bonusXp_desc => 'Bonus de points d\'expérience';
+
+  @override
+  String get onboarding_gotIt => 'Compris';
 }
