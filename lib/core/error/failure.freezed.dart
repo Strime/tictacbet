@@ -86,11 +86,10 @@ extension AppFailurePatterns on AppFailure {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( StorageFailure value)?  storage,TResult Function( UnknownFailure value)?  unknown,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( UnknownFailure value)?  unknown,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case StorageFailure() when storage != null:
-return storage(_that);case UnknownFailure() when unknown != null:
+case UnknownFailure() when unknown != null:
 return unknown(_that);case _:
   return orElse();
 
@@ -109,11 +108,10 @@ return unknown(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( StorageFailure value)  storage,required TResult Function( UnknownFailure value)  unknown,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( UnknownFailure value)  unknown,}){
 final _that = this;
 switch (_that) {
-case StorageFailure():
-return storage(_that);case UnknownFailure():
+case UnknownFailure():
 return unknown(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
@@ -128,11 +126,10 @@ return unknown(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( StorageFailure value)?  storage,TResult? Function( UnknownFailure value)?  unknown,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( UnknownFailure value)?  unknown,}){
 final _that = this;
 switch (_that) {
-case StorageFailure() when storage != null:
-return storage(_that);case UnknownFailure() when unknown != null:
+case UnknownFailure() when unknown != null:
 return unknown(_that);case _:
   return null;
 
@@ -150,10 +147,9 @@ return unknown(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String? debugInfo)?  storage,TResult Function( String? debugInfo)?  unknown,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String? debugInfo)?  unknown,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case StorageFailure() when storage != null:
-return storage(_that.debugInfo);case UnknownFailure() when unknown != null:
+case UnknownFailure() when unknown != null:
 return unknown(_that.debugInfo);case _:
   return orElse();
 
@@ -172,10 +168,9 @@ return unknown(_that.debugInfo);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String? debugInfo)  storage,required TResult Function( String? debugInfo)  unknown,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String? debugInfo)  unknown,}) {final _that = this;
 switch (_that) {
-case StorageFailure():
-return storage(_that.debugInfo);case UnknownFailure():
+case UnknownFailure():
 return unknown(_that.debugInfo);}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -190,81 +185,14 @@ return unknown(_that.debugInfo);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String? debugInfo)?  storage,TResult? Function( String? debugInfo)?  unknown,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String? debugInfo)?  unknown,}) {final _that = this;
 switch (_that) {
-case StorageFailure() when storage != null:
-return storage(_that.debugInfo);case UnknownFailure() when unknown != null:
+case UnknownFailure() when unknown != null:
 return unknown(_that.debugInfo);case _:
   return null;
 
 }
 }
-
-}
-
-/// @nodoc
-
-
-class StorageFailure implements AppFailure {
-  const StorageFailure({this.debugInfo});
-  
-
-@override final  String? debugInfo;
-
-/// Create a copy of AppFailure
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$StorageFailureCopyWith<StorageFailure> get copyWith => _$StorageFailureCopyWithImpl<StorageFailure>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is StorageFailure&&(identical(other.debugInfo, debugInfo) || other.debugInfo == debugInfo));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,debugInfo);
-
-@override
-String toString() {
-  return 'AppFailure.storage(debugInfo: $debugInfo)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $StorageFailureCopyWith<$Res> implements $AppFailureCopyWith<$Res> {
-  factory $StorageFailureCopyWith(StorageFailure value, $Res Function(StorageFailure) _then) = _$StorageFailureCopyWithImpl;
-@override @useResult
-$Res call({
- String? debugInfo
-});
-
-
-
-
-}
-/// @nodoc
-class _$StorageFailureCopyWithImpl<$Res>
-    implements $StorageFailureCopyWith<$Res> {
-  _$StorageFailureCopyWithImpl(this._self, this._then);
-
-  final StorageFailure _self;
-  final $Res Function(StorageFailure) _then;
-
-/// Create a copy of AppFailure
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? debugInfo = freezed,}) {
-  return _then(StorageFailure(
-debugInfo: freezed == debugInfo ? _self.debugInfo : debugInfo // ignore: cast_nullable_to_non_nullable
-as String?,
-  ));
-}
-
 
 }
 
