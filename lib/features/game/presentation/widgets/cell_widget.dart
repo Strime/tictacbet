@@ -1,15 +1,14 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
-
 import '../../../../core/config/game_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_decorations.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../domain/entities/card_entity.dart';
 import '../../domain/entities/cell_entity.dart';
 import '../../domain/entities/player_side.dart';
+import '../extensions/card_suit_ui.dart';
+import '../extensions/cell_bonus_ui.dart';
 import 'card_back_painter.dart';
 
 class CellWidget extends StatefulWidget {
@@ -139,9 +138,8 @@ class _CellWidgetState extends State<CellWidget>
     final card = widget.cell.card;
     if (card == null) return const SizedBox.shrink();
 
-    final isHeart = card.suit == CardSuit.heart;
-    final color = isHeart ? AppColors.heartRed : AppColors.spadeBlack;
-    final suitChar = isHeart ? '♥' : '♠';
+    final color = card.suit.color;
+    final suitChar = card.suit.symbol;
     final label = card.rank.displayLabel;
 
     final smallSuit = Text(
@@ -220,27 +218,19 @@ class _BonusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (icon, color, label) = switch (bonus) {
-      CellBonus.coin => (
-        LucideIcons.coins,
-        AppColors.coinColorDark,
-        '+${GameConstants.coinBonusValue}\$',
-      ),
-      CellBonus.xp => (
-        LucideIcons.sparkles,
-        AppColors.xpColorDark,
-        '+${GameConstants.xpPerBonusCell}',
-      ),
+    final label = switch (bonus) {
+      CellBonus.coin => '+${GameConstants.coinBonusValue}\$',
+      CellBonus.xp => '+${GameConstants.xpPerBonusCell}',
     };
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, color: color, size: AppSpacing.iconLg),
+        Icon(bonus.icon, color: bonus.colorDark, size: AppSpacing.iconLg),
         Text(
           label,
           style: TextStyle(
-            color: color,
+            color: bonus.colorDark,
             fontSize: 10,
             fontWeight: FontWeight.bold,
             height: 1,

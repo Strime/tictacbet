@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../game/domain/entities/player_side.dart';
+import '../../../game/presentation/extensions/player_side_ui.dart';
 
 class CampSelectionWidget extends StatelessWidget {
   final PlayerSide selectedSide;
@@ -19,25 +19,16 @@ class CampSelectionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(
-          child: _CampCard(
-            side: PlayerSide.red,
-            icon: LucideIcons.heart,
-            color: AppColors.heartRed,
-            isSelected: selectedSide == PlayerSide.red,
-            onTap: () => onSideChanged(PlayerSide.red),
+        for (final side in PlayerSide.values) ...[
+          if (side != PlayerSide.values.first) const SizedBox(width: AppSpacing.lg),
+          Expanded(
+            child: _CampCard(
+              side: side,
+              isSelected: selectedSide == side,
+              onTap: () => onSideChanged(side),
+            ),
           ),
-        ),
-        const SizedBox(width: AppSpacing.lg),
-        Expanded(
-          child: _CampCard(
-            side: PlayerSide.black,
-            icon: LucideIcons.spade,
-            color: AppColors.spadeBlackLight,
-            isSelected: selectedSide == PlayerSide.black,
-            onTap: () => onSideChanged(PlayerSide.black),
-          ),
-        ),
+        ],
       ],
     );
   }
@@ -45,15 +36,11 @@ class CampSelectionWidget extends StatelessWidget {
 
 class _CampCard extends StatelessWidget {
   final PlayerSide side;
-  final IconData icon;
-  final Color color;
   final bool isSelected;
   final VoidCallback onTap;
 
   const _CampCard({
     required this.side,
-    required this.icon,
-    required this.color,
     required this.isSelected,
     required this.onTap,
   });
@@ -75,27 +62,27 @@ class _CampCard extends StatelessWidget {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      color.withValues(alpha: 0.2),
-                      color.withValues(alpha: 0.05),
+                      side.color.withValues(alpha: 0.2),
+                      side.color.withValues(alpha: 0.05),
                     ],
                   )
                 : null,
             color: isSelected ? null : AppColors.surface,
             borderRadius: AppSpacing.borderRadiusLg,
             border: Border.all(
-              color: isSelected ? color : AppColors.surfaceLight,
+              color: isSelected ? side.color : AppColors.surfaceLight,
               width: isSelected ? 2 : 1,
             ),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: AppSpacing.iconXl, color: color),
+              Icon(side.icon, size: AppSpacing.iconXl, color: side.color),
               const SizedBox(height: AppSpacing.sm),
               Text(
                 side.label,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: color,
+                  color: side.color,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 ),
               ),

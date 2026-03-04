@@ -18,26 +18,26 @@ class HistoryListItem extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
-    final (Color accentColor, IconData icon, String label) = switch (result) {
+    final (:Color accentColor, :IconData icon, :String label) = switch (result) {
       GameResultEntity(isCashOut: true) => (
-          AppColors.chipGold,
-          LucideIcons.banknote,
-          l10n.history_result_cashOut,
+          accentColor: AppColors.chipGold,
+          icon: LucideIcons.banknote,
+          label: l10n.history_result_cashOut,
         ),
       GameResultEntity(isWin: true) => (
-          AppColors.success,
-          LucideIcons.trophy,
-          l10n.history_result_win,
+          accentColor: AppColors.success,
+          icon: LucideIcons.trophy,
+          label: l10n.history_result_win,
         ),
       GameResultEntity(isDraw: true) => (
-          AppColors.chipGold,
-          LucideIcons.scale,
-          l10n.history_result_draw,
+          accentColor: AppColors.chipGold,
+          icon: LucideIcons.scale,
+          label: l10n.history_result_draw,
         ),
       _ => (
-          AppColors.error,
-          LucideIcons.x,
-          l10n.history_result_loss,
+          accentColor: AppColors.error,
+          icon: LucideIcons.x,
+          label: l10n.history_result_loss,
         ),
     };
 

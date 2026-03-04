@@ -13,7 +13,7 @@ import '../../../progression/presentation/bloc/progression_bloc.dart';
 import '../../../wallet/presentation/bloc/wallet_bloc.dart';
 import '../../domain/entities/game_entity.dart';
 import '../../domain/entities/game_status.dart';
-import '../../domain/entities/player_side.dart';
+import '../extensions/player_side_ui.dart';
 import '../bloc/game_bloc.dart';
 import '../widgets/board_widget.dart';
 import '../widgets/game_result_dialog.dart';
@@ -316,9 +316,7 @@ class _TurnIndicator extends StatelessWidget {
     }
 
     final currentPlayer = game.board.currentPlayer;
-    final dotColor = currentPlayer == PlayerSide.red
-        ? AppColors.heartRed
-        : AppColors.spadeBlack;
+    final dotColor = currentPlayer.color;
 
     return Container(
       padding: const EdgeInsets.symmetric(

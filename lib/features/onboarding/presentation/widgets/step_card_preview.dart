@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import 'package:tictacbet/features/game/domain/entities/player_side.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -11,6 +10,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../game/domain/entities/board_entity.dart';
 import '../../../game/domain/entities/card_entity.dart';
 import '../../../game/domain/entities/cell_entity.dart';
+import '../../../game/presentation/extensions/cell_bonus_ui.dart';
 import '../../../game/presentation/widgets/board_widget.dart';
 import '../../../game/presentation/widgets/cell_widget.dart';
 
@@ -29,16 +29,10 @@ class StepCardPreview extends StatefulWidget {
 class _StepCardPreviewState extends State<StepCardPreview> {
   static const Duration _staggerDelay = Duration(milliseconds: 200);
 
-  static const _bonusEntries = [
-    (CellBonus.coin, LucideIcons.coins, AppColors.coinColor),
-    (CellBonus.xp, LucideIcons.sparkles, AppColors.xpColor),
-  ];
-
-  static List<(CellBonus, IconData, Color, String, String)> _bonusDescriptions(
-      AppLocalizations l10n) => [
-    (_bonusEntries[0].$1, _bonusEntries[0].$2, _bonusEntries[0].$3, l10n.onboarding_bonusCoin, l10n.onboarding_bonusCoin_desc),
-    (_bonusEntries[1].$1, _bonusEntries[1].$2, _bonusEntries[1].$3, l10n.onboarding_bonusLuck, l10n.onboarding_bonusLuck_desc),
-    (_bonusEntries[2].$1, _bonusEntries[2].$2, _bonusEntries[2].$3, l10n.onboarding_bonusXp, l10n.onboarding_bonusXp_desc),
+  static List<({CellBonus bonus, String label, String description})>
+      _bonusDescriptions(AppLocalizations l10n) => [
+    (bonus: CellBonus.coin, label: l10n.onboarding_bonusCoin, description: l10n.onboarding_bonusCoin_desc),
+    (bonus: CellBonus.xp, label: l10n.onboarding_bonusXp, description: l10n.onboarding_bonusXp_desc),
   ];
 
   late BoardEntity _board;
@@ -105,11 +99,11 @@ class _StepCardPreviewState extends State<StepCardPreview> {
                 children: [
                   for (int i = 0; i < bonuses.length; i++)
                     _BonusCardRow(
-                          bonus: bonuses[i].$1,
-                          icon: bonuses[i].$2,
-                          color: bonuses[i].$3,
-                          label: bonuses[i].$4,
-                          description: bonuses[i].$5,
+                          bonus: bonuses[i].bonus,
+                          icon: bonuses[i].bonus.icon,
+                          color: bonuses[i].bonus.color,
+                          label: bonuses[i].label,
+                          description: bonuses[i].description,
                           cardSize: AppSpacing.boardCellSize,
                         )
                         .animate()
