@@ -36,8 +36,6 @@ class _HistoryView extends StatefulWidget {
 }
 
 class _HistoryViewState extends State<_HistoryView> {
-  bool _hasInitialized = false;
-
   @override
   void initState() {
     super.initState();
@@ -53,10 +51,6 @@ class _HistoryViewState extends State<_HistoryView> {
   void _onRouteChanged() {
     final path = appRouter.routeInformationProvider.value.uri.path;
     if (path == AppRoutes.history) {
-      if (!_hasInitialized) {
-        _hasInitialized = true;
-        return;
-      }
       context.read<HistoryBloc>().add(const HistoryRefreshed());
     }
   }
