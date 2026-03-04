@@ -45,7 +45,6 @@ class _StepBetPreviewState extends State<StepBetPreview> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         BetAmountDisplay(
-          betAmount: _betAmount,
           remainingBalance: widget.maxBet - _betAmount,
         ),
         const SizedBox(height: AppSpacing.xl),
@@ -54,7 +53,7 @@ class _StepBetPreviewState extends State<StepBetPreview> {
           maxBet: widget.maxBet,
           onAdd: _onChipAdded,
           onReset: () => setState(() => _betAmount = 0),
-          onMax: () {
+          onMax: (_) {
             setState(() => _betAmount = widget.maxBet);
             _completeStep();
           },

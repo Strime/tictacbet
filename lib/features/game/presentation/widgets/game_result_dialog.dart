@@ -158,9 +158,9 @@ class _WinningsTextState extends State<_WinningsText> {
     final bool isPositive;
 
     if (widget.isCashOut) {
-      targetValue = (widget.winnings - widget.betAmount).abs();
-      isPositive = widget.winnings >= widget.betAmount;
-      color = isPositive ? AppColors.success : AppColors.error;
+      targetValue = widget.winnings;
+      isPositive = true;
+      color = AppColors.chipGold;
     } else if (widget.humanWon) {
       targetValue = widget.winnings - widget.betAmount;
       isPositive = true;

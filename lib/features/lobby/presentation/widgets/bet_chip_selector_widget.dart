@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_shadows.dart';
 import '../../../../core/theme/app_spacing.dart';
 
 class BetChipSelectorWidget extends StatelessWidget {
@@ -9,7 +11,7 @@ class BetChipSelectorWidget extends StatelessWidget {
   final int maxBet;
   final void Function(int amount, Offset globalCenter) onAdd;
   final VoidCallback onReset;
-  final VoidCallback onMax;
+  final void Function(Offset globalCenter) onMax;
 
   const BetChipSelectorWidget({
     super.key,
@@ -46,23 +48,36 @@ class BetChipSelectorWidget extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.md),
 
-        // Reset / Max row
+        // Reset + All In row
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _ActionButton(
-              label: 'Reset',
+            GestureDetector(
               onTap: () {
                 HapticFeedback.lightImpact();
                 onReset();
               },
+              child: Container(
+                padding: const EdgeInsets.all(AppSpacing.sm),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.textSecondary.withValues(alpha: 0.4),
+                  ),
+                ),
+                child: const Icon(
+                  LucideIcons.rotateCcw,
+                  size: AppSpacing.iconSm,
+                  color: AppColors.textSecondary,
+                ),
+              ),
             ),
-            const SizedBox(width: AppSpacing.lg),
-            _ActionButton(
-              label: 'Max',
-              onTap: () {
-                HapticFeedback.lightImpact();
-                onMax();
+            const SizedBox(width: AppSpacing.md),
+            _AllInButton(
+              enabled: currentBet < maxBet,
+              onTap: (center) {
+                HapticFeedback.mediumImpact();
+                onMax(center);
               },
             ),
           ],
@@ -168,34 +183,86 @@ class _ChipButtonState extends State<_ChipButton>
   }
 }
 
-class _ActionButton extends StatelessWidget {
-  final String label;
-  final VoidCallback onTap;
+class _AllInButton extends StatefulWidget {
+  final bool enabled;
+  final ValueChanged<Offset> onTap;
 
-  const _ActionButton({
-    required this.label,
-    required this.onTap,
-  });
+  const _AllInButton({required this.enabled, required this.onTap});
+
+  @override
+  State<_AllInButton> createState() => _AllInButtonState();
+}
+
+class _AllInButtonState extends State<_AllInButton>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: AppSpacing.animationFast),
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.85).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handleTap() {
+    if (!widget.enabled) return;
+    _controller.forward().then((_) => _controller.reverse());
+    final box = context.findRenderObject() as RenderBox;
+    final center = box.localToGlobal(
+      Offset(box.size.width / 2, box.size.height / 2),
+    );
+    widget.onTap(center);
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.lg,
-          vertical: AppSpacing.sm,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: AppSpacing.borderRadiusSm,
-          border: Border.all(
-            color: AppColors.textSecondary.withValues(alpha: 0.4),
-          ),
-        ),
-        child: Text(
-          label,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: AppColors.textSecondary,
+      onTap: _handleTap,
+      child: AnimatedBuilder(
+        animation: _scaleAnimation,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: child,
+          );
+        },
+        child: AnimatedOpacity(
+          opacity: widget.enabled ? 1.0 : 0.4,
+          duration: const Duration(milliseconds: AppSpacing.animationFast),
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.xl,
+              vertical: AppSpacing.sm,
+            ),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [AppColors.chipGold, AppColors.chipGoldDark],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: AppSpacing.borderRadiusSm,
+              boxShadow: widget.enabled ? AppShadows.glow : null,
+            ),
+            child: Text(
+              'ALL IN',
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: AppColors.surface,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.2,
+              ),
+            ),
           ),
         ),
       ),

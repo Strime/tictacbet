@@ -148,7 +148,6 @@ class _LobbyViewState extends State<_LobbyView> {
 
                       // Bet amount + chips
                       BetAmountDisplay(
-                        betAmount: state.betAmount,
                         remainingBalance: state.remainingBalance,
                       ),
                       const SizedBox(height: AppSpacing.md),
@@ -161,10 +160,29 @@ class _LobbyViewState extends State<_LobbyView> {
                               .read<LobbyBloc>()
                               .add(const LobbyBetReset());
                         },
-                        onMax: () {
+                        onMax: (center) {
+                          final remaining = state.remainingBalance;
                           context
                               .read<LobbyBloc>()
                               .add(const LobbyBetMaxed());
+
+                          if (remaining > 0) {
+                            final barBox = _barKey.currentContext
+                                ?.findRenderObject() as RenderBox?;
+                            if (barBox == null) return;
+                            final barCenter = barBox.localToGlobal(
+                              Offset(
+                                barBox.size.width / 2,
+                                barBox.size.height / 2,
+                              ),
+                            );
+                            showCoinDrop(
+                              context: context,
+                              from: center,
+                              to: barCenter,
+                              amount: remaining,
+                            );
+                          }
                         },
                       ),
                       const SizedBox(height: AppSpacing.lg),
