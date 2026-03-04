@@ -24,7 +24,7 @@ class App extends StatelessWidget {
         ),
       ],
       child: MaterialApp.router(
-        title: 'TicTacBet',
+        title: 'Tic Tac Bet',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.darkTheme,
         localizationsDelegates: AppLocalizations.localizationsDelegates,

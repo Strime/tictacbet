@@ -1,6 +1,6 @@
 {
-    "name": "tictacbet",
-    "short_name": "tictacbet",
+    "name": "Tic Tac Bet",
+    "short_name": "Tic Tac Bet",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -1,4 +1,4 @@
-# TicTacBet
+# Tic Tac Bet
 
 Casino-themed Tic-Tac-Toe with betting, AI opponent and a wallet system.
 
