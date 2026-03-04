@@ -54,6 +54,20 @@ dev_dependencies:
   bloc_test: ^10.0.0
   mocktail: ^1.0.4
 
+  # App Icon
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  web:
+    generate: true
+    image_path: "assets/app_icon.png"
+  image_path: "assets/app_icon.png"
+  adaptive_icon_background: "#1A1A2E"
+  adaptive_icon_foreground: "assets/app_icon.png"
+  remove_alpha_ios: true
+
 flutter:
   uses-material-design: true
   generate: true
