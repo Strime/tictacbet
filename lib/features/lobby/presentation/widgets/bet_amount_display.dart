@@ -5,11 +5,11 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 
 class BetAmountDisplay extends StatelessWidget {
-  final int remainingBalance;
+  final int balance;
 
   const BetAmountDisplay({
     super.key,
-    required this.remainingBalance,
+    required this.balance,
   });
 
   @override
@@ -33,7 +33,7 @@ class BetAmountDisplay extends StatelessWidget {
           ),
           const SizedBox(width: AppSpacing.sm),
           Text(
-            '\$$remainingBalance',
+            '\$$balance',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: AppColors.chipGold,
               fontWeight: FontWeight.w600,

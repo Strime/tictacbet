@@ -45,7 +45,7 @@ class _StepBetPreviewState extends State<StepBetPreview> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         BetAmountDisplay(
-          remainingBalance: widget.maxBet - _betAmount,
+          balance: widget.maxBet - _betAmount,
         ),
         const SizedBox(height: AppSpacing.xl),
         BetChipSelectorWidget(

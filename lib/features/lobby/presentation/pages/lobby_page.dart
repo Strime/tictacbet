@@ -51,6 +51,7 @@ class _LobbyViewState extends State<_LobbyView> {
   @override
   void dispose() {
     _expandOverlay?.remove();
+    _expandOverlay = null;
     super.dispose();
   }
 
@@ -67,12 +68,15 @@ class _LobbyViewState extends State<_LobbyView> {
   }
 
   void _onPlay(LobbyReady state) {
-    HapticFeedback.mediumImpact();
+    if (_expandOverlay != null) return;
 
-    context.read<WalletBloc>().add(WalletBetPlaced(state.betAmount));
+    HapticFeedback.mediumImpact();
 
     final barBox = _barKey.currentContext?.findRenderObject() as RenderBox?;
     if (barBox == null) return;
+
+    context.read<WalletBloc>().add(WalletBetPlaced(state.betAmount));
+
     final barTopLeft = barBox.localToGlobal(Offset.zero);
     final barRect = barTopLeft & barBox.size;
 
@@ -140,8 +144,13 @@ class _LobbyViewState extends State<_LobbyView> {
                       const SizedBox(height: AppSpacing.xxl),
 
                       // Bet amount + chips
-                      BetAmountDisplay(
-                        remainingBalance: state.remainingBalance,
+                      BlocBuilder<WalletBloc, WalletState>(
+                        builder: (context, walletState) {
+                          final balance = walletState is WalletLoaded
+                              ? walletState.balance
+                              : 0;
+                          return BetAmountDisplay(balance: balance);
+                        },
                       ),
                       const SizedBox(height: AppSpacing.md),
                       BetChipSelectorWidget(
