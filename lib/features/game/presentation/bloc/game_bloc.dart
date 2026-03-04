@@ -47,6 +47,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       aiLevel: event.aiLevel,
       betAmount: event.betAmount,
       startedAt: DateTime.now(),
+      isAllIn: event.isAllIn,
     );
     emit(GameInProgress(game: game));
 
@@ -177,6 +178,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         duration: game.duration ?? Duration.zero,
         moveCount: game.moveCount,
         isCashOut: isCashOut,
+        isAllIn: game.isAllIn,
       ),
     );
   }

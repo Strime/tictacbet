@@ -25,11 +25,13 @@ class GameParams {
   final PlayerSide humanSide;
   final double aiLevel;
   final int betAmount;
+  final bool isAllIn;
 
   const GameParams({
     required this.humanSide,
     required this.aiLevel,
     required this.betAmount,
+    this.isAllIn = false,
   });
 }
 

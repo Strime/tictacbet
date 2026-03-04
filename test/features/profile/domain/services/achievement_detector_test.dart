@@ -9,6 +9,7 @@ GameResultEntity _makeResult({
   bool isWin = false,
   bool isDraw = false,
   bool isCashOut = false,
+  bool isAllIn = false,
   Duration duration = const Duration(minutes: 2),
   int betAmount = 10,
   int winnings = 0,
@@ -37,6 +38,7 @@ GameResultEntity _makeResult({
     duration: duration,
     moveCount: 5,
     isCashOut: isCashOut,
+    isAllIn: isAllIn,
   );
 }
 
@@ -380,17 +382,36 @@ void main() {
       });
     });
 
-    test('non-detectable achievements are always false', () {
-      final results = [
-        _makeResult(isWin: true, betAmount: 50, winnings: 200),
-        _makeResult(isWin: true, winnings: 20),
-        _makeResult(isWin: true, winnings: 20),
-      ];
-      final achievements = detectAchievements(results);
-      expect(achievements[AchievementType.allIn], isFalse);
-      expect(achievements[AchievementType.comeback], isFalse);
-      expect(achievements[AchievementType.oops], isFalse);
-      expect(achievements[AchievementType.ghost], isFalse);
+    group('All In', () {
+      test('true when win with isAllIn', () {
+        final results = [
+          _makeResult(isWin: true, isAllIn: true, winnings: 20),
+        ];
+        expect(
+          detectAchievements(results)[AchievementType.allIn],
+          isTrue,
+        );
+      });
+
+      test('false when loss with isAllIn', () {
+        final results = [
+          _makeResult(isAllIn: true),
+        ];
+        expect(
+          detectAchievements(results)[AchievementType.allIn],
+          isFalse,
+        );
+      });
+
+      test('false when win without isAllIn', () {
+        final results = [
+          _makeResult(isWin: true, winnings: 20),
+        ];
+        expect(
+          detectAchievements(results)[AchievementType.allIn],
+          isFalse,
+        );
+      });
     });
   });
 }

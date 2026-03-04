@@ -91,6 +91,7 @@ class _LobbyViewState extends State<_LobbyView> {
             humanSide: state.selectedSide,
             aiLevel: state.aiLevel,
             betAmount: state.betAmount,
+            isAllIn: state.betAmount == state.maxBet,
           ),
         );
       },
