@@ -2,6 +2,11 @@
 
 Casino-themed Tic-Tac-Toe with betting, AI opponent and a wallet system.
 
+## About me
+
+Hello, I'm Gaëtan. I did this exercise with pleasure, hope the review will be enjoyable for you too.
+I'd enjoy working with you one day, I'm sure I still have some advice to take from you.
+
 ## Features
 
 - **Tic-Tac-Toe vs AI** — Minimax with alpha-beta pruning, 4 difficulty levels
