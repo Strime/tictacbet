@@ -26,17 +26,23 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     WalletStarted event,
     Emitter<WalletState> emit,
   ) async {
-    final wallet = await _loadWallet();
+    try {
+      final wallet = await _loadWallet();
 
-    if (wallet.canClaimDailyBonus) {
-      final updated = wallet.copyWith(
-        balance: wallet.balance + GameConstants.dailyBonusAmount,
-        lastBonusDate: DateTime.now(),
-      );
-      emit(WalletLoaded(wallet: updated, dailyBonusJustClaimed: true));
-      await _saveWallet(updated);
-    } else {
-      emit(WalletLoaded(wallet: wallet));
+      if (wallet.canClaimDailyBonus) {
+        final updated = wallet.copyWith(
+          balance: wallet.balance + GameConstants.dailyBonusAmount,
+          lastBonusDate: DateTime.now(),
+        );
+        emit(WalletLoaded(wallet: updated, dailyBonusJustClaimed: true));
+        await _saveWallet(updated);
+      } else {
+        emit(WalletLoaded(wallet: wallet));
+      }
+    } catch (_) {
+      emit(const WalletLoaded(
+        wallet: WalletEntity(balance: GameConstants.initialBalance),
+      ));
     }
   }
 
@@ -54,7 +60,9 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       balance: wallet.balance - event.amount,
     );
     emit(WalletLoaded(wallet: updated));
-    await _saveWallet(updated);
+    try {
+      await _saveWallet(updated);
+    } catch (_) {}
   }
 
   Future<void> _onGameSettled(
@@ -69,6 +77,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       balance: wallet.balance + event.winnings,
     );
     emit(WalletLoaded(wallet: updated));
-    await _saveWallet(updated);
+    try {
+      await _saveWallet(updated);
+    } catch (_) {}
   }
 }

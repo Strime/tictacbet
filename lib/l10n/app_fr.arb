@@ -107,7 +107,6 @@
   "lobby_playWithBet": "Jouer — {amount}$",
 
   "common_error_unknown": "Une erreur inattendue s'est produite",
-  "common_error_storage": "Échec de la sauvegarde",
 
   "onboarding_stepBet_title": "Place ta mise",
   "onboarding_stepBet_desc": "Tape un jeton pour miser.\nPlus la mise est haute, plus l'IA est forte.",

@@ -110,7 +110,6 @@
   "@lobby_playWithBet": { "placeholders": { "amount": { "type": "int" } } },
 
   "common_error_unknown": "An unexpected error occurred",
-  "common_error_storage": "Failed to save data",
 
   "onboarding_stepBet_title": "Place your bet",
   "onboarding_stepBet_desc": "Tap a chip to place your bet.\nHigher bets mean tougher AI.",
