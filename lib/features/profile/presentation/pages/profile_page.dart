@@ -39,8 +39,6 @@ class _ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<_ProfileView> {
-  bool _hasInitialized = false;
-
   @override
   void initState() {
     super.initState();
@@ -56,10 +54,6 @@ class _ProfileViewState extends State<_ProfileView> {
   void _onRouteChanged() {
     final path = appRouter.routeInformationProvider.value.uri.path;
     if (path == AppRoutes.profile) {
-      if (!_hasInitialized) {
-        _hasInitialized = true;
-        return;
-      }
       context.read<ProfileBloc>().add(const ProfileRefreshed());
     }
   }
