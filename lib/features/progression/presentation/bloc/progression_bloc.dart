@@ -70,7 +70,7 @@ class ProgressionBloc extends Bloc<ProgressionEvent, ProgressionState> {
     final multiplier = event.isWin
         ? GameConstants.streakMultiplier(newStreak)
         : 1.0;
-    final xpEarned = (baseXp * multiplier).round();
+    final xpEarned = (baseXp * multiplier).round() + event.bonusXp;
 
     final updated = old.copyWith(
       totalXp: old.totalXp + xpEarned,

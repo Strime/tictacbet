@@ -30,10 +30,7 @@ sealed class BoardEntity with _$BoardEntity {
       for (int col = 0; col < 3; col++) {
         final roll = rng.nextDouble();
         CellBonus? bonus;
-        if (roll < GameConstants.cloverProbability) {
-          bonus = CellBonus.clover;
-        } else if (roll < GameConstants.cloverProbability +
-            GameConstants.xpBonusProbability) {
+        if (roll < GameConstants.xpBonusProbability) {
           bonus = CellBonus.xp;
         } else {
           bonus = CellBonus.coin;

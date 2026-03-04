@@ -32,8 +32,11 @@ class AppSpacing {
   static const double xpBarMinHeight = 6.0;
   static const double chipBorderWidth = 3.0;
   static const double thinBorderWidth = 0.5;
+  static const double cardAspectRatio = 5 / 7;
+  static const double boardAspectRatio = 3 / 5;
 
   // Icon sizes
+  static const double iconXxs = 8.0;
   static const double iconXs = 16.0;
   static const double iconSm = 20.0;
   static const double iconMd = 24.0;

@@ -5,7 +5,7 @@ import 'card_entity.dart';
 part 'cell_entity.freezed.dart';
 
 /// Type of bonus hidden in a cell.
-enum CellBonus { coin, clover, xp }
+enum CellBonus { coin, xp }
 
 /// A single cell on the 3x3 board.
 @freezed

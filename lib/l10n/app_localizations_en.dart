@@ -133,13 +133,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profile_achievements => 'Achievements';
 
   @override
-  String get profile_clovers => 'Clovers';
-
-  @override
   String get achievement_all_in => 'All In';
 
   @override
-  String get achievement_all_in_desc => 'Win a game with 3 clovers';
+  String get achievement_all_in_desc => 'Win a game after an All In';
 
   @override
   String get achievement_comeback => 'Comeback';
@@ -159,13 +156,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get achievement_high_roller_desc => 'Accumulate \$100 total';
-
-  @override
-  String get achievement_lucky_bastard => 'Lucky Bastard';
-
-  @override
-  String get achievement_lucky_bastard_desc =>
-      'Land on 5 clovers in one session';
 
   @override
   String get achievement_oops => 'Oops';

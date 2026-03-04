@@ -1,16 +1,20 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+import '../../../../core/config/game_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_decorations.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../domain/entities/card_entity.dart';
 import '../../domain/entities/cell_entity.dart';
+import '../../domain/entities/player_side.dart';
 import 'card_back_painter.dart';
 
-class CellWidget extends StatelessWidget {
+class CellWidget extends StatefulWidget {
   final CellEntity cell;
+  final PlayerSide humanSide;
   final bool enabled;
   final bool isLastMove;
   final bool isWinningCell;
@@ -19,6 +23,7 @@ class CellWidget extends StatelessWidget {
   const CellWidget({
     super.key,
     required this.cell,
+    required this.humanSide,
     this.enabled = true,
     this.isLastMove = false,
     this.isWinningCell = false,
@@ -26,76 +31,185 @@ class CellWidget extends StatelessWidget {
   });
 
   @override
+  State<CellWidget> createState() => _CellWidgetState();
+}
+
+class _CellWidgetState extends State<CellWidget>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  bool _showFront = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: AppSpacing.animationMedium),
+    );
+    // If already revealed on first build, show front immediately.
+    if (widget.cell.revealed) {
+      _showFront = true;
+      _controller.value = 1.0;
+    }
+  }
+
+  @override
+  void didUpdateWidget(CellWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!oldWidget.cell.revealed && widget.cell.revealed) {
+      _controller.forward().then((_) {
+        // Ensure we stay on front after animation completes.
+        setState(() => _showFront = true);
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: enabled && cell.isEmpty ? onTap : null,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: AppSpacing.animationMedium),
-        decoration: cell.revealed
-            ? _revealedDecoration()
-            : AppDecorations.cellHidden,
-        child: cell.revealed ? _buildRevealedContent(context) : _buildHiddenContent(),
+      onTap: widget.enabled && widget.cell.isEmpty ? widget.onTap : null,
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          final value = _controller.value;
+          // First half: rotate back face from 0° to 90°
+          // Second half: rotate front face from -90° to 0°
+          final isBack = value <= 0.5;
+          final angle = isBack
+              ? value *
+                    math
+                        .pi // 0 → π/2
+              : (1 - value) * math.pi; // π/2 → 0 (but mirrored)
+
+          // Switch content and decoration at the halfway point.
+          final showFront = _showFront || value > 0.5;
+          final decoration = showFront
+              ? _revealedDecoration()
+              : AppDecorations.cellHidden;
+
+          return Transform(
+            alignment: Alignment.center,
+            transform: Matrix4.identity()
+              ..setEntry(3, 2, 0.002)
+              ..rotateY(angle),
+            child: Container(
+              decoration: decoration,
+              child: showFront
+                  ? _buildRevealedContent(context)
+                  : _buildHiddenContent(),
+            ),
+          );
+        },
       ),
     );
   }
 
   BoxDecoration _revealedDecoration() {
     Color borderColor = Colors.transparent;
-    if (isWinningCell) {
+    if (widget.isWinningCell) {
       borderColor = AppColors.chipGold;
-    } else if (isLastMove) {
+    } else if (widget.isLastMove) {
       borderColor = AppColors.feltGreenLight;
     }
 
     return BoxDecoration(
-      color: AppColors.surface,
+      color: AppColors.cardFace,
       borderRadius: AppSpacing.borderRadiusSm,
       border: Border.all(
         color: borderColor,
-        width: isWinningCell ? 3 : (isLastMove ? 2 : 0),
+        width: widget.isWinningCell ? 3 : (widget.isLastMove ? 2 : 0),
       ),
     );
   }
 
   Widget _buildHiddenContent() {
-    return Padding(
-      padding: const EdgeInsets.all(AppSpacing.xs),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppSpacing.radiusXs),
-        child: CustomPaint(
-          painter: const CardBackPainter(),
-          size: Size.infinite,
-        ),
-      ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(AppSpacing.radiusXs),
+      child: CustomPaint(painter: const CardBackPainter(), size: Size.infinite),
     );
   }
 
   Widget _buildRevealedContent(BuildContext context) {
-    final card = cell.card;
+    final card = widget.cell.card;
     if (card == null) return const SizedBox.shrink();
 
     final isHeart = card.suit == CardSuit.heart;
-    final color = isHeart ? AppColors.heartRed : AppColors.spadeBlackLight;
-    final icon = isHeart ? LucideIcons.heart : LucideIcons.spade;
+    final color = isHeart ? AppColors.heartRed : AppColors.spadeBlack;
+    final suitChar = isHeart ? '♥' : '♠';
+    final label = card.rank.displayLabel;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: color, size: AppSpacing.iconLg),
-        const SizedBox(height: AppSpacing.xxs),
-        Text(
-          card.rank.name.toUpperCase(),
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: color,
-            fontWeight: FontWeight.bold,
+    final smallSuit = Text(
+      suitChar,
+      style: TextStyle(color: color, fontSize: AppSpacing.iconXs, height: 1),
+    );
+
+    return Padding(
+      padding: const EdgeInsets.all(AppSpacing.xs),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Top-left: rank above suit
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _RankLabel(label: label, color: color),
+              const SizedBox(height: AppSpacing.xs),
+              smallSuit,
+            ],
           ),
-        ),
-        if (cell.bonus != null) ...[
-          const SizedBox(height: AppSpacing.xxs),
-          _BonusBadge(bonus: cell.bonus!),
+          // Center: bonus only (hidden on opponent cards)
+          Expanded(
+            child: Center(
+              child:
+                  widget.cell.bonus != null &&
+                      card.suit == widget.humanSide.suit
+                  ? _BonusBadge(bonus: widget.cell.bonus!)
+                  : const SizedBox.shrink(),
+            ),
+          ),
+          // Bottom-right: suit above rank (rotated 180°)
+          Align(
+            alignment: Alignment.centerRight,
+            child: Transform.rotate(
+              angle: math.pi,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _RankLabel(label: label, color: color),
+                  const SizedBox(height: AppSpacing.xs),
+                  smallSuit,
+                ],
+              ),
+            ),
+          ),
         ],
-      ],
-    ).animate().fadeIn(duration: 300.ms).scale(begin: const Offset(0.8, 0.8));
+      ),
+    );
+  }
+}
+
+class _RankLabel extends StatelessWidget {
+  final String label;
+  final Color color;
+
+  const _RankLabel({required this.label, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      label,
+      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+        color: color,
+        fontWeight: FontWeight.bold,
+        height: 1,
+      ),
+    );
   }
 }
 
@@ -106,12 +220,33 @@ class _BonusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (icon, color) = switch (bonus) {
-      CellBonus.coin => (LucideIcons.coins, AppColors.coinColor),
-      CellBonus.clover => (LucideIcons.clover, AppColors.cloverColor),
-      CellBonus.xp => (LucideIcons.sparkles, AppColors.xpColor),
+    final (icon, color, label) = switch (bonus) {
+      CellBonus.coin => (
+        LucideIcons.coins,
+        AppColors.coinColorDark,
+        '+${GameConstants.coinBonusValue}\$',
+      ),
+      CellBonus.xp => (
+        LucideIcons.sparkles,
+        AppColors.xpColorDark,
+        '+${GameConstants.xpPerBonusCell}',
+      ),
     };
 
-    return Icon(icon, color: color, size: AppSpacing.iconSm);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, color: color, size: AppSpacing.iconLg),
+        Text(
+          label,
+          style: TextStyle(
+            color: color,
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+            height: 1,
+          ),
+        ),
+      ],
+    );
   }
 }

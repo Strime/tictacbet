@@ -25,7 +25,6 @@ class AppDecorations {
   static BoxDecoration get cellHidden => BoxDecoration(
     color: AppColors.surfaceLight,
     borderRadius: AppSpacing.borderRadiusSm,
-    border: Border.all(color: AppColors.chipGold.withValues(alpha: 0.3)),
   );
 
   static BoxDecoration get cellRevealed => BoxDecoration(

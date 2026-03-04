@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_decorations.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../game/presentation/widgets/card_back_painter.dart';
 
 /// Shows an overlay that:
@@ -121,7 +122,7 @@ class _PlayExpandAnimationState extends State<_PlayExpandAnimation>
             opacity: opacity,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: AppColors.background,
+                color: AppColors.feltGreen,
                 borderRadius: BorderRadius.circular(radius),
               ),
               child: v >= _expandEnd
@@ -176,7 +177,7 @@ class _BoardPreview extends StatelessWidget {
                     borderRadius: AppSpacing.borderRadiusSm,
                   ),
                   child: Text(
-                    '\$$betAmount',
+                    AppLocalizations.of(context)!.history_bet(betAmount),
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: AppColors.chipGold,
                         ),
@@ -187,34 +188,38 @@ class _BoardPreview extends StatelessWidget {
             Expanded(
               child: Center(
                 child: AspectRatio(
-                  aspectRatio: 1,
+                  aspectRatio: AppSpacing.cardAspectRatio,
                   child: Container(
                     padding: const EdgeInsets.all(AppSpacing.sm),
                     decoration: BoxDecoration(
-                      color: AppColors.feltGreen.withValues(alpha: 0.3),
+                      color: AppColors.background.withValues(alpha: 0.8),
                       borderRadius: AppSpacing.borderRadiusLg,
                       border: Border.all(
                         color: AppColors.chipGold.withValues(alpha: 0.2),
                         width: 2,
                       ),
                     ),
-                    child: GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: AppSpacing.sm,
-                        mainAxisSpacing: AppSpacing.sm,
-                      ),
-                      itemCount: _cellCount,
-                      itemBuilder: (_, index) {
-                        final cellStart = index * _staggerFraction;
-                        final cellProgress =
-                            ((progress - cellStart) / (2 * _staggerFraction))
-                                .clamp(0.0, 1.0);
+                    child: Center(
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: AppSpacing.cardAspectRatio,
+                          crossAxisSpacing: AppSpacing.sm,
+                          mainAxisSpacing: AppSpacing.sm,
+                        ),
+                        itemCount: _cellCount,
+                        itemBuilder: (_, index) {
+                          final cellStart = index * _staggerFraction;
+                          final cellProgress =
+                              ((progress - cellStart) / (2 * _staggerFraction))
+                                  .clamp(0.0, 1.0);
 
-                        return _AnimatedCell(progress: cellProgress);
-                      },
+                          return _AnimatedCell(progress: cellProgress);
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -276,14 +281,11 @@ class _AnimatedCell extends StatelessWidget {
         scale: scale,
         child: Container(
           decoration: AppDecorations.cellHidden,
-          child: Padding(
-            padding: const EdgeInsets.all(AppSpacing.xs),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(AppSpacing.radiusXs),
-              child: const CustomPaint(
-                painter: CardBackPainter(),
-                size: Size.infinite,
-              ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(AppSpacing.radiusXs),
+            child: const CustomPaint(
+              painter: CardBackPainter(),
+              size: Size.infinite,
             ),
           ),
         ),

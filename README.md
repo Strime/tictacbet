@@ -7,7 +7,7 @@ Casino-themed Tic-Tac-Toe with betting, AI opponent and a wallet system.
 - **Tic-Tac-Toe vs AI** — Minimax with alpha-beta pruning, 4 difficulty levels
 - **Betting system** — Place bets before each game, difficulty scales with bet amount
 - **Wallet** — Persistent balance, daily bonus (10 chips), win/draw/loss settlement
-- **Card-based board** — Each cell hides a card with random bonuses (coins, XP, clovers)
+- **Card-based board** — Each cell hides a card with random bonuses (coins, XP)
 - **Cash out** — Leave a game early and collect a payout based on board evaluation
 - **Progression** — XP, levels and win streaks with streak bonus multipliers
 - **Profile** — Lifetime stats and 11 unlockable achievements

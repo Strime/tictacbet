@@ -36,7 +36,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get lobby_vsLocal => 'VS Local';
 
   @override
-  String get game_yourTurn => 'A toi de jouer';
+  String get game_yourTurn => 'À toi de jouer';
 
   @override
   String get game_aiTurn => 'L\'IA réfléchit...';
@@ -133,13 +133,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get profile_achievements => 'Succès';
 
   @override
-  String get profile_clovers => 'Trèfles';
-
-  @override
   String get achievement_all_in => 'All In';
 
   @override
-  String get achievement_all_in_desc => 'Gagner avec 3 trèfles';
+  String get achievement_all_in_desc => 'Gagner après un All In';
 
   @override
   String get achievement_comeback => 'Comeback';
@@ -159,13 +156,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get achievement_high_roller_desc => 'Accumuler 100\$ au total';
-
-  @override
-  String get achievement_lucky_bastard => 'Lucky Bastard';
-
-  @override
-  String get achievement_lucky_bastard_desc =>
-      'Tomber sur 5 trèfles en une session';
 
   @override
   String get achievement_oops => 'Oops';

@@ -17,13 +17,15 @@ class ProgressionGameSettled extends ProgressionEvent {
   final bool isWin;
   final bool isDraw;
   final bool isCashOut;
+  final int bonusXp;
 
   const ProgressionGameSettled({
     required this.isWin,
     required this.isDraw,
     this.isCashOut = false,
+    this.bonusXp = 0,
   });
 
   @override
-  List<Object?> get props => [isWin, isDraw, isCashOut];
+  List<Object?> get props => [isWin, isDraw, isCashOut, bonusXp];
 }

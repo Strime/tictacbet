@@ -11,7 +11,6 @@ Map<AchievementType, bool> detectAchievements(
     AchievementType.whale: _isWhale(results),
     AchievementType.allIn: false,
     AchievementType.comeback: false,
-    AchievementType.luckyBastard: false,
     AchievementType.oops: false,
     AchievementType.ghost: false,
     AchievementType.goldenParachute: _hasGoldenParachute(results),

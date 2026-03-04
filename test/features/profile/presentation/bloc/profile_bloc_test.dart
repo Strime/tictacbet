@@ -25,7 +25,6 @@ const _emptyAchievements = {
   AchievementType.whale: false,
   AchievementType.allIn: false,
   AchievementType.comeback: false,
-  AchievementType.luckyBastard: false,
   AchievementType.oops: false,
   AchievementType.ghost: false,
   AchievementType.goldenParachute: false,

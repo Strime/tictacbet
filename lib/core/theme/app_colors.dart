@@ -15,6 +15,9 @@ class AppColors {
   static const Color spadeBlack = Color(0xFF263238);
   static const Color spadeBlackLight = Color(0xFF4F5B62);
 
+  // --- Card face ---
+  static const Color cardFace = Color(0xFFE8E0D0);
+
   // --- Chips & gold ---
   static const Color chipGold = Color(0xFFFFD54F);
   static const Color chipGoldDark = Color(0xFFC9A825);
@@ -22,8 +25,9 @@ class AppColors {
 
   // --- Bonus colors ---
   static const Color coinColor = Color(0xFFFFD54F);
-  static const Color cloverColor = Color(0xFF66BB6A);
   static const Color xpColor = Color(0xFF7C4DFF);
+  static const Color coinColorDark = Color(0xFFB8860B);
+  static const Color xpColorDark = Color(0xFF4A148C);
 
   // --- Semantic ---
   static const Color success = Color(0xFF66BB6A);

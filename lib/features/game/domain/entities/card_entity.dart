@@ -15,6 +15,14 @@ enum CardRank {
 
   final int cashBonus;
   const CardRank({required this.cashBonus});
+
+  String get displayLabel => switch (this) {
+    ace => 'A',
+    ten => '10',
+    jack => 'J',
+    queen => 'Q',
+    king => 'K',
+  };
 }
 
 /// A playing card with a suit and rank.

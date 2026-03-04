@@ -55,6 +55,7 @@ class _GameView extends StatelessWidget {
           }
         },
         child: Scaffold(
+          backgroundColor: AppColors.feltGreen,
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(AppSpacing.lg),
@@ -85,58 +86,73 @@ class _GameView extends StatelessWidget {
                     return const SizedBox.shrink();
                   }
 
-                  return Column(
+                  return Stack(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.lg,
-                          vertical: AppSpacing.sm,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.surfaceLight,
-                          borderRadius: AppSpacing.borderRadiusSm,
-                        ),
-                        child: Text(
-                          l10n.history_bet(params.betAmount),
-                          style:
-                              Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    color: AppColors.chipGold,
-                                  ),
-                        ),
+                      Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.lg,
+                              vertical: AppSpacing.sm,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.surfaceLight,
+                              borderRadius: AppSpacing.borderRadiusSm,
+                            ),
+                            child: Text(
+                              l10n.history_bet(params.betAmount),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(color: AppColors.chipGold),
+                            ),
+                          ),
+                          Expanded(
+                            child: Center(
+                              child: BoardWidget(
+                                board: game.board,
+                                humanSide: game.humanSide,
+                                enabled: !isAiThinking && !game.isGameOver,
+                                lastMoveIndex: lastMove,
+                                winningLine: winLine,
+                                onCellTap: (row, col) {
+                                  context.read<GameBloc>().add(
+                                        CellTapped(row: row, col: col),
+                                      );
+                                },
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: AppSpacing.lg),
+                          _TurnIndicator(
+                            game: game,
+                            isAiThinking: isAiThinking,
+                            l10n: l10n,
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        child: Center(
-                          child: BoardWidget(
-                            board: game.board,
-                            enabled: !isAiThinking && !game.isGameOver,
-                            lastMoveIndex: lastMove,
-                            winningLine: winLine,
-                            onCellTap: (row, col) {
-                              context.read<GameBloc>().add(
-                                    CellTapped(row: row, col: col),
-                                  );
-                            },
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        child: IgnorePointer(
+                          ignoring: cashOutAmount == null,
+                          child: AnimatedOpacity(
+                            opacity: cashOutAmount != null ? 1.0 : 0.0,
+                            duration: const Duration(
+                              milliseconds: AppSpacing.animationFast,
+                            ),
+                            child: _CashOutButton(
+                              amount: cashOutAmount ?? 0,
+                              l10n: l10n,
+                              onTap: () => _confirmCashOut(
+                                context,
+                                cashOutAmount ?? 0,
+                                l10n,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: AppSpacing.lg),
-                      _TurnIndicator(
-                        game: game,
-                        isAiThinking: isAiThinking,
-                        l10n: l10n,
-                      ),
-                      if (cashOutAmount case final amount?) ...[
-                        const SizedBox(height: AppSpacing.md),
-                        _CashOutButton(
-                          amount: amount,
-                          l10n: l10n,
-                          onTap: () => _confirmCashOut(
-                            context,
-                            amount,
-                            l10n,
-                          ),
-                        ),
-                      ],
                     ],
                   );
                 },
@@ -205,6 +221,7 @@ class _GameView extends StatelessWidget {
             isWin: isWin,
             isDraw: isDraw,
             isCashOut: isCashOut,
+            bonusXp: game.collectedXpBonus,
           ),
         );
 
@@ -262,7 +279,7 @@ class _CashOutButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Icon(
-              LucideIcons.banknote,
+              LucideIcons.arrowLeft,
               color: AppColors.chipGold,
               size: AppSpacing.iconSm,
             ),
@@ -332,8 +349,8 @@ class _TurnIndicator extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: AppSpacing.iconSm,
-            height: AppSpacing.iconSm,
+            width: AppSpacing.iconXxs,
+            height: AppSpacing.iconXxs,
             decoration: BoxDecoration(
               color: dotColor,
               shape: BoxShape.circle,

@@ -332,12 +332,6 @@ abstract class AppLocalizations {
   /// **'Achievements'**
   String get profile_achievements;
 
-  /// No description provided for @profile_clovers.
-  ///
-  /// In en, this message translates to:
-  /// **'Clovers'**
-  String get profile_clovers;
-
   /// No description provided for @achievement_all_in.
   ///
   /// In en, this message translates to:
@@ -347,7 +341,7 @@ abstract class AppLocalizations {
   /// No description provided for @achievement_all_in_desc.
   ///
   /// In en, this message translates to:
-  /// **'Win a game with 3 clovers'**
+  /// **'Win a game after an All In'**
   String get achievement_all_in_desc;
 
   /// No description provided for @achievement_comeback.
@@ -385,18 +379,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Accumulate \$100 total'**
   String get achievement_high_roller_desc;
-
-  /// No description provided for @achievement_lucky_bastard.
-  ///
-  /// In en, this message translates to:
-  /// **'Lucky Bastard'**
-  String get achievement_lucky_bastard;
-
-  /// No description provided for @achievement_lucky_bastard_desc.
-  ///
-  /// In en, this message translates to:
-  /// **'Land on 5 clovers in one session'**
-  String get achievement_lucky_bastard_desc;
 
   /// No description provided for @achievement_oops.
   ///

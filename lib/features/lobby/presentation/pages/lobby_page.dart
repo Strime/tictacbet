@@ -197,7 +197,6 @@ class _LobbyViewState extends State<_LobbyView> {
                   child: FloatingBetBar(
                     key: _barKey,
                     betAmount: state.betAmount,
-                    potentialWinnings: state.potentialWinnings,
                     canPlay: state.betAmount > 0,
                     onPlay: () => _onPlay(state),
                   ),

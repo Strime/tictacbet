@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:tictacbet/features/game/domain/entities/player_side.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -30,7 +31,6 @@ class _StepCardPreviewState extends State<StepCardPreview> {
 
   static const _bonusEntries = [
     (CellBonus.coin, LucideIcons.coins, AppColors.coinColor),
-    (CellBonus.clover, LucideIcons.clover, AppColors.cloverColor),
     (CellBonus.xp, LucideIcons.sparkles, AppColors.xpColor),
   ];
 
@@ -81,6 +81,7 @@ class _StepCardPreviewState extends State<StepCardPreview> {
           width: double.infinity,
           child: BoardWidget(
             board: _board,
+            humanSide: PlayerSide.red,
             enabled: !_completed,
             onCellTap: _onCellTap,
           ),
@@ -213,7 +214,7 @@ class _BonusCardRow extends StatelessWidget {
           SizedBox(
             width: cardSize,
             height: cardSize / AppSpacing.cardAspectRatio,
-            child: CellWidget(cell: cell, enabled: false),
+            child: CellWidget(cell: cell, enabled: false, humanSide: PlayerSide.red),
           ),
           const SizedBox(width: AppSpacing.md),
           Expanded(

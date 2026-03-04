@@ -294,7 +294,6 @@ void main() {
       final achievements = detectAchievements(results);
       expect(achievements[AchievementType.allIn], isFalse);
       expect(achievements[AchievementType.comeback], isFalse);
-      expect(achievements[AchievementType.luckyBastard], isFalse);
       expect(achievements[AchievementType.oops], isFalse);
       expect(achievements[AchievementType.ghost], isFalse);
     });

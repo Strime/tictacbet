@@ -65,8 +65,7 @@ class GameConstants {
   }
 
   // --- Bonus distribution probabilities ---
-  static const double cloverProbability = 0.15; // 15% chance per cell
-  static const double xpBonusProbability = 0.25; // 25% chance per cell
+  static const double xpBonusProbability = 0.4; // 40% chance per cell
   // Remaining ~60% = coin bonus
 
   // --- Cash out ---
