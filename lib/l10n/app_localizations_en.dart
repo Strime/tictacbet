@@ -89,6 +89,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get game_cashOut_confirm_no => 'Keep Playing';
 
   @override
+  String game_pot(int amount) {
+    return 'Pot: \$$amount';
+  }
+
+  @override
   String get profile_title => 'Profile';
 
   @override

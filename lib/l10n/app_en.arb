@@ -32,6 +32,9 @@
   "game_cashOut_confirm_yes": "Cash Out",
   "game_cashOut_confirm_no": "Keep Playing",
 
+  "game_pot": "Pot: ${amount}",
+  "@game_pot": { "placeholders": { "amount": { "type": "int" } } },
+
   "profile_title": "Profile",
   "profile_level": "Level {level}",
   "@profile_level": { "placeholders": { "level": { "type": "int" } } },

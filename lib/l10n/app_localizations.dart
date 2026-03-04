@@ -254,6 +254,12 @@ abstract class AppLocalizations {
   /// **'Keep Playing'**
   String get game_cashOut_confirm_no;
 
+  /// No description provided for @game_pot.
+  ///
+  /// In en, this message translates to:
+  /// **'Pot: \${amount}'**
+  String game_pot(int amount);
+
   /// No description provided for @profile_title.
   ///
   /// In en, this message translates to:

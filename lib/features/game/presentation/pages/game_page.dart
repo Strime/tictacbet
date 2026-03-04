@@ -90,23 +90,6 @@ class _GameView extends StatelessWidget {
                     children: [
                       Column(
                         children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: AppSpacing.lg,
-                              vertical: AppSpacing.sm,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AppColors.surfaceLight,
-                              borderRadius: AppSpacing.borderRadiusSm,
-                            ),
-                            child: Text(
-                              l10n.history_bet(params.betAmount),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(color: AppColors.chipGold),
-                            ),
-                          ),
                           Expanded(
                             child: Center(
                               child: BoardWidget(
@@ -115,6 +98,7 @@ class _GameView extends StatelessWidget {
                                 enabled: !isAiThinking && !game.isGameOver,
                                 lastMoveIndex: lastMove,
                                 winningLine: winLine,
+                                betAmount: params.betAmount,
                                 onCellTap: (row, col) {
                                   context.read<GameBloc>().add(
                                         CellTapped(row: row, col: col),

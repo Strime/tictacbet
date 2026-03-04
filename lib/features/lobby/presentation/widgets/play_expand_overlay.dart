@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import 'package:lucide_icons/lucide_icons.dart';
+
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_decorations.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -162,64 +164,83 @@ class _BoardPreview extends StatelessWidget {
         padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           children: [
-            // Animated bet badge
-            Opacity(
-              opacity: betOpacity,
-              child: Transform.scale(
-                scale: betScale,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.lg,
-                    vertical: AppSpacing.sm,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceLight,
-                    borderRadius: AppSpacing.borderRadiusSm,
-                  ),
-                  child: Text(
-                    AppLocalizations.of(context)!.history_bet(betAmount),
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: AppColors.chipGold,
-                        ),
-                  ),
-                ),
-              ),
-            ),
             Expanded(
               child: Center(
                 child: AspectRatio(
-                  aspectRatio: AppSpacing.cardAspectRatio,
+                  aspectRatio: AppSpacing.boardAspectRatio,
                   child: Container(
                     padding: const EdgeInsets.all(AppSpacing.sm),
-                    decoration: BoxDecoration(
-                      color: AppColors.background.withValues(alpha: 0.8),
-                      borderRadius: AppSpacing.borderRadiusLg,
-                      border: Border.all(
-                        color: AppColors.chipGold.withValues(alpha: 0.2),
-                        width: 2,
-                      ),
-                    ),
-                    child: Center(
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          childAspectRatio: AppSpacing.cardAspectRatio,
-                          crossAxisSpacing: AppSpacing.sm,
-                          mainAxisSpacing: AppSpacing.sm,
+                    decoration: AppDecorations.pokerTable,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: AppSpacing.xs),
+                        // Animated pot label
+                        Opacity(
+                          opacity: betOpacity,
+                          child: Transform.scale(
+                            scale: betScale,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppSpacing.md,
+                                vertical: AppSpacing.xs,
+                              ),
+                              decoration: BoxDecoration(
+                                color:
+                                    AppColors.background.withValues(alpha: 0.4),
+                                borderRadius: BorderRadius.circular(
+                                    AppSpacing.radiusRound),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    LucideIcons.coins,
+                                    color: AppColors.chipGold,
+                                    size: AppSpacing.iconSm,
+                                  ),
+                                  const SizedBox(width: AppSpacing.xs),
+                                  Text(
+                                    AppLocalizations.of(context)!
+                                        .game_pot(betAmount),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.copyWith(
+                                          color: AppColors.chipGold,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                        itemCount: _cellCount,
-                        itemBuilder: (_, index) {
-                          final cellStart = index * _staggerFraction;
-                          final cellProgress =
-                              ((progress - cellStart) / (2 * _staggerFraction))
-                                  .clamp(0.0, 1.0);
+                        const SizedBox(height: AppSpacing.sm),
+                        Expanded(
+                          child: Center(
+                            child: GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                childAspectRatio: AppSpacing.cardAspectRatio,
+                                crossAxisSpacing: AppSpacing.sm,
+                                mainAxisSpacing: AppSpacing.sm,
+                              ),
+                              itemCount: _cellCount,
+                              itemBuilder: (_, index) {
+                                final cellStart = index * _staggerFraction;
+                                final cellProgress = ((progress - cellStart) /
+                                        (2 * _staggerFraction))
+                                    .clamp(0.0, 1.0);
 
-                          return _AnimatedCell(progress: cellProgress);
-                        },
-                      ),
+                                return _AnimatedCell(progress: cellProgress);
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -237,8 +258,7 @@ class _BoardPreview extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: AppColors.surfaceLight,
-                  borderRadius:
-                      BorderRadius.circular(AppSpacing.radiusRound),
+                  borderRadius: BorderRadius.circular(AppSpacing.radiusRound),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -250,8 +270,7 @@ class _BoardPreview extends StatelessWidget {
                     const SizedBox(width: AppSpacing.sm),
                     Text(
                       ' ',
-                      style:
-                          Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ],
                 ),
