@@ -44,6 +44,7 @@ lib/
 ├── core/
 │   ├── config/        # Game constants & balance tuning
 │   ├── di/            # DI module
+│   ├── analytics/     # Pluggable analytics (debug logger → Firebase/Mixpanel)
 │   ├── error/         # Typed failures (Freezed)
 │   ├── navigation/    # Bottom nav bar
 │   ├── router/        # GoRouter config

@@ -15,6 +15,8 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:hive/hive.dart' as _i979;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
+import 'package:tictacbet/core/analytics/analytics_service.dart' as _i815;
+import 'package:tictacbet/core/analytics/debug_analytics_service.dart' as _i776;
 import 'package:tictacbet/core/di/app_module.dart' as _i109;
 import 'package:tictacbet/features/ai/domain/services/minimax_service.dart'
     as _i274;
@@ -124,6 +126,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factoryParam<_i740.PlayMoveUseCase, _i407.Random?, dynamic>(
       (random, _) => _i740.PlayMoveUseCase(random: random),
+    );
+    gh.lazySingleton<_i815.AnalyticsService>(
+      () => _i776.DebugAnalyticsService(),
     );
     gh.factory<_i948.HistoryLocalDataSource>(
       () => _i948.HistoryLocalDataSource(
