@@ -12,15 +12,19 @@ GameResultEntity _makeResult({
   Duration duration = const Duration(minutes: 2),
   int betAmount = 10,
   int winnings = 0,
+  PlayerSide humanSide = PlayerSide.red,
 }) {
-  final humanSide = PlayerSide.red;
   final GameStatus result;
   if (isWin) {
-    result = GameStatus.redWins;
+    result = humanSide == PlayerSide.red
+        ? GameStatus.redWins
+        : GameStatus.blackWins;
   } else if (isDraw) {
     result = GameStatus.draw;
   } else {
-    result = GameStatus.blackWins;
+    result = humanSide == PlayerSide.red
+        ? GameStatus.blackWins
+        : GameStatus.redWins;
   }
 
   return GameResultEntity(
@@ -280,6 +284,97 @@ void main() {
         ];
         expect(
           detectAchievements(results)[AchievementType.paperHands],
+          isFalse,
+        );
+      });
+    });
+
+    group('Double Agent', () {
+      test('true when won as both red and black', () {
+        final results = [
+          _makeResult(isWin: true, humanSide: PlayerSide.red, winnings: 20),
+          _makeResult(isWin: true, humanSide: PlayerSide.black, winnings: 20),
+        ];
+        expect(
+          detectAchievements(results)[AchievementType.doubleAgent],
+          isTrue,
+        );
+      });
+
+      test('false when only won as red', () {
+        final results = [
+          _makeResult(isWin: true, humanSide: PlayerSide.red, winnings: 20),
+          _makeResult(humanSide: PlayerSide.black),
+        ];
+        expect(
+          detectAchievements(results)[AchievementType.doubleAgent],
+          isFalse,
+        );
+      });
+
+      test('false when no wins at all', () {
+        final results = [_makeResult()];
+        expect(
+          detectAchievements(results)[AchievementType.doubleAgent],
+          isFalse,
+        );
+      });
+    });
+
+    group('Red Master', () {
+      test('true when 5 wins as red', () {
+        final results = List.generate(
+          5,
+          (_) => _makeResult(isWin: true, humanSide: PlayerSide.red, winnings: 20),
+        );
+        expect(
+          detectAchievements(results)[AchievementType.redMaster],
+          isTrue,
+        );
+      });
+
+      test('false when only 4 wins as red', () {
+        final results = List.generate(
+          4,
+          (_) => _makeResult(isWin: true, humanSide: PlayerSide.red, winnings: 20),
+        );
+        expect(
+          detectAchievements(results)[AchievementType.redMaster],
+          isFalse,
+        );
+      });
+
+      test('does not count black wins', () {
+        final results = [
+          ...List.generate(4, (_) => _makeResult(isWin: true, humanSide: PlayerSide.red, winnings: 20)),
+          _makeResult(isWin: true, humanSide: PlayerSide.black, winnings: 20),
+        ];
+        expect(
+          detectAchievements(results)[AchievementType.redMaster],
+          isFalse,
+        );
+      });
+    });
+
+    group('Black Master', () {
+      test('true when 5 wins as black', () {
+        final results = List.generate(
+          5,
+          (_) => _makeResult(isWin: true, humanSide: PlayerSide.black, winnings: 20),
+        );
+        expect(
+          detectAchievements(results)[AchievementType.blackMaster],
+          isTrue,
+        );
+      });
+
+      test('false when only 4 wins as black', () {
+        final results = List.generate(
+          4,
+          (_) => _makeResult(isWin: true, humanSide: PlayerSide.black, winnings: 20),
+        );
+        expect(
+          detectAchievements(results)[AchievementType.blackMaster],
           isFalse,
         );
       });

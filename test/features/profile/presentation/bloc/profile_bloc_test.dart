@@ -29,6 +29,9 @@ const _emptyAchievements = {
   AchievementType.ghost: false,
   AchievementType.goldenParachute: false,
   AchievementType.paperHands: false,
+  AchievementType.doubleAgent: false,
+  AchievementType.redMaster: false,
+  AchievementType.blackMaster: false,
 };
 
 void main() {

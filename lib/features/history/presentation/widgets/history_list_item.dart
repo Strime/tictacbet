@@ -6,6 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/currency_formatter.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../game/presentation/extensions/player_side_ui.dart';
 import '../../domain/entities/game_result_entity.dart';
 
 class HistoryListItem extends StatelessWidget {
@@ -77,6 +78,12 @@ class HistoryListItem extends StatelessWidget {
                         color: accentColor,
                         fontWeight: FontWeight.bold,
                       ),
+                    ),
+                    const SizedBox(width: AppSpacing.sm),
+                    Icon(
+                      result.humanSide.icon,
+                      size: AppSpacing.iconXs,
+                      color: result.humanSide.color,
                     ),
                     const SizedBox(width: AppSpacing.sm),
                     Container(

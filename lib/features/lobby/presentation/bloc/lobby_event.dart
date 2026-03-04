@@ -16,15 +16,6 @@ class LobbyInitialized extends LobbyEvent {
   List<Object?> get props => [playerBalance];
 }
 
-class LobbySideChanged extends LobbyEvent {
-  final PlayerSide side;
-
-  const LobbySideChanged(this.side);
-
-  @override
-  List<Object?> get props => [side];
-}
-
 class LobbyBetChanged extends LobbyEvent {
   final int amount;
 

@@ -13,7 +13,7 @@ import '../bloc/lobby_bloc.dart';
 import '../widgets/ai_difficulty_gauge.dart';
 import '../widgets/bet_amount_display.dart';
 import '../widgets/bet_chip_selector_widget.dart';
-import '../widgets/camp_selection_widget.dart';
+import '../widgets/side_indicator_widget.dart';
 import '../widgets/coin_drop_overlay.dart';
 import '../widgets/floating_bet_bar.dart';
 import '../widgets/play_expand_overlay.dart';
@@ -135,15 +135,8 @@ class _LobbyViewState extends State<_LobbyView> {
                       ),
                       const SizedBox(height: AppSpacing.xl),
 
-                      // Camp selection
-                      CampSelectionWidget(
-                        selectedSide: state.selectedSide,
-                        onSideChanged: (side) {
-                          context
-                              .read<LobbyBloc>()
-                              .add(LobbySideChanged(side));
-                        },
-                      ),
+                      // Side indicator
+                      SideIndicatorWidget(side: state.selectedSide),
                       const SizedBox(height: AppSpacing.xxl),
 
                       // Bet amount + chips

@@ -1,3 +1,4 @@
+import '../../../game/domain/entities/player_side.dart';
 import '../../../history/domain/entities/game_result_entity.dart';
 import '../entities/achievement.dart';
 
@@ -15,6 +16,9 @@ Map<AchievementType, bool> detectAchievements(
     AchievementType.ghost: false,
     AchievementType.goldenParachute: _hasGoldenParachute(results),
     AchievementType.paperHands: _hasPaperHands(results),
+    AchievementType.doubleAgent: _isDoubleAgent(results),
+    AchievementType.redMaster: _isRedMaster(results),
+    AchievementType.blackMaster: _isBlackMaster(results),
   };
 }
 
@@ -58,4 +62,25 @@ bool _hasGoldenParachute(List<GameResultEntity> results) {
 /// Cash out 3 times total.
 bool _hasPaperHands(List<GameResultEntity> results) {
   return results.where((r) => r.isCashOut).length >= 3;
+}
+
+/// Win at least one game as red AND one as black.
+bool _isDoubleAgent(List<GameResultEntity> results) {
+  final hasRedWin = results.any(
+    (r) => r.isWin && r.humanSide == PlayerSide.red,
+  );
+  final hasBlackWin = results.any(
+    (r) => r.isWin && r.humanSide == PlayerSide.black,
+  );
+  return hasRedWin && hasBlackWin;
+}
+
+/// Win 5 games as red.
+bool _isRedMaster(List<GameResultEntity> results) {
+  return results.where((r) => r.isWin && r.humanSide == PlayerSide.red).length >= 5;
+}
+
+/// Win 5 games as black.
+bool _isBlackMaster(List<GameResultEntity> results) {
+  return results.where((r) => r.isWin && r.humanSide == PlayerSide.black).length >= 5;
 }

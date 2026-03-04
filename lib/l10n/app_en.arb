@@ -3,7 +3,8 @@
   "appTitle": "TicTacBet",
 
   "lobby_title": "TicTacBet",
-  "lobby_selectCamp": "Pick your side",
+  "lobby_playingAs": "Playing as {side}",
+  "@lobby_playingAs": { "placeholders": { "side": { "type": "String" } } },
   "lobby_red": "Red",
   "lobby_black": "Black",
   "lobby_placeBet": "Place your bet",
@@ -71,6 +72,12 @@
   "achievement_golden_parachute_desc": "Cash out with a profit",
   "achievement_paper_hands": "Paper Hands",
   "achievement_paper_hands_desc": "Cash out 3 times",
+  "achievement_double_agent": "Double Agent",
+  "achievement_double_agent_desc": "Win as red and as black",
+  "achievement_red_master": "Red Master",
+  "achievement_red_master_desc": "Win 5 games as red",
+  "achievement_black_master": "Black Master",
+  "achievement_black_master_desc": "Win 5 games as black",
 
   "lobby_difficulty_easy": "Easy",
   "lobby_difficulty_medium": "Medium",

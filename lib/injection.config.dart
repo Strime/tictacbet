@@ -89,7 +89,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i991.CheckWinUseCase>(() => _i991.CheckWinUseCase());
     gh.factory<_i800.GenerateBoardUseCase>(() => _i800.GenerateBoardUseCase());
-    gh.factory<_i335.LobbyBloc>(() => _i335.LobbyBloc());
     gh.lazySingleton<_i274.MinimaxService>(() => _i274.MinimaxService());
     gh.factory<_i774.WalletLocalDataSource>(
       () => _i774.WalletLocalDataSource(gh<_i460.SharedPreferences>()),
@@ -174,6 +173,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i341.HistoryBloc>(
       () => _i341.HistoryBloc(gh<_i721.LoadHistoryUseCase>()),
+    );
+    gh.factory<_i335.LobbyBloc>(
+      () => _i335.LobbyBloc(gh<_i721.LoadHistoryUseCase>()),
     );
     gh.factory<_i789.GameBloc>(
       () => _i789.GameBloc(

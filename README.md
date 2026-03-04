@@ -10,7 +10,7 @@ Casino-themed Tic-Tac-Toe with betting, AI opponent and a wallet system.
 - **Card-based board** — Each cell hides a card with random bonuses (coins, XP)
 - **Cash out** — Leave a game early and collect a payout based on board evaluation
 - **Progression** — XP, levels and win streaks with streak bonus multipliers
-- **Profile** — Lifetime stats and 11 unlockable achievements
+- **Profile** — Lifetime stats and 13 unlockable achievements
 - **Game history** — Last 50 results stored locally (Hive), browsable list with outcome & stats
 - **Onboarding** — 4-step interactive tutorial introducing gameplay, cards, betting and achievements
 
@@ -53,7 +53,7 @@ lib/
 ├── features/
 │   ├── ai/            # Minimax AI service & use case
 │   ├── game/          # Board, cells, cards, game logic & UI
-│   ├── lobby/         # Bet & side selection before a game
+│   ├── lobby/         # Bet placement & auto-alternating sides
 │   ├── wallet/        # Balance, bets, daily bonus, persistence
 │   ├── history/       # Game results log (Hive storage)
 │   ├── profile/       # Stats dashboard & achievements

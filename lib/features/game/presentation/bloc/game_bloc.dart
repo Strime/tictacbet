@@ -36,7 +36,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<GameReset>(_onGameReset);
   }
 
-  void _onGameStarted(GameStarted event, Emitter<GameState> emit) {
+  Future<void> _onGameStarted(
+    GameStarted event,
+    Emitter<GameState> emit,
+  ) async {
     final board = _generateBoard();
     final game = GameEntity(
       board: board,
@@ -46,6 +49,27 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       startedAt: DateTime.now(),
     );
     emit(GameInProgress(game: game));
+
+    // If AI plays first (human is black), trigger AI move
+    if (!game.isHumanTurn) {
+      emit(GameInProgress(game: game, isAiThinking: true));
+
+      await Future.delayed(GameConstants.aiMoveDelay);
+      if (isClosed) return;
+
+      final aiMoveIndex = _computeAiMove(game.board, game.aiLevel);
+      final aiRow = aiMoveIndex ~/ 3;
+      final aiCol = aiMoveIndex % 3;
+      final boardAfterAi = _playMove(game.board, aiRow, aiCol);
+      if (boardAfterAi == null) return;
+
+      final gameAfterAi = game.copyWith(board: boardAfterAi);
+      emit(GameInProgress(
+        game: gameAfterAi,
+        isAiThinking: false,
+        lastMoveIndex: aiMoveIndex,
+      ));
+    }
   }
 
   Future<void> _onCellTapped(

@@ -15,7 +15,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lobby_title => 'TicTacBet';
 
   @override
-  String get lobby_selectCamp => 'Pick your side';
+  String lobby_playingAs(String side) {
+    return 'Playing as $side';
+  }
 
   @override
   String get lobby_red => 'Red';
@@ -197,6 +199,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get achievement_paper_hands_desc => 'Cash out 3 times';
+
+  @override
+  String get achievement_double_agent => 'Double Agent';
+
+  @override
+  String get achievement_double_agent_desc => 'Win as red and as black';
+
+  @override
+  String get achievement_red_master => 'Red Master';
+
+  @override
+  String get achievement_red_master_desc => 'Win 5 games as red';
+
+  @override
+  String get achievement_black_master => 'Black Master';
+
+  @override
+  String get achievement_black_master_desc => 'Win 5 games as black';
 
   @override
   String get lobby_difficulty_easy => 'Easy';

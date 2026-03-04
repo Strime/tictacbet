@@ -3,7 +3,8 @@
   "appTitle": "TicTacBet",
 
   "lobby_title": "TicTacBet",
-  "lobby_selectCamp": "Choisis ton camp",
+  "lobby_playingAs": "Tu joues {side}",
+  "@lobby_playingAs": { "placeholders": { "side": { "type": "String" } } },
   "lobby_red": "Rouge",
   "lobby_black": "Noir",
   "lobby_placeBet": "Place ta mise",
@@ -69,6 +70,12 @@
   "achievement_golden_parachute_desc": "Cash out avec un profit",
   "achievement_paper_hands": "Mains de papier",
   "achievement_paper_hands_desc": "Cash out 3 fois",
+  "achievement_double_agent": "Agent double",
+  "achievement_double_agent_desc": "Gagner en rouge et en noir",
+  "achievement_red_master": "Maître rouge",
+  "achievement_red_master_desc": "Gagner 5 parties en rouge",
+  "achievement_black_master": "Maître noir",
+  "achievement_black_master_desc": "Gagner 5 parties en noir",
 
   "lobby_difficulty_easy": "Facile",
   "lobby_difficulty_medium": "Moyen",

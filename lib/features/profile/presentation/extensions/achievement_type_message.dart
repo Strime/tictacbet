@@ -14,6 +14,9 @@ extension AchievementTypeMessage on AchievementType {
         AchievementType.ghost => l10n.achievement_ghost,
         AchievementType.goldenParachute => l10n.achievement_golden_parachute,
         AchievementType.paperHands => l10n.achievement_paper_hands,
+        AchievementType.doubleAgent => l10n.achievement_double_agent,
+        AchievementType.redMaster => l10n.achievement_red_master,
+        AchievementType.blackMaster => l10n.achievement_black_master,
       };
 
   String description(AppLocalizations l10n) => switch (this) {
@@ -27,5 +30,8 @@ extension AchievementTypeMessage on AchievementType {
         AchievementType.ghost => l10n.achievement_ghost_desc,
         AchievementType.goldenParachute => l10n.achievement_golden_parachute_desc,
         AchievementType.paperHands => l10n.achievement_paper_hands_desc,
+        AchievementType.doubleAgent => l10n.achievement_double_agent_desc,
+        AchievementType.redMaster => l10n.achievement_red_master_desc,
+        AchievementType.blackMaster => l10n.achievement_black_master_desc,
       };
 }

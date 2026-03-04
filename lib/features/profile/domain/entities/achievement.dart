@@ -13,7 +13,10 @@ enum AchievementType {
   oops(icon: LucideIcons.frown, color: AppColors.warning, detectable: false),
   ghost(icon: LucideIcons.eyeOff, color: AppColors.textSecondary, detectable: false),
   goldenParachute(icon: LucideIcons.umbrella, color: AppColors.chipGold, detectable: true),
-  paperHands(icon: LucideIcons.handMetal, color: AppColors.warning, detectable: true);
+  paperHands(icon: LucideIcons.handMetal, color: AppColors.warning, detectable: true),
+  doubleAgent(icon: LucideIcons.repeat, color: AppColors.info, detectable: true),
+  redMaster(icon: LucideIcons.heart, color: AppColors.heartRed, detectable: true),
+  blackMaster(icon: LucideIcons.spade, color: AppColors.spadeBlack, detectable: true);
 
   final IconData icon;
   final Color color;

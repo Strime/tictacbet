@@ -110,11 +110,11 @@ abstract class AppLocalizations {
   /// **'TicTacBet'**
   String get lobby_title;
 
-  /// No description provided for @lobby_selectCamp.
+  /// No description provided for @lobby_playingAs.
   ///
   /// In en, this message translates to:
-  /// **'Pick your side'**
-  String get lobby_selectCamp;
+  /// **'Playing as {side}'**
+  String lobby_playingAs(String side);
 
   /// No description provided for @lobby_red.
   ///
@@ -457,6 +457,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cash out 3 times'**
   String get achievement_paper_hands_desc;
+
+  /// No description provided for @achievement_double_agent.
+  ///
+  /// In en, this message translates to:
+  /// **'Double Agent'**
+  String get achievement_double_agent;
+
+  /// No description provided for @achievement_double_agent_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Win as red and as black'**
+  String get achievement_double_agent_desc;
+
+  /// No description provided for @achievement_red_master.
+  ///
+  /// In en, this message translates to:
+  /// **'Red Master'**
+  String get achievement_red_master;
+
+  /// No description provided for @achievement_red_master_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Win 5 games as red'**
+  String get achievement_red_master_desc;
+
+  /// No description provided for @achievement_black_master.
+  ///
+  /// In en, this message translates to:
+  /// **'Black Master'**
+  String get achievement_black_master;
+
+  /// No description provided for @achievement_black_master_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Win 5 games as black'**
+  String get achievement_black_master_desc;
 
   /// No description provided for @lobby_difficulty_easy.
   ///
