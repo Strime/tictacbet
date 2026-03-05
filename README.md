@@ -5,7 +5,15 @@ Casino-themed Tic-Tac-Toe with betting, AI opponent and a wallet system.
 ## Demo
 
 <p align="center">
-  <video src="https://github.com/user-attachments/assets/ac545cf8-9119-42f6-a300-1ac8a37badb6" width="300" autoplay loop muted playsinline></video>
+  <a href="https://dai.ly/k26xnvsHsaiRAcF43BC">📱 iPhone version</a>
+  &nbsp;&nbsp;|&nbsp;&nbsp;
+  <a href="https://dai.ly/k71x0Imk0Hilj7F43JA">📱 Tablet version</a>
+</p>
+
+<p align="center">
+  <iframe src="https://www.dailymotion.com/embed/video/k26xnvsHsaiRAcF43BC" width="300" height="534" frameborder="0" allowfullscreen></iframe>
+  &nbsp;&nbsp;
+  <iframe src="https://www.dailymotion.com/embed/video/k71x0Imk0Hilj7F43JA" width="534" height="400" frameborder="0" allowfullscreen></iframe>
 </p>
 
 ## About me
