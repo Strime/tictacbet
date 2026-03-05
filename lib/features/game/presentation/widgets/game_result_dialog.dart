@@ -147,7 +147,7 @@ class _WinningsTextState extends State<_WinningsText> {
         opacity: _started ? 1.0 : 0.0,
         duration: const Duration(milliseconds: 300),
         child: Text(
-          0.toCurrency(),
+          '+${widget.winnings.toCurrency()}',
           style: style?.copyWith(color: AppColors.chipGold),
         ),
       );
@@ -162,7 +162,7 @@ class _WinningsTextState extends State<_WinningsText> {
       isPositive = true;
       color = AppColors.chipGold;
     } else if (widget.humanWon) {
-      targetValue = widget.winnings - widget.betAmount;
+      targetValue = widget.winnings;
       isPositive = true;
       color = AppColors.success;
     } else {

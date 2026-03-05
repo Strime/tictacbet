@@ -200,8 +200,9 @@ class _BoardPreview extends StatelessWidget {
                                   ),
                                   const SizedBox(width: AppSpacing.xs),
                                   Text(
-                                    AppLocalizations.of(context)!
-                                        .game_pot(betAmount),
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.game_pot(betAmount * 2),
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleSmall
