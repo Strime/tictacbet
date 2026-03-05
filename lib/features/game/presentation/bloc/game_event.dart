@@ -12,15 +12,17 @@ class GameStarted extends GameEvent {
   final PlayerSide humanSide;
   final double aiLevel;
   final int betAmount;
+  final bool isAllIn;
 
   const GameStarted({
     required this.humanSide,
     required this.aiLevel,
     required this.betAmount,
+    this.isAllIn = false,
   });
 
   @override
-  List<Object?> get props => [humanSide, aiLevel, betAmount];
+  List<Object?> get props => [humanSide, aiLevel, betAmount, isAllIn];
 }
 
 /// Human taps a cell on the board.

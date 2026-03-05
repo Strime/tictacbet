@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/responsive.dart';
 import '../../../../core/theme/app_decorations.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -106,8 +107,9 @@ class _PlayExpandAnimationState extends State<_PlayExpandAnimation>
         final v = _controller.value;
 
         // Phase 1: Expand bar → full screen
-        final expandT =
-            Curves.easeInCubic.transform((v / _expandEnd).clamp(0.0, 1.0));
+        final expandT = Curves.easeInCubic.transform(
+          (v / _expandEnd).clamp(0.0, 1.0),
+        );
         final rect = Rect.lerp(widget.fromRect, fullRect, expandT)!;
         final radius = lerpDouble(AppSpacing.radiusLg, 0.0, expandT)!;
 
@@ -129,9 +131,8 @@ class _PlayExpandAnimationState extends State<_PlayExpandAnimation>
               ),
               child: v >= _expandEnd
                   ? _BoardPreview(
-                      progress:
-                          ((v - _expandEnd) / (_boardEnd - _expandEnd))
-                              .clamp(0.0, 1.0),
+                      progress: ((v - _expandEnd) / (_boardEnd - _expandEnd))
+                          .clamp(0.0, 1.0),
                       betAmount: widget.betAmount,
                     )
                   : const SizedBox.shrink(),
@@ -166,81 +167,91 @@ class _BoardPreview extends StatelessWidget {
           children: [
             Expanded(
               child: Center(
-                child: AspectRatio(
-                  aspectRatio: AppSpacing.boardAspectRatio,
-                  child: Container(
-                    padding: const EdgeInsets.all(AppSpacing.sm),
-                    decoration: AppDecorations.pokerTable,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: AppSpacing.xs),
-                        // Animated pot label
-                        Opacity(
-                          opacity: betOpacity,
-                          child: Transform.scale(
-                            scale: betScale,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: AppSpacing.md,
-                                vertical: AppSpacing.xs,
-                              ),
-                              decoration: BoxDecoration(
-                                color:
-                                    AppColors.background.withValues(alpha: 0.4),
-                                borderRadius: BorderRadius.circular(
-                                    AppSpacing.radiusRound),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(
-                                    LucideIcons.coins,
-                                    color: AppColors.chipGold,
-                                    size: AppSpacing.iconSm,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxWidth: Responsive.boardMaxWidth,
+                  ),
+                  child: AspectRatio(
+                    aspectRatio: AppSpacing.boardAspectRatio,
+                    child: Container(
+                      padding: const EdgeInsets.all(AppSpacing.sm),
+                      decoration: AppDecorations.pokerTable,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: AppSpacing.xs),
+                          // Animated pot label
+                          Opacity(
+                            opacity: betOpacity,
+                            child: Transform.scale(
+                              scale: betScale,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: AppSpacing.md,
+                                  vertical: AppSpacing.xs,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.background.withValues(
+                                    alpha: 0.4,
                                   ),
-                                  const SizedBox(width: AppSpacing.xs),
-                                  Text(
-                                    AppLocalizations.of(context)!
-                                        .game_pot(betAmount),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall
-                                        ?.copyWith(
-                                          color: AppColors.chipGold,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                  borderRadius: BorderRadius.circular(
+                                    AppSpacing.radiusRound,
                                   ),
-                                ],
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      LucideIcons.coins,
+                                      color: AppColors.chipGold,
+                                      size: AppSpacing.iconSm,
+                                    ),
+                                    const SizedBox(width: AppSpacing.xs),
+                                    Text(
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.game_pot(betAmount * 2),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(
+                                            color: AppColors.chipGold,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: AppSpacing.sm),
-                        Expanded(
-                          child: Center(
-                            child: GridView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                childAspectRatio: AppSpacing.cardAspectRatio,
-                                crossAxisSpacing: AppSpacing.sm,
-                                mainAxisSpacing: AppSpacing.sm,
-                              ),
-                              itemCount: _cellCount,
-                              itemBuilder: (_, index) {
-                                final cellStart = index * _staggerFraction;
-                                final cellProgress = ((progress - cellStart) /
-                                        (2 * _staggerFraction))
-                                    .clamp(0.0, 1.0);
+                          const SizedBox(height: AppSpacing.sm),
+                          Expanded(
+                            child: Center(
+                              child: GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                      childAspectRatio:
+                                          AppSpacing.cardAspectRatio,
+                                      crossAxisSpacing: AppSpacing.sm,
+                                      mainAxisSpacing: AppSpacing.sm,
+                                    ),
+                                itemCount: _cellCount,
+                                itemBuilder: (_, index) {
+                                  final cellStart = index * _staggerFraction;
+                                  final cellProgress =
+                                      ((progress - cellStart) /
+                                              (2 * _staggerFraction))
+                                          .clamp(0.0, 1.0);
 
-                                return _AnimatedCell(progress: cellProgress);
-                              },
+                                  return _AnimatedCell(progress: cellProgress);
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -268,10 +279,7 @@ class _BoardPreview extends StatelessWidget {
                       height: AppSpacing.iconSm,
                     ),
                     const SizedBox(width: AppSpacing.sm),
-                    Text(
-                      ' ',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
+                    Text(' ', style: Theme.of(context).textTheme.titleMedium),
                   ],
                 ),
               ),

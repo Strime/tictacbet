@@ -350,18 +350,6 @@ abstract class AppLocalizations {
   /// **'Win a game after an All In'**
   String get achievement_all_in_desc;
 
-  /// No description provided for @achievement_comeback.
-  ///
-  /// In en, this message translates to:
-  /// **'Comeback'**
-  String get achievement_comeback;
-
-  /// No description provided for @achievement_comeback_desc.
-  ///
-  /// In en, this message translates to:
-  /// **'Win with fewer cell gains than opponent'**
-  String get achievement_comeback_desc;
-
   /// No description provided for @achievement_speed_run.
   ///
   /// In en, this message translates to:
@@ -385,30 +373,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Accumulate \$100 total'**
   String get achievement_high_roller_desc;
-
-  /// No description provided for @achievement_oops.
-  ///
-  /// In en, this message translates to:
-  /// **'Oops'**
-  String get achievement_oops;
-
-  /// No description provided for @achievement_oops_desc.
-  ///
-  /// In en, this message translates to:
-  /// **'Lose a game with a perfect cell score'**
-  String get achievement_oops_desc;
-
-  /// No description provided for @achievement_ghost.
-  ///
-  /// In en, this message translates to:
-  /// **'Ghost'**
-  String get achievement_ghost;
-
-  /// No description provided for @achievement_ghost_desc.
-  ///
-  /// In en, this message translates to:
-  /// **'Finish a game with \$0 and 0 XP'**
-  String get achievement_ghost_desc;
 
   /// No description provided for @achievement_hat_trick.
   ///
@@ -643,12 +607,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An unexpected error occurred'**
   String get common_error_unknown;
-
-  /// No description provided for @common_error_storage.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to save data'**
-  String get common_error_storage;
 
   /// No description provided for @onboarding_stepBet_title.
   ///

@@ -6,6 +6,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/utils/responsive.dart';
 import '../../../../core/utils/currency_formatter.dart';
 import '../../../../injection.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -31,6 +32,7 @@ class GamePage extends StatelessWidget {
           humanSide: params.humanSide,
           aiLevel: params.aiLevel,
           betAmount: params.betAmount,
+          isAllIn: params.isAllIn,
         )),
       child: _GameView(params: params),
     );
@@ -92,7 +94,11 @@ class _GameView extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Center(
-                              child: BoardWidget(
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(
+                                  maxWidth: Responsive.boardMaxWidth,
+                                ),
+                                child: BoardWidget(
                                 board: game.board,
                                 humanSide: game.humanSide,
                                 enabled: !isAiThinking && !game.isGameOver,
@@ -104,6 +110,7 @@ class _GameView extends StatelessWidget {
                                         CellTapped(row: row, col: col),
                                       );
                                 },
+                              ),
                               ),
                             ),
                           ),
@@ -214,6 +221,9 @@ class _GameView extends StatelessWidget {
       isDismissible: false,
       enableDrag: false,
       backgroundColor: Colors.transparent,
+      constraints: const BoxConstraints(
+        maxWidth: Responsive.contentMaxWidth,
+      ),
       builder: (_) => GameResultDialog(
         humanWon: isWin,
         isDraw: isDraw,

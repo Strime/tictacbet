@@ -17,6 +17,7 @@ _GameResultModel _$GameResultModelFromJson(Map<String, dynamic> json) =>
       durationSeconds: (json['durationSeconds'] as num).toInt(),
       moveCount: (json['moveCount'] as num).toInt(),
       isCashOut: json['isCashOut'] as bool? ?? false,
+      isAllIn: json['isAllIn'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$GameResultModelToJson(_GameResultModel instance) =>
@@ -30,4 +31,5 @@ Map<String, dynamic> _$GameResultModelToJson(_GameResultModel instance) =>
       'durationSeconds': instance.durationSeconds,
       'moveCount': instance.moveCount,
       'isCashOut': instance.isCashOut,
+      'isAllIn': instance.isAllIn,
     };

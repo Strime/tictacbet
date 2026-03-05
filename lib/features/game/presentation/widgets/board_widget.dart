@@ -115,7 +115,7 @@ class _PotLabel extends StatelessWidget {
           ),
           const SizedBox(width: AppSpacing.xs),
           Text(
-            l10n.game_pot(betAmount),
+            l10n.game_pot(betAmount * 2),
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   color: AppColors.chipGold,
                   fontWeight: FontWeight.bold,

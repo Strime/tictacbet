@@ -47,6 +47,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       aiLevel: event.aiLevel,
       betAmount: event.betAmount,
       startedAt: DateTime.now(),
+      isAllIn: event.isAllIn,
     );
     emit(GameInProgress(game: game));
 
@@ -166,18 +167,21 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     bool isCashOut = false,
     int? winnings,
   }) {
-    _saveGameResult(
-      GameResultEntity(
-        result: game.status,
-        humanSide: game.humanSide,
-        aiLevel: game.aiLevel,
-        betAmount: game.betAmount,
-        winnings: winnings ?? game.winnings,
-        playedAt: game.startedAt,
-        duration: game.duration ?? Duration.zero,
-        moveCount: game.moveCount,
-        isCashOut: isCashOut,
-      ),
-    );
+    try {
+      _saveGameResult(
+        GameResultEntity(
+          result: game.status,
+          humanSide: game.humanSide,
+          aiLevel: game.aiLevel,
+          betAmount: game.betAmount,
+          winnings: winnings ?? game.winnings,
+          playedAt: game.startedAt,
+          duration: game.duration ?? Duration.zero,
+          moveCount: game.moveCount,
+          isCashOut: isCashOut,
+          isAllIn: game.isAllIn,
+        ),
+      );
+    } catch (_) {}
   }
 }

@@ -25,11 +25,13 @@ class GameParams {
   final PlayerSide humanSide;
   final double aiLevel;
   final int betAmount;
+  final bool isAllIn;
 
   const GameParams({
     required this.humanSide,
     required this.aiLevel,
     required this.betAmount,
+    this.isAllIn = false,
   });
 }
 
@@ -102,6 +104,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.game,
       parentNavigatorKey: _rootNavigatorKey,
+      redirect: (context, state) {
+        if (state.extra is! GameParams) return AppRoutes.lobby;
+        return null;
+      },
       builder: (context, state) {
         final params = state.extra! as GameParams;
         return GamePage(params: params);

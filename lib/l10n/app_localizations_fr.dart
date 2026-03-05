@@ -146,13 +146,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get achievement_all_in_desc => 'Gagner après un All In';
 
   @override
-  String get achievement_comeback => 'Comeback';
-
-  @override
-  String get achievement_comeback_desc =>
-      'Gagner avec moins de gains de cellules que l\'adversaire';
-
-  @override
   String get achievement_speed_run => 'Speed Run';
 
   @override
@@ -163,19 +156,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get achievement_high_roller_desc => 'Accumuler 100\$ au total';
-
-  @override
-  String get achievement_oops => 'Oops';
-
-  @override
-  String get achievement_oops_desc =>
-      'Perdre avec un score de cellules parfait';
-
-  @override
-  String get achievement_ghost => 'Fantôme';
-
-  @override
-  String get achievement_ghost_desc => 'Finir une partie avec 0\$ et 0 XP';
 
   @override
   String get achievement_hat_trick => 'Hat Trick';
@@ -306,9 +286,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get common_error_unknown => 'Une erreur inattendue s\'est produite';
-
-  @override
-  String get common_error_storage => 'Échec de la sauvegarde';
 
   @override
   String get onboarding_stepBet_title => 'Place ta mise';

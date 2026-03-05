@@ -11,6 +11,7 @@ import '../../../../core/error/failure_message.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/utils/responsive.dart';
 import '../../../../injection.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../progression/presentation/bloc/progression_bloc.dart';
@@ -39,8 +40,6 @@ class _ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<_ProfileView> {
-  bool _hasInitialized = false;
-
   @override
   void initState() {
     super.initState();
@@ -56,10 +55,6 @@ class _ProfileViewState extends State<_ProfileView> {
   void _onRouteChanged() {
     final path = appRouter.routeInformationProvider.value.uri.path;
     if (path == AppRoutes.profile) {
-      if (!_hasInitialized) {
-        _hasInitialized = true;
-        return;
-      }
       context.read<ProfileBloc>().add(const ProfileRefreshed());
     }
   }
@@ -205,7 +200,10 @@ class _ProfileSliverAppBar extends StatelessWidget {
                   (maxExtent - minExtent))
               .clamp(0.0, 1.0);
 
-          return _FlexibleContent(t: t);
+          return _FlexibleContent(
+            t: t,
+            availableWidth: constraints.maxWidth,
+          );
         },
       ),
     );
@@ -218,8 +216,12 @@ class _ProfileSliverAppBar extends StatelessWidget {
 
 class _FlexibleContent extends StatelessWidget {
   final double t;
+  final double availableWidth;
 
-  const _FlexibleContent({required this.t});
+  const _FlexibleContent({
+    required this.t,
+    required this.availableWidth,
+  });
 
   static const double _avatarExpanded = _ProfileSliverAppBar._avatarExpanded;
   static const double _avatarCollapsed = _ProfileSliverAppBar._avatarCollapsed;
@@ -237,11 +239,12 @@ class _FlexibleContent extends StatelessWidget {
     final borderWidth = lerpDouble(2.0, 1.5, t)!;
     final iconSize = lerpDouble(AppSpacing.iconLg, AppSpacing.iconSm, t)!;
     final balanceOpacity = (1.0 - t * 2.5).clamp(0.0, 1.0);
+    final hPadding = Responsive.horizontalPaddingFromWidth(availableWidth);
 
     // Avatar position: left-aligned below toolbar → top-left in toolbar
     final avatarLeft = lerpDouble(
-      AppSpacing.xl,
-      AppSpacing.lg,
+      hPadding + AppSpacing.sm,
+      hPadding,
       t,
     )!;
     final avatarTop = lerpDouble(
@@ -251,13 +254,13 @@ class _FlexibleContent extends StatelessWidget {
     )!;
 
     // Info block: right of avatar, vertically centered
-    final infoLeft = AppSpacing.xl + _avatarExpanded + AppSpacing.lg;
+    final infoLeft = hPadding + AppSpacing.sm + _avatarExpanded + AppSpacing.lg;
     final infoTop = topPadding + AppSpacing.appBarHeight + AppSpacing.sm +
         (_avatarExpanded - 48) / 2;
 
     // Title collapsed position (next to avatar)
     final collapsedTitleLeft =
-        AppSpacing.lg + _avatarCollapsed + AppSpacing.md;
+        hPadding + _avatarCollapsed + AppSpacing.md;
     final collapsedTitleTop =
         topPadding + (AppSpacing.appBarHeight - _collapsedTitleHeight) / 2;
 
@@ -276,7 +279,7 @@ class _FlexibleContent extends StatelessWidget {
         children: [
           // Expanded title — top left, fades out
           Positioned(
-            left: AppSpacing.lg,
+            left: hPadding,
             top: topPadding + (AppSpacing.appBarHeight - _expandedTitleHeight) / 2,
             child: IgnorePointer(
               ignoring: t > 0.5,
@@ -378,7 +381,7 @@ class _FlexibleContent extends StatelessWidget {
 
           // Level circle — collapsed, right side, fades in
           Positioned(
-            right: AppSpacing.lg,
+            right: hPadding,
             top: topPadding +
                 (AppSpacing.appBarHeight - _avatarCollapsed) / 2,
             child: Opacity(

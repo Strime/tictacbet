@@ -146,13 +146,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get achievement_all_in_desc => 'Win a game after an All In';
 
   @override
-  String get achievement_comeback => 'Comeback';
-
-  @override
-  String get achievement_comeback_desc =>
-      'Win with fewer cell gains than opponent';
-
-  @override
   String get achievement_speed_run => 'Speed Run';
 
   @override
@@ -163,18 +156,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get achievement_high_roller_desc => 'Accumulate \$100 total';
-
-  @override
-  String get achievement_oops => 'Oops';
-
-  @override
-  String get achievement_oops_desc => 'Lose a game with a perfect cell score';
-
-  @override
-  String get achievement_ghost => 'Ghost';
-
-  @override
-  String get achievement_ghost_desc => 'Finish a game with \$0 and 0 XP';
 
   @override
   String get achievement_hat_trick => 'Hat Trick';
@@ -305,9 +286,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get common_error_unknown => 'An unexpected error occurred';
-
-  @override
-  String get common_error_storage => 'Failed to save data';
 
   @override
   String get onboarding_stepBet_title => 'Place your bet';

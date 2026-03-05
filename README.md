@@ -2,6 +2,14 @@
 
 Casino-themed Tic-Tac-Toe with betting, AI opponent and a wallet system.
 
+## Demo
+
+<p align="center">
+  <a href="https://dai.ly/k26xnvsHsaiRAcF43BC">📱 iPhone version</a>
+  &nbsp;&nbsp;|&nbsp;&nbsp;
+  <a href="https://dai.ly/k71x0Imk0Hilj7F43JA">📱 Tablet version</a>
+</p>
+
 ## About me
 
 Hello, I'm Gaëtan. I did this exercise with pleasure, hope the review will be enjoyable for you too.

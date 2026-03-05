@@ -43,7 +43,9 @@ class OnboardingCubit extends Cubit<OnboardingState> {
   }
 
   Future<void> complete() async {
-    await _dataSource.setCompleted(true);
+    try {
+      await _dataSource.setCompleted(true);
+    } catch (_) {}
     emit(const OnboardingCompleted());
   }
 }

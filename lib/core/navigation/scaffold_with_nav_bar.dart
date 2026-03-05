@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +8,7 @@ import '../theme/app_colors.dart';
 import '../theme/app_decorations.dart';
 import '../theme/app_shadows.dart';
 import '../theme/app_spacing.dart';
+import '../utils/responsive.dart';
 
 class ScaffoldWithNavBar extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
@@ -22,31 +21,166 @@ class ScaffoldWithNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isExpanded = Responsive.isExpanded(context);
+
+    void onTap(int index) {
+      HapticFeedback.lightImpact();
+      navigationShell.goBranch(
+        index,
+        initialLocation: index == navigationShell.currentIndex,
+      );
+    }
+
+    final leftItem = _NavItem(
+      icon: LucideIcons.clock,
+      label: l10n.nav_history,
+    );
+    final rightItem = _NavItem(
+      icon: LucideIcons.user,
+      label: l10n.nav_profile,
+    );
+
+    if (isExpanded) {
+      return DecoratedBox(
+        decoration: AppDecorations.backgroundGradient,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Row(
+            children: [
+              _TabletNavRail(
+                selectedIndex: navigationShell.currentIndex,
+                onTap: onTap,
+                topItem: leftItem,
+                centerLabel: l10n.nav_lobby,
+                bottomItem: rightItem,
+              ),
+              Expanded(child: navigationShell),
+            ],
+          ),
+        ),
+      );
+    }
 
     return DecoratedBox(
       decoration: AppDecorations.backgroundGradient,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: navigationShell,
-      bottomNavigationBar: _NavBar(
-        selectedIndex: navigationShell.currentIndex,
-        onTap: (index) {
-          HapticFeedback.lightImpact();
-          navigationShell.goBranch(
-            index,
-            initialLocation: index == navigationShell.currentIndex,
-          );
-        },
-        leftItem: _NavItem(
-          icon: LucideIcons.clock,
-          label: l10n.nav_history,
-        ),
-        centerLabel: l10n.nav_lobby,
-        rightItem: _NavItem(
-          icon: LucideIcons.user,
-          label: l10n.nav_profile,
+        bottomNavigationBar: _NavBar(
+          selectedIndex: navigationShell.currentIndex,
+          onTap: onTap,
+          leftItem: leftItem,
+          centerLabel: l10n.nav_lobby,
+          rightItem: rightItem,
         ),
       ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Tablet navigation rail — vertical bar with casino chip in the center.
+// ---------------------------------------------------------------------------
+class _TabletNavRail extends StatelessWidget {
+  final int selectedIndex;
+  final ValueChanged<int> onTap;
+  final _NavItem topItem;
+  final String centerLabel;
+  final _NavItem bottomItem;
+
+  static const double _railWidth = AppSpacing.navRailWidth;
+
+  const _TabletNavRail({
+    required this.selectedIndex,
+    required this.onTap,
+    required this.topItem,
+    required this.centerLabel,
+    required this.bottomItem,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: _railWidth,
+      decoration: const BoxDecoration(
+        color: AppColors.surface,
+        border: Border(
+          right: BorderSide(
+            color: AppColors.surfaceLight,
+            width: AppSpacing.thinBorderWidth,
+          ),
+        ),
+      ),
+      child: SafeArea(
+        right: false,
+        child: Column(
+          children: [
+            const SizedBox(height: AppSpacing.xl),
+            _RailDestination(
+              item: topItem,
+              isSelected: selectedIndex == 0,
+              onTap: () => onTap(0),
+            ),
+            const Spacer(),
+            _CenterNavButton(
+              semanticLabel: centerLabel,
+              isSelected: selectedIndex == 1,
+              onTap: () => onTap(1),
+            ),
+            const Spacer(),
+            _RailDestination(
+              item: bottomItem,
+              isSelected: selectedIndex == 2,
+              onTap: () => onTap(2),
+            ),
+            const SizedBox(height: AppSpacing.xl),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _RailDestination extends StatelessWidget {
+  final _NavItem item;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _RailDestination({
+    required this.item,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: SizedBox(
+        width: double.infinity,
+        height: AppSpacing.bottomNavHeight,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              item.icon,
+              size: AppSpacing.iconMd,
+              color: isSelected ? AppColors.chipGold : AppColors.textSecondary,
+            ),
+            const SizedBox(height: AppSpacing.xs),
+            Text(
+              item.label,
+              style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                    fontWeight:
+                        isSelected ? FontWeight.w600 : FontWeight.normal,
+                    color: isSelected
+                        ? AppColors.chipGold
+                        : AppColors.textSecondary,
+                  ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -93,38 +227,30 @@ class _NavBar extends StatelessWidget {
             right: 0,
             bottom: 0,
             height: barHeight,
-            child: CustomPaint(
-              painter: _NotchedBarPainter(
-                notchRadius:
-                    AppSpacing.navFabSize / 2 + AppSpacing.navNotchMargin,
-                backgroundColor: AppColors.surface,
-                borderColor: AppColors.surfaceLight,
-              ),
-              child: Padding(
-                padding: EdgeInsets.only(bottom: bottomPadding),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _NavDestination(
-                        item: leftItem,
-                        isSelected: selectedIndex == 0,
-                        onTap: () => onTap(0),
-                      ),
+            child: Padding(
+              padding: EdgeInsets.only(bottom: bottomPadding),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _NavDestination(
+                      item: leftItem,
+                      isSelected: selectedIndex == 0,
+                      onTap: () => onTap(0),
                     ),
-                    SizedBox(
-                      width: (AppSpacing.navFabSize / 2 +
-                              AppSpacing.navNotchMargin) *
-                          2,
+                  ),
+                  SizedBox(
+                    width: (AppSpacing.navFabSize / 2 +
+                            AppSpacing.navNotchMargin) *
+                        2,
+                  ),
+                  Expanded(
+                    child: _NavDestination(
+                      item: rightItem,
+                      isSelected: selectedIndex == 2,
+                      onTap: () => onTap(2),
                     ),
-                    Expanded(
-                      child: _NavDestination(
-                        item: rightItem,
-                        isSelected: selectedIndex == 2,
-                        onTap: () => onTap(2),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -147,75 +273,6 @@ class _NavBar extends StatelessWidget {
     );
   }
 }
-
-// ---------------------------------------------------------------------------
-// Notched bar painter — draws the surface background with a semicircular
-// cutout at the top-center for the casino chip to sit in.
-// ---------------------------------------------------------------------------
-class _NotchedBarPainter extends CustomPainter {
-  final double notchRadius;
-  final Color backgroundColor;
-  final Color borderColor;
-
-  const _NotchedBarPainter({
-    required this.notchRadius,
-    required this.backgroundColor,
-    required this.borderColor,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = size.width / 2;
-
-    // Bar path with notch cutout
-    final path = Path()
-      ..moveTo(0, 0)
-      ..lineTo(center - notchRadius, 0)
-      ..arcTo(
-        Rect.fromCircle(center: Offset(center, 0), radius: notchRadius),
-        math.pi,
-        -math.pi,
-        false,
-      )
-      ..lineTo(size.width, 0)
-      ..lineTo(size.width, size.height)
-      ..lineTo(0, size.height)
-      ..close();
-
-    // Fill
-    canvas.drawPath(
-      path,
-      Paint()..color = backgroundColor,
-    );
-
-    // Border line following the notch curve
-    final borderPath = Path()
-      ..moveTo(0, 0)
-      ..lineTo(center - notchRadius, 0)
-      ..arcTo(
-        Rect.fromCircle(center: Offset(center, 0), radius: notchRadius),
-        math.pi,
-        -math.pi,
-        false,
-      )
-      ..lineTo(size.width, 0);
-
-    canvas.drawPath(
-      borderPath,
-      Paint()
-        ..color = borderColor
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = AppSpacing.thinBorderWidth,
-    );
-  }
-
-  @override
-  bool shouldRepaint(_NotchedBarPainter oldDelegate) =>
-      notchRadius != oldDelegate.notchRadius ||
-      backgroundColor != oldDelegate.backgroundColor ||
-      borderColor != oldDelegate.borderColor;
-}
-
 // ---------------------------------------------------------------------------
 // Casino chip center button — gold ring with notch marks, feltGreen gradient,
 // pulsing glow when selected, scale bounce on selection change.

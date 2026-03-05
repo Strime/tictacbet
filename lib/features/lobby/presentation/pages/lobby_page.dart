@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/utils/responsive.dart';
 import '../../../../injection.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../wallet/presentation/bloc/wallet_bloc.dart';
@@ -51,6 +52,7 @@ class _LobbyViewState extends State<_LobbyView> {
   @override
   void dispose() {
     _expandOverlay?.remove();
+    _expandOverlay = null;
     super.dispose();
   }
 
@@ -63,16 +65,24 @@ class _LobbyViewState extends State<_LobbyView> {
       Offset(barBox.size.width / 2, barBox.size.height / 2),
     );
 
-    showCoinDrop(context: context, from: chipCenter, to: barCenter, amount: amount);
+    showCoinDrop(
+      context: context,
+      from: chipCenter,
+      to: barCenter,
+      amount: amount,
+    );
   }
 
   void _onPlay(LobbyReady state) {
-    HapticFeedback.mediumImpact();
+    if (_expandOverlay != null) return;
 
-    context.read<WalletBloc>().add(WalletBetPlaced(state.betAmount));
+    HapticFeedback.mediumImpact();
 
     final barBox = _barKey.currentContext?.findRenderObject() as RenderBox?;
     if (barBox == null) return;
+
+    context.read<WalletBloc>().add(WalletBetPlaced(state.betAmount));
+
     final barTopLeft = barBox.localToGlobal(Offset.zero);
     final barRect = barTopLeft & barBox.size;
 
@@ -87,6 +97,7 @@ class _LobbyViewState extends State<_LobbyView> {
             humanSide: state.selectedSide,
             aiLevel: state.aiLevel,
             betAmount: state.betAmount,
+            isAllIn: state.betAmount == state.maxBet,
           ),
         );
       },
@@ -105,8 +116,8 @@ class _LobbyViewState extends State<_LobbyView> {
       listener: (context, walletState) {
         if (walletState is WalletLoaded) {
           context.read<LobbyBloc>().add(
-                LobbyInitialized(playerBalance: walletState.balance),
-              );
+            LobbyInitialized(playerBalance: walletState.balance),
+          );
         }
       },
       child: BlocBuilder<LobbyBloc, LobbyState>(
@@ -123,77 +134,85 @@ class _LobbyViewState extends State<_LobbyView> {
                     horizontal: AppSpacing.xl,
                     vertical: AppSpacing.lg,
                   ),
-                  child: Column(
-                    children: [
-                      Text(
-                        l10n.lobby_title,
-                        style:
-                            Theme.of(context).textTheme.displayLarge?.copyWith(
-                                  color: AppColors.textPrimary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                      ),
-                      const SizedBox(height: AppSpacing.xl),
-
-                      // Side indicator
-                      SideIndicatorWidget(side: state.selectedSide),
-                      const SizedBox(height: AppSpacing.xxl),
-
-                      // Bet amount + chips
-                      BetAmountDisplay(
-                        remainingBalance: state.remainingBalance,
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                      BetChipSelectorWidget(
-                        currentBet: state.betAmount,
-                        maxBet: state.maxBet,
-                        onAdd: _onChipAdded,
-                        onReset: () {
-                          context
-                              .read<LobbyBloc>()
-                              .add(const LobbyBetReset());
-                        },
-                        onMax: (center) {
-                          final remaining = state.remainingBalance;
-                          context
-                              .read<LobbyBloc>()
-                              .add(const LobbyBetMaxed());
-
-                          if (remaining > 0) {
-                            final barBox = _barKey.currentContext
-                                ?.findRenderObject() as RenderBox?;
-                            if (barBox == null) return;
-                            final barCenter = barBox.localToGlobal(
-                              Offset(
-                                barBox.size.width / 2,
-                                barBox.size.height / 2,
+                  child: ResponsiveContentWrapper(
+                    child: Column(
+                      children: [
+                        Text(
+                          l10n.lobby_title,
+                          style: Theme.of(context).textTheme.displayLarge
+                              ?.copyWith(
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.bold,
                               ),
-                            );
-                            showCoinDrop(
-                              context: context,
-                              from: center,
-                              to: barCenter,
-                              amount: remaining,
-                            );
-                          }
-                        },
-                      ),
-                      const SizedBox(height: AppSpacing.lg),
+                        ),
+                        const SizedBox(height: AppSpacing.xl),
 
-                      // AI difficulty
-                      AiDifficultyGauge(
-                        aiLevel: state.aiLevel,
-                        label: switch (state.aiDifficulty) {
-                          AiDifficulty.easy => l10n.lobby_difficulty_easy,
-                          AiDifficulty.medium => l10n.lobby_difficulty_medium,
-                          AiDifficulty.hard => l10n.lobby_difficulty_hard,
-                          AiDifficulty.expert => l10n.lobby_difficulty_expert,
-                        },
-                      ),
+                        // Side indicator
+                        SideIndicatorWidget(side: state.selectedSide),
+                        const SizedBox(height: AppSpacing.xxl),
 
-                      // Bottom clearance for floating bar
-                      const SizedBox(height: 80),
-                    ],
+                        // Bet amount + chips
+                        BlocBuilder<WalletBloc, WalletState>(
+                          builder: (context, walletState) {
+                            final balance = walletState is WalletLoaded
+                                ? walletState.balance
+                                : 0;
+                            return BetAmountDisplay(balance: balance);
+                          },
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                        BetChipSelectorWidget(
+                          currentBet: state.betAmount,
+                          maxBet: state.maxBet,
+                          onAdd: _onChipAdded,
+                          onReset: () {
+                            context.read<LobbyBloc>().add(
+                              const LobbyBetReset(),
+                            );
+                          },
+                          onMax: (center) {
+                            final remaining = state.remainingBalance;
+                            context.read<LobbyBloc>().add(
+                              const LobbyBetMaxed(),
+                            );
+
+                            if (remaining > 0) {
+                              final barBox =
+                                  _barKey.currentContext?.findRenderObject()
+                                      as RenderBox?;
+                              if (barBox == null) return;
+                              final barCenter = barBox.localToGlobal(
+                                Offset(
+                                  barBox.size.width / 2,
+                                  barBox.size.height / 2,
+                                ),
+                              );
+                              showCoinDrop(
+                                context: context,
+                                from: center,
+                                to: barCenter,
+                                amount: remaining,
+                              );
+                            }
+                          },
+                        ),
+                        const SizedBox(height: AppSpacing.lg),
+
+                        // AI difficulty
+                        AiDifficultyGauge(
+                          aiLevel: state.aiLevel,
+                          label: switch (state.aiDifficulty) {
+                            AiDifficulty.easy => l10n.lobby_difficulty_easy,
+                            AiDifficulty.medium => l10n.lobby_difficulty_medium,
+                            AiDifficulty.hard => l10n.lobby_difficulty_hard,
+                            AiDifficulty.expert => l10n.lobby_difficulty_expert,
+                          },
+                        ),
+
+                        // Bottom clearance for floating bar
+                        const SizedBox(height: AppSpacing.floatingBarClearance),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -205,11 +224,13 @@ class _LobbyViewState extends State<_LobbyView> {
                 bottom: 0,
                 child: SafeArea(
                   top: false,
-                  child: FloatingBetBar(
-                    key: _barKey,
-                    betAmount: state.betAmount,
-                    canPlay: state.betAmount > 0,
-                    onPlay: () => _onPlay(state),
+                  child: ResponsiveContentWrapper(
+                    child: FloatingBetBar(
+                      key: _barKey,
+                      betAmount: state.betAmount,
+                      canPlay: state.betAmount > 0,
+                      onPlay: () => _onPlay(state),
+                    ),
                   ),
                 ),
               ),

@@ -9,6 +9,7 @@ import '../../../../core/error/failure_message.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/utils/responsive.dart';
 import '../../../../injection.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/game_result_entity.dart';
@@ -36,8 +37,6 @@ class _HistoryView extends StatefulWidget {
 }
 
 class _HistoryViewState extends State<_HistoryView> {
-  bool _hasInitialized = false;
-
   @override
   void initState() {
     super.initState();
@@ -53,10 +52,6 @@ class _HistoryViewState extends State<_HistoryView> {
   void _onRouteChanged() {
     final path = appRouter.routeInformationProvider.value.uri.path;
     if (path == AppRoutes.history) {
-      if (!_hasInitialized) {
-        _hasInitialized = true;
-        return;
-      }
       context.read<HistoryBloc>().add(const HistoryRefreshed());
     }
   }
@@ -226,6 +221,7 @@ class _HistorySliverAppBar extends StatelessWidget {
 
                 return _FlexibleContent(
                   t: t,
+                  availableWidth: constraints.maxWidth,
                   wins: wins,
                   losses: losses,
                   draws: draws,
@@ -248,17 +244,25 @@ class _StaticTitle extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final topPadding = MediaQuery.of(context).padding.top;
 
-    return Container(
-      color: AppColors.background,
-      padding: EdgeInsets.only(top: topPadding),
-      alignment: Alignment.centerLeft,
-      child: Padding(
-        padding: const EdgeInsets.only(left: AppSpacing.lg),
-        child: Text(
-          l10n.history_title,
-          style: Theme.of(context).textTheme.headlineLarge,
-        ),
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
+          color: AppColors.background,
+          padding: EdgeInsets.only(top: topPadding),
+          alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: Responsive.horizontalPaddingFromWidth(
+                constraints.maxWidth,
+              ),
+            ),
+            child: Text(
+              l10n.history_title,
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -269,6 +273,7 @@ class _StaticTitle extends StatelessWidget {
 
 class _FlexibleContent extends StatelessWidget {
   final double t;
+  final double availableWidth;
   final int wins;
   final int losses;
   final int draws;
@@ -276,6 +281,7 @@ class _FlexibleContent extends StatelessWidget {
 
   const _FlexibleContent({
     required this.t,
+    required this.availableWidth,
     required this.wins,
     required this.losses,
     required this.draws,
@@ -289,6 +295,7 @@ class _FlexibleContent extends StatelessWidget {
     final topPadding = MediaQuery.of(context).padding.top;
 
     final statsOpacity = (1.0 - t * 2.0).clamp(0.0, 1.0);
+    final hPadding = Responsive.horizontalPaddingFromWidth(availableWidth);
 
     return Container(
       decoration: BoxDecoration(
@@ -305,7 +312,7 @@ class _FlexibleContent extends StatelessWidget {
         children: [
           // Expanded title — top left, fades out
           Positioned(
-            left: AppSpacing.lg,
+            left: hPadding,
             top: topPadding +
                 (AppSpacing.appBarHeight -
                         _HistorySliverAppBar._expandedTitleHeight) /
@@ -324,8 +331,8 @@ class _FlexibleContent extends StatelessWidget {
 
           // Collapsed title + compact stats — fades in
           Positioned(
-            left: AppSpacing.lg,
-            right: AppSpacing.lg,
+            left: hPadding,
+            right: hPadding,
             top: topPadding +
                 (AppSpacing.appBarHeight -
                         _HistorySliverAppBar._collapsedTitleHeight) /
@@ -383,8 +390,8 @@ class _FlexibleContent extends StatelessWidget {
           // StatsRow — below the title, fades out on scroll
           if (statsOpacity > 0)
             Positioned(
-              left: AppSpacing.lg,
-              right: AppSpacing.lg,
+              left: hPadding,
+              right: hPadding,
               top: topPadding + AppSpacing.appBarHeight + AppSpacing.sm,
               child: Opacity(
                 opacity: statsOpacity,

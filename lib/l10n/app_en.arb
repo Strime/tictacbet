@@ -54,16 +54,10 @@
 
   "achievement_all_in": "All In",
   "achievement_all_in_desc": "Win a game after an All In",
-  "achievement_comeback": "Comeback",
-  "achievement_comeback_desc": "Win with fewer cell gains than opponent",
   "achievement_speed_run": "Speed Run",
   "achievement_speed_run_desc": "Win in under 30 seconds",
   "achievement_high_roller": "High Roller",
   "achievement_high_roller_desc": "Accumulate $100 total",
-  "achievement_oops": "Oops",
-  "achievement_oops_desc": "Lose a game with a perfect cell score",
-  "achievement_ghost": "Ghost",
-  "achievement_ghost_desc": "Finish a game with $0 and 0 XP",
   "achievement_hat_trick": "Hat Trick",
   "achievement_hat_trick_desc": "Win 3 consecutive games",
   "achievement_whale": "Whale",
@@ -116,7 +110,6 @@
   "@lobby_playWithBet": { "placeholders": { "amount": { "type": "int" } } },
 
   "common_error_unknown": "An unexpected error occurred",
-  "common_error_storage": "Failed to save data",
 
   "onboarding_stepBet_title": "Place your bet",
   "onboarding_stepBet_desc": "Tap a chip to place your bet.\nHigher bets mean tougher AI.",
