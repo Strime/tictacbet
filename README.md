@@ -10,12 +10,6 @@ Casino-themed Tic-Tac-Toe with betting, AI opponent and a wallet system.
   <a href="https://dai.ly/k71x0Imk0Hilj7F43JA">📱 Tablet version</a>
 </p>
 
-<p align="center">
-  <iframe src="https://www.dailymotion.com/embed/video/k26xnvsHsaiRAcF43BC" width="300" height="534" frameborder="0" allowfullscreen></iframe>
-  &nbsp;&nbsp;
-  <iframe src="https://www.dailymotion.com/embed/video/k71x0Imk0Hilj7F43JA" width="534" height="400" frameborder="0" allowfullscreen></iframe>
-</p>
-
 ## About me
 
 Hello, I'm Gaëtan. I did this exercise with pleasure, hope the review will be enjoyable for you too.
