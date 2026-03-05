@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_decorations.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/utils/responsive.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../cubit/onboarding_cubit.dart';
 import '../widgets/onboarding_step_indicator.dart';
@@ -46,82 +47,80 @@ class OnboardingPage extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: SafeArea(
-            child: BlocBuilder<OnboardingCubit, OnboardingState>(
-              builder: (context, state) {
-                final step = switch (state) {
-                  OnboardingInProgress(:final step) => step,
-                  _ => OnboardingStep.achievements,
-                };
-                final betAmount = switch (state) {
-                  OnboardingInProgress(:final betAmount) => betAmount,
-                  _ => 0,
-                };
-                final l10n = AppLocalizations.of(context)!;
-                return Column(
-                  children: [
-                    const SizedBox(height: AppSpacing.xl),
+            child: ResponsiveContentWrapper(
+              child: BlocBuilder<OnboardingCubit, OnboardingState>(
+                builder: (context, state) {
+                  final step = switch (state) {
+                    OnboardingInProgress(:final step) => step,
+                    _ => OnboardingStep.achievements,
+                  };
+                  final betAmount = switch (state) {
+                    OnboardingInProgress(:final betAmount) => betAmount,
+                    _ => 0,
+                  };
+                  final l10n = AppLocalizations.of(context)!;
+                  return Column(
+                    children: [
+                      const SizedBox(height: AppSpacing.xl),
 
-                    // Stepper
-                    OnboardingStepIndicator(
-                      currentStep: step.index,
-                      totalSteps: OnboardingStep.values.length,
-                    ),
-                    const SizedBox(height: AppSpacing.xxl),
-
-                    // Title
-                    AnimatedSwitcher(
-                      duration: const Duration(
-                        milliseconds: AppSpacing.animationMedium,
+                      // Stepper
+                      OnboardingStepIndicator(
+                        currentStep: step.index,
+                        totalSteps: OnboardingStep.values.length,
                       ),
-                      transitionBuilder: _slideTransition,
-                      child: Text(
-                        _titleFor(step, l10n),
-                        key: ValueKey('step_$step'),
-                        style:
-                            Theme.of(context).textTheme.displayLarge?.copyWith(
-                                  color: AppColors.chipGold,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.xl),
+                      const SizedBox(height: AppSpacing.xxl),
 
-                    // Preview area
-                    Expanded(
-                      child: AnimatedSwitcher(
+                      // Title
+                      AnimatedSwitcher(
                         duration: const Duration(
-                          milliseconds: AppSpacing.animationSlow,
+                          milliseconds: AppSpacing.animationMedium,
                         ),
-                        child: _buildStepPreview(context, step, betAmount),
+                        transitionBuilder: _slideTransition,
+                        child: Text(
+                          _titleFor(step, l10n),
+                          key: ValueKey('step_$step'),
+                          style: Theme.of(context).textTheme.displayLarge
+                              ?.copyWith(
+                                color: AppColors.chipGold,
+                                fontWeight: FontWeight.bold,
+                              ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                    ),
+                      const SizedBox(height: AppSpacing.xl),
 
-                    const SizedBox(height: AppSpacing.lg),
-
-                    // Description
-                    AnimatedSwitcher(
-                      duration: const Duration(
-                        milliseconds: AppSpacing.animationMedium,
+                      // Preview area
+                      Expanded(
+                        child: AnimatedSwitcher(
+                          duration: const Duration(
+                            milliseconds: AppSpacing.animationSlow,
+                          ),
+                          child: _buildStepPreview(context, step, betAmount),
+                        ),
                       ),
-                      transitionBuilder: _slideTransition,
-                      child: Text(
-                        _descriptionFor(step, l10n),
-                        key: ValueKey('desc_$step'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
 
-                    const SizedBox(height: AppSpacing.lg),
-                  ],
-                );
-              },
+                      const SizedBox(height: AppSpacing.lg),
+
+                      // Description
+                      AnimatedSwitcher(
+                        duration: const Duration(
+                          milliseconds: AppSpacing.animationMedium,
+                        ),
+                        transitionBuilder: _slideTransition,
+                        child: Text(
+                          _descriptionFor(step, l10n),
+                          key: ValueKey('desc_$step'),
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(color: AppColors.textSecondary),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+
+                      const SizedBox(height: AppSpacing.lg),
+                    ],
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -130,43 +129,43 @@ class OnboardingPage extends StatelessWidget {
   }
 
   Widget _buildStepPreview(
-      BuildContext context, OnboardingStep step, int betAmount) {
+    BuildContext context,
+    OnboardingStep step,
+    int betAmount,
+  ) {
     final cubit = context.read<OnboardingCubit>();
 
     return switch (step) {
       OnboardingStep.bet => StepBetPreview(
-          key: const ValueKey(OnboardingStep.bet),
-          maxBet: OnboardingCubit.maxBet,
-          onStepCompleted: cubit.advanceFromBet,
-        ),
+        key: const ValueKey(OnboardingStep.bet),
+        maxBet: OnboardingCubit.maxBet,
+        onStepCompleted: cubit.advanceFromBet,
+      ),
       OnboardingStep.play => StepPlayPreview(
-          key: const ValueKey(OnboardingStep.play),
-          betAmount: betAmount,
-          maxBet: OnboardingCubit.maxBet,
-          onStepCompleted: cubit.advanceFromPlay,
-        ),
+        key: const ValueKey(OnboardingStep.play),
+        betAmount: betAmount,
+        maxBet: OnboardingCubit.maxBet,
+        onStepCompleted: cubit.advanceFromPlay,
+      ),
       OnboardingStep.card => StepCardPreview(
-          key: const ValueKey(OnboardingStep.card),
-          onStepCompleted: cubit.advanceFromCard,
-        ),
+        key: const ValueKey(OnboardingStep.card),
+        onStepCompleted: cubit.advanceFromCard,
+      ),
       OnboardingStep.achievements => StepAchievementPreview(
-          key: const ValueKey(OnboardingStep.achievements),
-          onStepCompleted: cubit.complete,
-        ),
+        key: const ValueKey(OnboardingStep.achievements),
+        onStepCompleted: cubit.complete,
+      ),
     };
   }
 
-  static Widget _slideTransition(
-      Widget child, Animation<double> animation) {
+  static Widget _slideTransition(Widget child, Animation<double> animation) {
     return FadeTransition(
       opacity: animation,
       child: SlideTransition(
         position: Tween<Offset>(
           begin: const Offset(0, 0.15),
           end: Offset.zero,
-        ).animate(
-          CurvedAnimation(parent: animation, curve: Curves.easeOut),
-        ),
+        ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
         child: child,
       ),
     );
